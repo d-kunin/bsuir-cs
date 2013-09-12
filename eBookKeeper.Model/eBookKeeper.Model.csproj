@@ -40,7 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Book.cs" />
+    <Compile Include="ELibraryIndex.cs" />
+    <Compile Include="IIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StubLibraryIndex.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,54 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace eBookKeeper.Model
 {
-    public class Book
+    public abstract class UniqueObject
     {
-        public Book()
+        public ulong Id { get; private set; }
+
+        protected UniqueObject(ulong id)
         {
-            Title = string.Empty;
-            Authors    = new List<Author>();
-            Categories = new List<Category>();
-
-            ISBN = "0000000000";
-            Publisher = new Publisher();
-            PublicationDate = new DateTime(0);
-            Edition = 1;
-
-            NumberOfPager = 1;
-            TableOfContent = new List<string>();
+            Id = id;
         }
+    }
+
+    public class Book : UniqueObject
+    {
+        internal Book(ulong id) : base(id) {}
 
         public string         Title      { get; set; }
         public List<Author>   Authors    { get; set; }
         public List<Category> Categories { get; set; }
+        public List<string>   TableOfContent { get; set; }
 
-        public string    ISBN            { get; set; }
-        public Publisher Publisher       { get; set; }
-        public DateTime  PublicationDate { get; set; }
-        public uint      Edition         { get; set; }
-
-
-        public uint         NumberOfPager  { get; set; }
-        public List<string> TableOfContent { get; set; } 
+        /*
+         *  Additional data, may use it later
+         */
+//      public string    ISBN            { get; set; }
+//      public Publisher Publisher       { get; set; }
+//      public DateTime  PublicationDate { get; set; }
+//      public uint      NumberOfPager  { get; set; }
+//      public uint      Edition         { get; set; }
     }
 
-    public class Category
+    public class Category : UniqueObject
     {
+        public Category(ulong id) : base(id) {}
+
+        // TODO: may add parent/child categories
         public string Name { get; set; }
     }
 
-    public class Author
+    public class Author : UniqueObject
     {
-        public string Name { get; set; }
-    }
+        public Author(ulong id) : base(id) {}
 
-    public class Publisher
-    {
         public string Name { get; set; }
     }
 }
