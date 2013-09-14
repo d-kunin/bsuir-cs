@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace eBookKeeper.Model
 {
-    public class StubLibraryIndex : IELibraryIndex
+    [Serializable]
+    public class StubLibraryIndex : ILibraryIndex
     {
-        private ulong _mBookId;
-        private ulong _mAuthorId;
-        private ulong _mCategoryId;
-
         public StubLibraryIndex()
         {
             // Populate with foo data
@@ -30,7 +29,14 @@ namespace eBookKeeper.Model
 
         public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null, List<string> tableOfContent = null)
         {
-            var book = new Book(++_mBookId)
+            if (authors == null)
+                authors = new List<Author>();
+            if (categories == null)
+                categories = new List<Category>();
+            if (tableOfContent == null)
+                tableOfContent = new List<string>();
+
+            var book = new Book()
             {
                 Title = title,
                 Authors = authors,
@@ -47,7 +53,7 @@ namespace eBookKeeper.Model
             return AllBooks.Count;
         }
 
-        public List<Book> AllBooks { get; private set; }
+        public List<Book> AllBooks { get; set; }
 
         public bool Delete(Author author)
         {
@@ -61,7 +67,7 @@ namespace eBookKeeper.Model
 
         public Author CreateAuthor(string name)
         {
-            var author = new Author(++_mAuthorId)
+            var author = new Author()
             {
                 Name = name
             };
@@ -75,7 +81,7 @@ namespace eBookKeeper.Model
             return AllAuthors.Count;
         }
 
-        public List<Author> AllAuthors { get; private set; }
+        public List<Author> AllAuthors { get; set; }
 
         public bool Delete(Category category)
         {
@@ -89,7 +95,7 @@ namespace eBookKeeper.Model
 
         public Category CreateCategory(string name)
         {
-            var category = new Category(++_mCategoryId)
+            var category = new Category()
             {
                 Name = name
             };
@@ -103,16 +109,26 @@ namespace eBookKeeper.Model
             return AllCategories.Count;
         }
 
-        public List<Category> AllCategories { get; private set; }
+        public List<Category> AllCategories { get; set; }
 
         public bool Save()
         {
-            throw new NotImplementedException();
+            using (TextWriter writer = new StreamWriter("book_index.xml"))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(StubLibraryIndex));
+                xmlSerializer.Serialize(writer, this);
+            }
+            return true;
         }
 
-        public bool Restore()
+        public ILibraryIndex Restore()
         {
-            throw new NotImplementedException();
+            using (TextReader reader = new StreamReader("book_index.xml"))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(StubLibraryIndex));
+                StubLibraryIndex sb = (StubLibraryIndex) xmlSerializer.Deserialize(reader);
+                return sb;
+            }
         }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace eBookKeeper.Model
 {
-    interface IELibraryIndex : IBookIndex, IAuthorIndex, ICategoryIndex
+    public interface ILibraryIndex : IBookIndex, IAuthorIndex, ICategoryIndex
     {
         bool Save();
-        bool Restore();
+        ILibraryIndex Restore();
     }
 
 }
