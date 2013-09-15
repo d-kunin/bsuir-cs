@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace eBookKeeper.Model
@@ -9,20 +8,30 @@ namespace eBookKeeper.Model
     [Serializable]
     public class Book : IComparable<Book>
     {
-        public string         Title { get; set; }
-        public List<Author>   Authors { get; set; }
-        public List<Category> Categories { get; set; }
+        private List<Author> _mAuthors = new List<Author>(); 
+        private List<Category> _mCategories = new List<Category>();
+        private string _mTitle = String.Empty;
 
+        public string Title
+        {
+            get { return _mTitle;  }
+            set { _mTitle = value ?? String.Empty;  }
+        }
+        public List<Author>   Authors 
+        {
+            get { return _mAuthors; }
+            set { _mAuthors = value ?? new List<Author>(); }
+        }
+        public List<Category> Categories
+        {
+            get { return _mCategories; }
+            set { _mCategories = value ?? new List<Category>(); }
+        }
+
+        public List<string> Keywords { get; set; }
         public List<string> TableOfContent { get; set; }
         public string       Description { get; set; }
         public uint         Edition { get; set; }
-
-        public Book()
-        {
-            Authors        = new List<Author>();
-            Categories     = new List<Category>();
-            TableOfContent = new List<string>();
-        }
 
         public int CompareTo(Book other)
         {
@@ -32,8 +41,7 @@ namespace eBookKeeper.Model
                 String.Compare(Title, other.Title, StringComparison.OrdinalIgnoreCase);
             if (compareByTitle != 0)
                 return compareByTitle;
-            else
-                return (int) (Edition - other.Edition);
+            return (int) (Edition - other.Edition);
         }
 
         public override bool Equals(object obj)

@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 
 namespace eBookKeeper.Model
 {
     [Serializable]
+    [XmlRoot(ElementName = "LibraryIndex")]
     public class StubLibraryIndex : ILibraryIndex
     {
+        private string _mFilePath = "book_index.xml";
+
+        [XmlElement(ElementName = "Categories", Namespace = "http://kunin.dk")]
+        public List<Category> AllCategories { get; set; }
+        [XmlElement(ElementName = "Authors", Namespace = "http://kunin.dk")]
+        public List<Author>   AllAuthors    { get; set; }
+        [XmlElement(ElementName = "Books", Namespace = "http://kunin.dk")]
+        public List<Book>   AllBooks    { get; set; }
+
         public StubLibraryIndex()
         {
-            // Populate with foo data
             AllBooks      = new List<Book>();
             AllAuthors    = new List<Author>();
             AllCategories = new List<Category>();
@@ -29,14 +39,7 @@ namespace eBookKeeper.Model
 
         public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null, List<string> tableOfContent = null)
         {
-            if (authors == null)
-                authors = new List<Author>();
-            if (categories == null)
-                categories = new List<Category>();
-            if (tableOfContent == null)
-                tableOfContent = new List<string>();
-
-            var book = new Book()
+            var book = new Book
             {
                 Title = title,
                 Authors = authors,
@@ -53,8 +56,6 @@ namespace eBookKeeper.Model
             return AllBooks.Count;
         }
 
-        public List<Book> AllBooks { get; set; }
-
         public bool Delete(Author author)
         {
             return AllAuthors.RemoveAll(x => x.Equals(author)) > 0;
@@ -67,7 +68,7 @@ namespace eBookKeeper.Model
 
         public Author CreateAuthor(string name)
         {
-            var author = new Author()
+            var author = new Author
             {
                 Name = name
             };
@@ -81,7 +82,6 @@ namespace eBookKeeper.Model
             return AllAuthors.Count;
         }
 
-        public List<Author> AllAuthors { get; set; }
 
         public bool Delete(Category category)
         {
@@ -95,7 +95,7 @@ namespace eBookKeeper.Model
 
         public Category CreateCategory(string name)
         {
-            var category = new Category()
+            var category = new Category
             {
                 Name = name
             };
@@ -109,25 +109,41 @@ namespace eBookKeeper.Model
             return AllCategories.Count;
         }
 
-        public List<Category> AllCategories { get; set; }
+        
 
         public bool Save()
         {
-            using (TextWriter writer = new StreamWriter("book_index.xml"))
+            try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(StubLibraryIndex));
-                xmlSerializer.Serialize(writer, this);
+                using (TextWriter writer = new StreamWriter(_mFilePath))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof (StubLibraryIndex));
+                    xmlSerializer.Serialize(writer, this);
+                }
+                return true;
             }
-            return true;
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception on saving file: " + e);
+                return false;
+            }
         }
 
         public ILibraryIndex Restore()
         {
-            using (TextReader reader = new StreamReader("book_index.xml"))
+            try
             {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(StubLibraryIndex));
-                StubLibraryIndex sb = (StubLibraryIndex) xmlSerializer.Deserialize(reader);
-                return sb;
+                using (TextReader reader = new StreamReader(_mFilePath))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(StubLibraryIndex));
+                    StubLibraryIndex sb = (StubLibraryIndex)xmlSerializer.Deserialize(reader);
+                    return sb;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Exception on loading from file: " + e);
+                return null;
             }
         }
     }
