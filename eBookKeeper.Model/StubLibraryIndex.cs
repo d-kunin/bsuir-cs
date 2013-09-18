@@ -187,7 +187,6 @@ namespace eBookKeeper.Model
 
             foreach (var author in authors)
                 index.CreateAuthor(author);
-
             foreach (var category in categories)
                 index.CreateCategory(category);
 
@@ -196,7 +195,7 @@ namespace eBookKeeper.Model
             {
                 int wordsInTitle = rand.Next(2, 5);
                 string title = "";
-                HashSet<int> usedIndeces = new HashSet<int>();
+                var usedIndeces = new HashSet<int>();
                 for (var j = 0; j < wordsInTitle; ++j)
                 {
                     // genarate index 
@@ -218,11 +217,8 @@ namespace eBookKeeper.Model
                     }
 
                 }
-
                 var bookAuthors = new List<Author> {index.AllAuthors[rand.Next(authors.Length)]};
-
                 var bookCategories = new List<Category> {index.AllCategories[rand.Next(categories.Length)]};
-
                 index.CreateBook(title.Trim(), bookAuthors, bookCategories);
             }
         }
