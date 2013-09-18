@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace eBookKeeper.Model
@@ -144,6 +145,85 @@ namespace eBookKeeper.Model
             {
                 Debug.WriteLine("Exception on loading from file: " + e);
                 return null;
+            }
+        }
+
+        public static void PopulateWithStubData(ILibraryIndex index)
+        {
+            const int booksToGenerate = 42*7; // Some magic numbers. Because 42.
+
+            string[] bookNames =
+            {
+                "WTF", "WPF", "J2E",
+                "Introduction", "Depth",
+                "C++", "Java", "iOS", "Android",
+                "Bugs", "Monkeys",
+                "Rails", "Ruby", "Advanced",
+                "Concurrency", "Optimazation", "CookBook",
+                "Beginning", "Design", "Pattern"
+            };
+
+            string[] preps =
+            {
+                "For", "On", "In", "To"
+            };
+
+            string[] authors =
+            {
+                "Semmy Fixter",
+                "Max Issueman",
+                "Steve Looper",
+                "Mark Deadlock",
+                "Bill Goto",
+                "Garry Template"
+            };
+            string[] categories =
+            {
+                "Success story", "Love story",
+                "Textbook", "Novel",
+                "Computer Science", "Pseudoscience",
+                "Horror", "Software"
+            };
+
+            foreach (var author in authors)
+                index.CreateAuthor(author);
+
+            foreach (var category in categories)
+                index.CreateCategory(category);
+
+            var rand = new Random();
+            for (var i = 0; i < booksToGenerate; ++i)
+            {
+                int wordsInTitle = rand.Next(2, 5);
+                string title = "";
+                HashSet<int> usedIndeces = new HashSet<int>();
+                for (var j = 0; j < wordsInTitle; ++j)
+                {
+                    // genarate index 
+                    int nameIndex;
+
+                    while (usedIndeces.Contains((nameIndex = rand.Next(bookNames.Length))))
+                    {
+                        // noop
+                    }
+                    usedIndeces.Add(nameIndex);
+
+                    title = String.Join(" ", title, bookNames[nameIndex]);
+
+                    if (j != 0 && j != wordsInTitle - 1)
+                    {
+                        bool addPreposition = rand.Next()%2 == 0;
+                        if (addPreposition)
+                            title = String.Join(" ", title, preps[rand.Next(preps.Length)]);
+                    }
+
+                }
+
+                var bookAuthors = new List<Author> {index.AllAuthors[rand.Next(authors.Length)]};
+
+                var bookCategories = new List<Category> {index.AllCategories[rand.Next(categories.Length)]};
+
+                index.CreateBook(title.Trim(), bookAuthors, bookCategories);
             }
         }
     }

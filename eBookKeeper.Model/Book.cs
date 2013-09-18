@@ -33,6 +33,14 @@ namespace eBookKeeper.Model
         public string       Description { get; set; }
         public uint         Edition { get; set; }
 
+        public string FormatedAuthors
+        {
+            get
+            {
+                return string.Join(", ", Authors);
+            }
+        }
+
         public int CompareTo(Book other)
         {
             if (other == null)
@@ -68,6 +76,11 @@ namespace eBookKeeper.Model
                 Edition)
               .GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} by {1}, {2} edition", Title, FormatedAuthors, Edition);
+        }
     }
 
     [Serializable]
@@ -92,6 +105,11 @@ namespace eBookKeeper.Model
         {
             return Name == null ? 0 : Name.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     [Serializable]
@@ -114,6 +132,11 @@ namespace eBookKeeper.Model
         public override int GetHashCode()
         {
             return Name == null ? 0 : Name.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 

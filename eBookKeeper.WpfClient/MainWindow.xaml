@@ -1,8 +1,88 @@
-﻿<Window x:Class="eBookKeeper.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:model="clr-namespace:eBookKeeper.Model;assembly=eBookKeeper.Model"
+        mc:Ignorable="d" x:Class="eBookKeeper.MainWindow"
+        Title="EBookIndex" Height="400" Width="800">
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid 
+			x:Name="LeftPanel"
+			Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition
+					Height="1*"
+                    MinHeight="30"
+                    />
+
+                <RowDefinition
+					Height="9*"
+                    />
+            </Grid.RowDefinitions>
+
+            <TextBox 
+                Name="SearchBox"
+                Grid.Row="0"
+                FontSize="20"
+                TextAlignment="Left"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                TextChanged="SearchBox_OnTextChanged"
+                />
+
+            <ListView
+                Name="ResultList"
+                Grid.Row="1"
+                SelectionMode="Single"
+                >
+
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="model:Book">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="30"/>
+                                <RowDefinition
+                                    Height="20"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Text="{Binding Title}"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Grid.Row="0"/>
+
+                            <TextBlock
+                                Text="{Binding FormatedAuthors}"
+                                FontSize="12"
+                                Grid.Row="1"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+        </Grid>
+
+        <Grid
+			x:Name="RightPanel"
+			Grid.Column="1">
+          
+            <TextBlock
+                Name="BookTitle"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Your book Here"
+                />
+            
+        </Grid>
+
+
     </Grid>
 </Window>
