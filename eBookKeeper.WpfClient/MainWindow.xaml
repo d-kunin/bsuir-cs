@@ -5,7 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:model="clr-namespace:eBookKeeper.Model;assembly=eBookKeeper.Model"
         mc:Ignorable="d" x:Class="eBookKeeper.MainWindow"
-        Title="EBookIndex" Height="400" Width="800">
+        Title="EBookIndex">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataTemplates.xaml"/>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+    <Window.Style>
+        <StaticResource ResourceKey="WindowStyle"></StaticResource>
+    </Window.Style>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,7 +34,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition
 					Height="1*"
-                    MinHeight="30"
+                    MinHeight="40"
                     />
 
                 <RowDefinition
@@ -34,53 +49,105 @@
                 TextAlignment="Left"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
+                ToolTip="Search ..."
                 TextChanged="SearchBox_OnTextChanged"
                 />
 
             <ListView
-                Name="ResultList"
+                Name="BooksList"
                 Grid.Row="1"
                 SelectionMode="Single"
-                >
+                ItemsSource="{Binding Books}"
+                ItemTemplate="{StaticResource BookListItemTemplate}"/>
 
-                <ListView.ItemTemplate>
-                    <DataTemplate DataType="model:Book">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="30"/>
-                                <RowDefinition
-                                    Height="20"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock
-                                Text="{Binding Title}"
-                                FontSize="16"
-                                FontWeight="Bold"
-                                Grid.Row="0"/>
-
-                            <TextBlock
-                                Text="{Binding FormatedAuthors}"
-                                FontSize="12"
-                                Grid.Row="1"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-
-            </ListView>
         </Grid>
 
         <Grid
 			x:Name="RightPanel"
-			Grid.Column="1">
-          
-            <TextBlock
-                Name="BookTitle"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Text="Your book Here"
-                />
+			Grid.Column="1"
+            DataContext="{Binding ElementName=BooksList, 
+                                  Path=SelectedItem}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <TextBox
+                Grid.ColumnSpan="4"
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="{Binding (model:Book.Title)}"/>
+
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Text="{Binding (model:Book.Categories)}"/>
+
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="1"
+                Text="{Binding (model:Book.Edition)}"/>
+
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Text="{Binding (model:Book.Keywords)}"/>
+
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="3"
+                Text="{Binding (model:Book.TableOfContent)}"/>
+
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="3"
+                Text="{Binding (model:Book.Description)}"/>
+
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="3"
+                Text="{Binding (model:Book.Authors)}"/>
+
             
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Categories: "/>
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Edition: "/>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Text="Key Words"/>
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="2"
+                Text="Content: "/>
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="2"
+                Text="Description: "/>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="2"
+                Text="Authors: "/>
         </Grid>
 
 

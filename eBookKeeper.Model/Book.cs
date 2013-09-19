@@ -8,6 +8,11 @@ namespace eBookKeeper.Model
     [Serializable]
     public class Book : IComparable<Book>
     {
+        public Book()
+        {
+            Edition = 1;
+        }
+
         private List<Author> _mAuthors = new List<Author>(); 
         private List<Category> _mCategories = new List<Category>();
         private string _mTitle = String.Empty;
@@ -52,31 +57,6 @@ namespace eBookKeeper.Model
             return (int) (Edition - other.Edition);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            Book other = (Book) obj;
-            return String.Equals(Title, other.Title, StringComparison.OrdinalIgnoreCase)
-                   && (Edition == other.Edition) 
-                   && (Authors != null 
-                        ? Authors.SequenceEqual(other.Authors) 
-                        : other.Authors == null)
-                   && (Categories != null
-                        ? Categories.SequenceEqual(other.Categories) 
-                        : other.Categories == null);
-        }
-
-        public override int GetHashCode()
-        {
-            return Tuple.Create(Title, 
-                Authors != null ? Authors.Count : 0, 
-                Categories != null ? Categories.Count: 0, 
-                Edition)
-              .GetHashCode();
-        }
-
         public override string ToString()
         {
             return string.Format("{0} by {1}, {2} edition", Title, FormatedAuthors, Edition);
@@ -94,18 +74,6 @@ namespace eBookKeeper.Model
             return String.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-            return String.Equals(Name, ((Category)obj).Name, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name == null ? 0 : Name.GetHashCode();
-        }
-
         public override string ToString()
         {
             return Name;
@@ -120,18 +88,6 @@ namespace eBookKeeper.Model
         public int CompareTo(Author other)
         {
             return String.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-            return String.Equals(Name, ((Author)obj).Name);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name == null ? 0 : Name.GetHashCode();
         }
 
         public override string ToString()

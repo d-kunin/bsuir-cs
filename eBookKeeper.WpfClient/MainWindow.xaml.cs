@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -10,27 +11,30 @@ namespace eBookKeeper
 {
     public partial class MainWindow : Window
     {
-        private ILibraryIndex _mIndex;
+        public ILibraryIndex Index { get; set; }
+        public ObservableCollection<Book> Books { get; set; } 
+
 
         public MainWindow()
         {
             InitializeComponent();
-            _mIndex = new StubLibraryIndex();
+            Index = new StubLibraryIndex();
 
-
-            var index = _mIndex.Restore();
+            var index = Index.Restore();
             if (index == null)
-                StubLibraryIndex.PopulateWithStubData(_mIndex);
+                StubLibraryIndex.PopulateWithStubData(Index);
             else
-                _mIndex = index;
+                Index = index;
 
-            _mIndex.AllBooks.Sort();
-            ResultList.ItemsSource = _mIndex.AllBooks;
+            Index.AllBooks.Sort();
+            DataContext = this;
+
+            Books = new ObservableCollection<Book>(Index.AllBooks);
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            _mIndex.Save();
+            Index.Save();
             base.OnClosed(e);
         }
 
@@ -38,9 +42,9 @@ namespace eBookKeeper
         {
             string newText = SearchBox.Text;
 
-            var result = _mIndex.Find(x => x.Title.Contains(newText));
+            var result = Index.Find(x => x.Title.ToLower().Contains(newText.ToLower()));
             result.Sort();
-            ResultList.ItemsSource = result;
+            BooksList.ItemsSource = result;
         }
     }
 }
