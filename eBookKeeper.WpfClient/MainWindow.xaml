@@ -49,7 +49,7 @@
                 TextAlignment="Left"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                ToolTip="Search ..."
+                ToolTip="Search bar"
                 TextChanged="SearchBox_OnTextChanged"
                 />
 
@@ -58,7 +58,8 @@
                 Grid.Row="1"
                 SelectionMode="Single"
                 ItemsSource="{Binding Books}"
-                ItemTemplate="{StaticResource BookListItemTemplate}"/>
+                ItemTemplate="{StaticResource BookListItemTemplate}"
+                />
 
         </Grid>
 

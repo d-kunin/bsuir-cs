@@ -12,22 +12,30 @@
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="2"/>
         <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Foreground" Value="GhostWhite"/>
-        <Setter Property="Background" Value="LightSlateGray"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="DarkGray"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Justify"/>
         <Setter Property="Padding" Value="3"/>
     </Style>
     
+    <Style TargetType="ListViewItem">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Margin"  Value="2 4"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <Style TargetType="ListView">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="Background" Value="DarkSlateGray"/>
+        <Setter Property="Background" Value="DimGray"/>
     </Style>
     
     <Style TargetType="TextBlock">
         <Setter Property="TextAlignment" Value="Left"/>
         <Setter Property="Foreground" Value="LightGray"/>
-        <Setter Property="Padding" Value="8 4"/> 
+        <Setter Property="Padding" Value="4 8"/> 
     </Style>
    
 </ResourceDictionary>

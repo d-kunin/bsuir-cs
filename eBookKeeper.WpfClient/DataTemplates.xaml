@@ -16,13 +16,14 @@
     </Style>
 
     <DataTemplate x:Key="BookListItemTemplate" DataType="model:Book">
-            
+        
             <Grid Background="DarkOrange">
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-
+                
                 <TextBlock
                     Style="{StaticResource ListItemMainText}"
                     Text="{Binding Title}"
