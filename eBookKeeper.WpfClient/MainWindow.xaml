@@ -145,7 +145,8 @@
                 Name="AddRemovePanel">
                 
                 <Button
-                    Content="Add New"/>
+                    Content="Add New"
+                    Click="AddButton_OnClick"/>
                     
                 <Button
                     Name="Remove"

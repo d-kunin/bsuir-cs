@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -52,6 +53,13 @@ namespace eBookKeeper
             Book bookToRemove = (Book) BooksList.SelectedItem;
             Index.Delete(bookToRemove);
             Books.Remove(bookToRemove);
+        }
+
+        private void AddButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Book newBook = Index.CreateBook("Brand new book!");
+            Books.Insert(0, newBook); // show recently added items first
+            BooksList.SelectedItem = newBook;
         }
       
     }
