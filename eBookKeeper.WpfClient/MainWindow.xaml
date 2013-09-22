@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="DataTemplates.xaml"/>
                 <ResourceDictionary Source="Styles.xaml"/>
+                <ResourceDictionary Source="KeyWords.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -34,12 +35,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition
 					Height="1*"
-                    MinHeight="40"
-                    />
+                    MinHeight="40"/>
 
                 <RowDefinition
-					Height="9*"
-                    />
+					Height="9*"/>
             </Grid.RowDefinitions>
 
             <TextBox 
@@ -50,16 +49,14 @@
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 ToolTip="Search bar"
-                TextChanged="SearchBox_OnTextChanged"
-                />
+                TextChanged="SearchBox_OnTextChanged"/>
 
             <ListView
                 Name="BooksList"
                 Grid.Row="1"
                 SelectionMode="Single"
                 ItemsSource="{Binding Books}"
-                ItemTemplate="{StaticResource BookListItemTemplate}"
-                />
+                ItemTemplate="{StaticResource BookListItemTemplate}"/>
 
         </Grid>
 
@@ -70,85 +67,93 @@
                                   Path=SelectedItem}">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
-
+            
             <TextBox
-                Grid.ColumnSpan="4"
+                Grid.ColumnSpan="2"
+                Grid.RowSpan="2"
                 Grid.Row="0"
                 Grid.Column="0"
                 Text="{Binding (model:Book.Title)}"/>
 
             <TextBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Text="{Binding (model:Book.Categories)}"/>
-
-            <TextBox
-                Grid.Row="2"
-                Grid.Column="1"
+                Grid.Row="0"
+                Grid.Column="3"
                 Text="{Binding (model:Book.Edition)}"/>
 
             <TextBox
-                Grid.Row="3"
-                Grid.Column="1"
-                Text="{Binding (model:Book.Keywords)}"/>
-
-            <TextBox
-                Grid.Row="1"
-                Grid.Column="3"
-                Text="{Binding (model:Book.TableOfContent)}"/>
-
-            <TextBox
                 Grid.Row="2"
-                Grid.Column="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
                 Text="{Binding (model:Book.Description)}"/>
 
-            <TextBox
-                Grid.Row="3"
-                Grid.Column="3"
-                Text="{Binding (model:Book.Authors)}"/>
-
-            
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
-                Text="Categories: "/>
-
-            <TextBlock
+            <ListView
                 Grid.Row="2"
+                Grid.Column="2"
+                ItemsSource="{Binding 
+                                ElementName=BooksList,
+                                Path=SelectedItem.(model:Book.Authors)}"/>
+
+            <ListView
+                Grid.Row="2"
+                Grid.Column="3"
+                ItemsSource="{Binding 
+                                ElementName=BooksList, 
+                                Path=SelectedItem.(model:Book.Categories)}"/>
+
+            <ItemsControl
+                Style="{StaticResource KeyWordStyle}"
+                Grid.Row="3"
                 Grid.Column="0"
+                Grid.ColumnSpan="2"
+                ItemsSource="{Binding 
+                                ElementName=BooksList,
+                                Path=SelectedItem.(model:Book.Keywords)}">
+            </ItemsControl>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
                 Text="Edition: "/>
 
             <TextBlock
-                Grid.Row="3"
-                Grid.Column="0"
-                Text="Key Words"/>
+                Grid.Row="1"
+                Grid.Column="2"
+                Text="Authors:"/>
 
             <TextBlock
                 Grid.Row="1"
-                Grid.Column="2"
-                Text="Content: "/>
-
-            <TextBlock
-                Grid.Row="2"
-                Grid.Column="2"
-                Text="Description: "/>
-
-            <TextBlock
+                Grid.Column="3"
+                Text="Categories:"/>
+            
+            <StackPanel
                 Grid.Row="3"
                 Grid.Column="2"
-                Text="Authors: "/>
+                Grid.ColumnSpan="2"
+                VerticalAlignment="Center"
+                Name="AddRemovePanel">
+                
+                <Button
+                    Content="Add New"/>
+                    
+                <Button
+                    Name="Remove"
+                    Content="Remove"
+                    Click="RemoveButton_OnClick"
+                    IsEnabled="{Binding ElementName=BooksList,
+                                        Path=SelectedItems.Count}"/>
+            </StackPanel>
         </Grid>
 
 

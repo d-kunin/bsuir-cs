@@ -148,24 +148,26 @@ namespace eBookKeeper.Model
             }
         }
 
+        private static Random _random = new Random();
         public static void PopulateWithStubData(ILibraryIndex index)
         {
             const int booksToGenerate = 42*7; // Some magic numbers. Because 42.
 
             string[] bookNames =
             {
-                "WTF", "WPF", "J2E",
+                "WTF", "WPF", "J2E","C#",
                 "Introduction", "Depth",
                 "C++", "Java", "iOS", "Android",
                 "Bugs", "Monkeys",
                 "Rails", "Ruby", "Advanced",
                 "Concurrency", "Optimazation", "CookBook",
-                "Beginning", "Design", "Pattern"
+                "Beginning", "Design", "Pattern", ".NET",
+                "DirectX", "OpenGl"
             };
 
             string[] preps =
             {
-                "For", "On", "In", "To"
+                "for", "on", "in", "to", "with"
             };
 
             string[] authors =
@@ -175,14 +177,28 @@ namespace eBookKeeper.Model
                 "Steve Looper",
                 "Mark Deadlock",
                 "Bill Goto",
-                "Garry Template"
+                "Garry Template",
+                "Joel Howto",
+                "John Skeetles"
             };
             string[] categories =
             {
                 "Success story", "Love story",
                 "Textbook", "Novel",
                 "Computer Science", "Pseudoscience",
-                "Horror", "Software"
+                "Horror", "Software",
+                "Programming Languages", "Web Development",
+                "System Programming", "Mobile Devices",
+                "Big Data"
+                };
+
+            string[] keywords =
+            {
+                    "WTF", "WPF", "J2E", "C#",
+                    "C++", "Java", "iOS", "Android",
+                    "Rails", "Ruby", "Management",
+                    "Concurrency", "Optimazation", "CookBook",
+                    "Design", "Pattern", ".NET"
             };
 
             foreach (var author in authors)
@@ -190,10 +206,15 @@ namespace eBookKeeper.Model
             foreach (var category in categories)
                 index.CreateCategory(category);
 
-            var rand = new Random();
+            Chooser<string> keyWordsChooser = new Chooser<string>(keywords.ToList());
+            Chooser<Author> authorChooser = new Chooser<Author>(index.AllAuthors);
+            Chooser<Category> categoryChooser = new Chooser<Category>(index.AllCategories);
+
+
+
             for (var i = 0; i < booksToGenerate; ++i)
             {
-                int wordsInTitle = rand.Next(2, 5);
+                int wordsInTitle = _random.Next(2, 5);
                 string title = "";
                 var usedIndeces = new HashSet<int>();
                 for (var j = 0; j < wordsInTitle; ++j)
@@ -201,7 +222,7 @@ namespace eBookKeeper.Model
                     // genarate index 
                     int nameIndex;
 
-                    while (usedIndeces.Contains((nameIndex = rand.Next(bookNames.Length))))
+                    while (usedIndeces.Contains((nameIndex = _random.Next(bookNames.Length))))
                     {
                         // noop
                     }
@@ -211,16 +232,55 @@ namespace eBookKeeper.Model
 
                     if (j != 0 && j != wordsInTitle - 1)
                     {
-                        bool addPreposition = rand.Next()%2 == 0;
+                        bool addPreposition = _random.Next()%2 == 0;
                         if (addPreposition)
-                            title = String.Join(" ", title, preps[rand.Next(preps.Length)]);
+                            title = String.Join(" ", title, preps[_random.Next(preps.Length)]);
                     }
 
                 }
-                var bookAuthors = new List<Author> {index.AllAuthors[rand.Next(authors.Length)]};
-                var bookCategories = new List<Category> {index.AllCategories[rand.Next(categories.Length)]};
-                index.CreateBook(title.Trim(), bookAuthors, bookCategories);
+
+                var book = index.CreateBook(title.Trim(), authorChooser.ChooseRandom(1, 3), categoryChooser.ChooseRandom(1,2));
+                book.Keywords =  keyWordsChooser.ChooseRandom(1, 5);
             }
         }
+
+        class Chooser<T>
+        {
+            readonly List<T> _mInput;
+
+            public Chooser(List<T> input)
+            {
+                _mInput = input;
+            }
+
+            public List<T> ChooseRandom(int minCount, int maxCount)
+            {
+                if (maxCount > _mInput.Count)
+                    throw new ArgumentException(
+                        String.Format("Can't get {0} items from {1}-size collection.", maxCount, _mInput.Count));
+
+                var indeces = GetRandomUniqueSeries(minCount, maxCount, _mInput.Count);
+
+                return indeces.Select(index => _mInput[index]).ToList();
+            }
+        }
+
+        private static List<int> GetRandomUniqueSeries(int minCount, int maxCount, int maxValue)
+        {
+            var addedIndeces = new HashSet<int>();
+            int numberToGenerate = _random.Next(minCount, maxCount);
+
+            while (addedIndeces.Count < numberToGenerate)
+            {
+                int nextIndex = _random.Next(maxValue);
+                if (addedIndeces.Contains(nextIndex))
+                    continue;
+                else
+                    addedIndeces.Add(nextIndex);
+            }
+            return addedIndeces.ToList();
+        }
+
+
     }
 }

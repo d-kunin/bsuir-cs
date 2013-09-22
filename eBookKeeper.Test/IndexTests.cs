@@ -32,9 +32,9 @@ namespace eBookKeeper.Test
             stubIndex.Save();
             var sb2 = stubIndex.Restore();
 
-            Assert.IsTrue(stubIndex.AllAuthors.SequenceEqual(sb2.AllAuthors));
-            Assert.IsTrue(stubIndex.AllBooks.SequenceEqual(sb2.AllBooks));
-            Assert.IsTrue(stubIndex.AllCategories.SequenceEqual(sb2.AllCategories));
+            Assert.AreEqual(stubIndex.AllBooks.Select(b => sb2.AllBooks.Find(x => x.Authors.SequenceEqual(b.Authors))).Count(), sb2.AllBooks.Count);
+            Assert.AreEqual(stubIndex.AllCategories.Select(b => sb2.AllCategories.Find(x => x.Name.Equals(b.Name))).Count(), sb2.AllCategories.Count);
+            Assert.AreEqual(stubIndex.AllAuthors.Select(b => sb2.AllAuthors.Find(x => x.Name.Equals(b.Name))).Count(), sb2.AllAuthors.Count);
         }
     }
 }

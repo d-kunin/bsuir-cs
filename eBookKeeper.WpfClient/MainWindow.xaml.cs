@@ -46,5 +46,13 @@ namespace eBookKeeper
             result.Sort();
             BooksList.ItemsSource = result;
         }
+
+        private void RemoveButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Book bookToRemove = (Book) BooksList.SelectedItem;
+            Index.Delete(bookToRemove);
+            Books.Remove(bookToRemove);
+        }
+      
     }
 }
