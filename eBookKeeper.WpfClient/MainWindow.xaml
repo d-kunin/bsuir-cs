@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="DataTemplates.xaml"/>
                 <ResourceDictionary Source="Styles.xaml"/>
                 <ResourceDictionary Source="KeyWords.xaml"/>
+                <ResourceDictionary Source="FlatButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -145,11 +146,19 @@
                 Name="AddRemovePanel">
                 
                 <Button
+                    Name="Add"
+                    Template="{StaticResource FlatButtonTemplate}"
+                    Foreground="White"
                     Content="Add New"
-                    Click="AddButton_OnClick"/>
+                    Click="AddButton_OnClick"
+                    Background="LimeGreen"
+                    />
                     
                 <Button
                     Name="Remove"
+                    Template="{StaticResource FlatButtonTemplate}"
+                    Background="OrangeRed"
+                    Foreground="White"
                     Content="Remove"
                     Click="RemoveButton_OnClick"
                     IsEnabled="{Binding ElementName=BooksList,

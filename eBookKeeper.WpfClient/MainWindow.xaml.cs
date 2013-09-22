@@ -42,10 +42,11 @@ namespace eBookKeeper
         private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             string newText = SearchBox.Text;
-
             var result = Index.Find(x => x.Title.ToLower().Contains(newText.ToLower()));
             result.Sort();
-            BooksList.ItemsSource = result;
+            // could make easier
+            Books = new ObservableCollection<Book>(result);
+            BooksList.ItemsSource = Books;
         }
 
         private void RemoveButton_OnClick(object sender, RoutedEventArgs e)
