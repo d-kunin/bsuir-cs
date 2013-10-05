@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookKeeper.Model", "eBookKeeper.Model\eBookKeeper.Model.csproj", "{080C106E-526D-4165-932B-869762274769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookKeeper.WpfClient", "eBookKeeper.WpfClient\eBookKeeper.WpfClient.csproj", "{BC739B75-3569-4618-AA48-F7887B7D4497}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookKeeper.Test", "eBookKeeper.Test\eBookKeeper.Test.csproj", "{CE1D378B-D0C6-4394-9596-2E1C53DCEFA9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{080C106E-526D-4165-932B-869762274769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{080C106E-526D-4165-932B-869762274769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{080C106E-526D-4165-932B-869762274769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{080C106E-526D-4165-932B-869762274769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC739B75-3569-4618-AA48-F7887B7D4497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC739B75-3569-4618-AA48-F7887B7D4497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC739B75-3569-4618-AA48-F7887B7D4497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC739B75-3569-4618-AA48-F7887B7D4497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1D378B-D0C6-4394-9596-2E1C53DCEFA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1D378B-D0C6-4394-9596-2E1C53DCEFA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1D378B-D0C6-4394-9596-2E1C53DCEFA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1D378B-D0C6-4394-9596-2E1C53DCEFA9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
