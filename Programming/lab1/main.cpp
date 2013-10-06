@@ -17,10 +17,11 @@ public:
 	Matrix();
 	virtual ~Matrix();
 
-	size_t Rows();
-	size_t Columns();
+	size_t Rows() const;
+	size_t Columns() const;
 	// Доступ к элементам
 	T & operator()(size_t i, size_t j);
+	T const & operator()(size_t i, size_t j) const;
 	// Базовые операции
 	Matrix<N, M, T> operator +(Matrix<N, M, T> const & other) const;
 	Matrix<N, M, T> operator -(Matrix<N, M, T> const & other) const;
@@ -110,6 +111,13 @@ template <size_t N, size_t M, typename T> T& Matrix<N, M, T>::operator()(size_t 
 	return _data[i][j];
 }
 
+template <size_t N, size_t M, typename T> T const & Matrix<N, M, T>::operator()(size_t i, size_t j) const
+{
+	// todo: add range check
+	return _data[i][j];
+}
+
+
 template <size_t N, size_t M, typename T> Matrix<N, M, T> Matrix<N, M, T>::operator-() const
 {
 	Matrix<N,M,T> res(*this);
@@ -137,14 +145,14 @@ template <size_t N, size_t M, typename T> Matrix<N, M, T> Matrix<N, M, T>::opera
 	return *this + (-other);
 }
 
-template <size_t N, size_t M, typename T> size_t Matrix<N, M, T>::Rows() { return N; }
-template <size_t N, size_t M, typename T> size_t Matrix<N, M, T>::Columns() { return M; }
+template <size_t N, size_t M, typename T> size_t Matrix<N, M, T>::Rows() const { return N; }
+template <size_t N, size_t M, typename T> size_t Matrix<N, M, T>::Columns() const { return M; }
 
 
 // Vector
 template <size_t M, typename T> T & Vector<M, T>::operator[](size_t index)
 {
-	return _data[0][index];
+	return this->_data[0][index];
 }
 
 template <size_t M, typename T> T Vector<M, T>::operator*(Vector<M, T> const & other) const
@@ -152,7 +160,7 @@ template <size_t M, typename T> T Vector<M, T>::operator*(Vector<M, T> const & o
 	T prod = 0;
 
 	for (size_t i = 0; i < M; ++i)
-		prod += _data[0][i] * other._data[0][i];
+		prod += this->_data[0][i] * other._data[0][i];
 
 	return prod;
 }
@@ -161,16 +169,16 @@ template <size_t M, typename T> T Vector<M, T>::operator*(Vector<M, T> const & o
 // Point
 template <typename T> Point2D<T>::Point2D(T x, T y) 
 {
-	_data[0][0] = x;
-	_data[0][1] = y;
+	this->_data[0][0] = x;
+	this->_data[0][1] = y;
 }
-template <typename T> T & Point2D<T>::x() { return _data[0][0]; }
-template <typename T> T & Point2D<T>::y() { return _data[0][1]; }
+template <typename T> T & Point2D<T>::x() { return this->_data[0][0]; }
+template <typename T> T & Point2D<T>::y() { return this->_data[0][1]; }
 
 
 
 // Вспомогательные функции
-template <size_t N, size_t M, typename T> void matrix_print(Matrix<N, M, T> & m)
+template <size_t N, size_t M, typename T> void matrix_print(Matrix<N, M, T> const & m)
 {
 	cout << ">>>===" << endl;
 	for (size_t i = 0; i < m.Rows(); ++i)
