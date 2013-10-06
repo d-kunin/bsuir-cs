@@ -150,3 +150,7 @@ $RECYCLE.BIN/
 # Mac crap
 CMakeLists.txt.user
 .DS_Store
+
+
+#build dirs
+*-build/

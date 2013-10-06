@@ -20,11 +20,20 @@ int main()
     const size_t n = 10;
     MatrixD * matrices[n];
 
-    for (int i = 1; i < n; ++i)
-      matrices[i - 1] = new MatrixD( i*i, (n-i)*(n-i));
+    for (int i = 1; i <= n; ++i)
+      matrices[i - 1] = new MatrixD( i*i, (n+1-i)*(n+1-i));
+
 
     for (int i = 0; i < n; ++i)
+    {
       delete matrices[i];
+      matrices[i] = NULL;
+    }
+
+    MatrixD zeroM(5,5);
+    for (int i = 0; i < 5; ++i)
+      for (int j = 0; j < 5; ++j)
+        assert(zeroM(i,j) == 0);
   }
 
 
