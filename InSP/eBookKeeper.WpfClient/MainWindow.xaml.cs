@@ -19,18 +19,19 @@ namespace eBookKeeper
         public MainWindow()
         {
             InitializeComponent();
-            Index = new StubLibraryIndex();
+//            Index = new StubLibraryIndex();
+          Index = new LibraryIndexOnDb();
 
             var index = Index.Restore();
-            if (index == null)
-                StubLibraryIndex.PopulateWithStubData(Index);
-            else
-                Index = index;
+//            if (index == null)
+//                StubLibraryIndex.PopulateWithStubData(Index);
+//            else
+//                Index = index;
 
-            Index.AllBooks.Sort();
-            DataContext = this;
-
-            Books = new ObservableCollection<Book>(Index.AllBooks);
+//            Index.AllBooks.Sort();
+//            DataContext = this;
+//
+//            Books = new ObservableCollection<Book>(Index.AllBooks);
         }
 
         protected override void OnClosed(EventArgs e)
