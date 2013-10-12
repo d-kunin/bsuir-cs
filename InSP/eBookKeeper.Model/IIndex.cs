@@ -16,21 +16,21 @@ namespace eBookKeeper.Model
            List<Category> categories = null,
            List<string> tableOfContent = null);
 
-        int NumberOfBooks();
+        long NumberOfBooks();
         List<Book> AllBooks { get; } 
     }
 
     public interface IAuthorIndex : IIndex<Author>
     {
         Author CreateAuthor(string name);
-        int NumberOfAuthors();
+        long NumberOfAuthors();
         List<Author> AllAuthors { get; } 
     }
 
     public interface ICategoryIndex : IIndex<Category>
     {
         Category CreateCategory(string name);
-        int NumberOfCategories();
+        long NumberOfCategories();
         List<Category> AllCategories { get; } 
     }
 

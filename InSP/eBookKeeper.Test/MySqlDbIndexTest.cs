@@ -10,7 +10,7 @@ namespace eBookKeeper.Test
 
     private LibraryIndexOnDb _index;
 
-    [ClassInitialize]
+    [TestInitialize]
     public void SetUp()
     {
       _index = new LibraryIndexOnDb();
@@ -20,17 +20,11 @@ namespace eBookKeeper.Test
     }
 
     [TestMethod]
-    public void FooTest()
-    {
-      Assert.IsTrue(false);
-
-      Assert.Fail("Must fail");
-    }
-
-    [TestMethod]
     public void EmptyTablesTest()
     {
-      
+      Assert.AreEqual(0, _index.NumberOfAuthors());
+      Assert.AreEqual(0, _index.NumberOfBooks());
+      Assert.AreEqual(0, _index.NumberOfCategories());
     }
   }
 }

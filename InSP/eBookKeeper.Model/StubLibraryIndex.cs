@@ -52,7 +52,7 @@ namespace eBookKeeper.Model
             return book;
         }
 
-        public int NumberOfBooks()
+        public long NumberOfBooks()
         {
             return AllBooks.Count;
         }
@@ -78,7 +78,7 @@ namespace eBookKeeper.Model
             return author;
         }
 
-        public int NumberOfAuthors()
+        public long NumberOfAuthors()
         {
             return AllAuthors.Count;
         }
@@ -105,7 +105,7 @@ namespace eBookKeeper.Model
             return category;
         }
 
-        public int NumberOfCategories()
+        public long NumberOfCategories()
         {
             return AllCategories.Count;
         }

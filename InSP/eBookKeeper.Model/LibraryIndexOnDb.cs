@@ -56,7 +56,7 @@ namespace eBookKeeper.Model
       throw new NotImplementedException();
     }
 
-    public int NumberOfBooks()
+    public long NumberOfBooks()
     {
       return SelectCountFromTable(MySqlStatements.TableBooks);
     }
@@ -81,7 +81,7 @@ namespace eBookKeeper.Model
       throw new NotImplementedException();
     }
 
-    public int NumberOfAuthors()
+    public long NumberOfAuthors()
     {
       return SelectCountFromTable(MySqlStatements.TableAuthors);
     }
@@ -106,7 +106,7 @@ namespace eBookKeeper.Model
       throw new NotImplementedException();
     }
 
-    public int NumberOfCategories()
+    public long NumberOfCategories()
     {
       return SelectCountFromTable(MySqlStatements.TableCategories);
     }
@@ -176,13 +176,14 @@ namespace eBookKeeper.Model
       return (int) lastIdCommand.ExecuteScalar();
     }
 
-    private int SelectCountFromTable(string tableName)
+    private long SelectCountFromTable(string tableName)
     {
       IDbCommand selectCountCommand = new MySqlCommand(
          MySqlStatements.SelectCountFrom + tableName,
         (MySqlConnection) Connection);
 
-      return (int) selectCountCommand.ExecuteScalar();
+
+      return (long)selectCountCommand.ExecuteScalar();
     }
   }
 }
