@@ -13,8 +13,7 @@ namespace eBookKeeper.Model
     {
         Book CreateBook(string title,
            List<Author> authors = null,
-           List<Category> categories = null,
-           List<string> tableOfContent = null);
+           List<Category> categories = null);
 
         long NumberOfBooks();
         List<Book> AllBooks { get; } 

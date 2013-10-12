@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -34,10 +35,14 @@ namespace eBookKeeper.Model
       if (Connection.State != ConnectionState.Open)
       {
         var message = "Не могу открыть подключение к базе: " + Connection.State;
-        Console.WriteLine(message);
         throw new IOException(message);
       }
+
+      Books = new List<Book>();
     }
+
+
+    public List<Book> Books { get; set; }
 
     public IDbConnection Connection { get; private set; }
 
@@ -48,12 +53,33 @@ namespace eBookKeeper.Model
 
     public List<Book> Find(Predicate<Book> predicate)
     {
-      throw new NotImplementedException();
+      return Books.ToList().FindAll(predicate);
     }
 
-    public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null, List<string> tableOfContent = null)
+    public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null)
     {
-      throw new NotImplementedException();
+      IDbCommand insertBookCommand = 
+        new MySqlCommand(MySqlStatements.BookInsert, (MySqlConnection) Connection);
+
+      Book newBook = new Book();
+      newBook.Edition = 1;
+      newBook.Title = title;
+      newBook.Description = "";
+      
+      MySqlStatements.BookTitleParam.Value = newBook.Title;
+      MySqlStatements.BookEditionParam.Value = newBook.Edition;
+      MySqlStatements.BookDescriptionParam.Value = newBook.Description;
+
+      insertBookCommand.Parameters.Add(MySqlStatements.BookTitleParam);
+      insertBookCommand.Parameters.Add(MySqlStatements.BookDescriptionParam);
+      insertBookCommand.Parameters.Add(MySqlStatements.BookEditionParam);
+
+      insertBookCommand.ExecuteNonQuery();
+      newBook.Id = LastInsertId();
+
+      //TODO add mapping 
+
+      return newBook;
     }
 
     public long NumberOfBooks()
@@ -63,7 +89,7 @@ namespace eBookKeeper.Model
 
     public List<Book> AllBooks
     {
-      get { throw new NotImplementedException(); }
+      get { return Books; }
     }
 
     public bool Delete(Author item)
@@ -118,7 +144,17 @@ namespace eBookKeeper.Model
 
     public bool Save()
     {
-      DropTables(); // strange ha?
+      IDbTransaction transaction = Connection.BeginTransaction();
+      try
+      {
+        // TODO suboptimal
+        foreach (var book in Books)
+          book.Update(Connection);
+      }
+      finally
+      {
+        transaction.Commit();
+      }
 
       return true;
     }
@@ -126,6 +162,19 @@ namespace eBookKeeper.Model
     public ILibraryIndex Restore()
     {
       InitTables();
+      Books.Clear();
+
+      IDbCommand selectBooks = 
+        new MySqlCommand(MySqlStatements.BookSelect, (MySqlConnection) Connection);
+
+      IDataReader reader = selectBooks.ExecuteReader();
+      while (reader.Read())
+      {
+        Book newBook = new Book();
+        newBook.PopulateFromReader(reader);
+        Books.Add(newBook);
+      }
+      reader.Close();
 
       return this;
     }
@@ -145,7 +194,7 @@ namespace eBookKeeper.Model
       foreach (var table in tables)
       {
         IDbCommand dropTable = new MySqlCommand(MySqlStatements.DropTable + table, 
-          (MySqlConnection) Connection);
+          (MySqlConnection) Connection); 
         dropTable.ExecuteNonQuery();
       }
     }
@@ -167,13 +216,13 @@ namespace eBookKeeper.Model
       createMappingCommand.ExecuteNonQuery();
     }
 
-    private int LastInsertId()
+    private uint LastInsertId()
     {
       IDbCommand lastIdCommand = new MySqlCommand(
          MySqlStatements.SelectLastInsertId,
         (MySqlConnection) Connection);
 
-      return (int) lastIdCommand.ExecuteScalar();
+      return Convert.ToUInt32(lastIdCommand.ExecuteScalar());
     }
 
     private long SelectCountFromTable(string tableName)

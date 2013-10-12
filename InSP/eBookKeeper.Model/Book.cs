@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
 {
 
     [Serializable]
-    public class Book : IComparable<Book>
+    public class Book : DbObject, IComparable<Book>
     {
         public Book()
         {
@@ -33,10 +35,9 @@ namespace eBookKeeper.Model
             set { _mCategories = value ?? new List<Category>(); }
         }
 
-        public List<string> Keywords { get; set; }
-        public List<string> TableOfContent { get; set; }
+        public List<string> Keywords    { get; set; }
         public string       Description { get; set; }
-        public uint         Edition { get; set; }
+        public ushort       Edition     { get; set; }
 
         public string FormatedAuthors
         {
@@ -61,12 +62,37 @@ namespace eBookKeeper.Model
         {
             return string.Format("{0} by {1}, {2} edition", Title, FormatedAuthors, Edition);
         }
+
+      public override void PopulateFromReader(IDataReader reader)
+      {
+        Id          = Convert.ToUInt32(reader.GetInt32(MySqlStatements.BookIdIndex));
+        Title       = reader.GetString(MySqlStatements.BookTitleIndex);
+        Description = reader.GetString(MySqlStatements.BookDescriptionIndex);
+        Edition     = Convert.ToUInt16(reader.GetInt16(MySqlStatements.BookEditionIndex));
+      }
+
+      public override void Update(IDbConnection connection)
+      {
+        IDbCommand updateCommand = 
+          new MySqlCommand(MySqlStatements.BookUpdate, (MySqlConnection) connection);
+
+        MySqlStatements.BookTitleParam.Value = Title;
+        MySqlStatements.BookDescriptionParam.Value = Description;
+        MySqlStatements.BookEditionParam.Value = Edition;
+        MySqlStatements.BookIdParam.Value = Id;
+
+        updateCommand.Parameters.Add(MySqlStatements.BookTitleParam);
+        updateCommand.Parameters.Add(MySqlStatements.BookDescriptionParam);
+        updateCommand.Parameters.Add(MySqlStatements.BookEditionParam);
+        updateCommand.Parameters.Add(MySqlStatements.BookIdParam);
+
+        updateCommand.ExecuteNonQuery();
+      }
     }
 
     [Serializable]
     public class Category : IComparable<Category>
     {
-        // TODO: may add parent/child categories
         public string Name { get; set; }
 
         public int CompareTo(Category other)

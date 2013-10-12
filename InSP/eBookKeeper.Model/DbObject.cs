@@ -4,32 +4,23 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
 {
-  abstract class DbObject
+  public class DbObject
   {
 
-    public int Id { get; private set; }
+    public uint Id { get; internal set; }
 
-    protected DbObject(int id)
+    public virtual void Update(IDbConnection connection)
     {
-      Id = id;
     }
 
-    /// <summary>
-    /// Helps is to save, update
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
-    public abstract IDbCommand AddParams(IDbCommand command);
-
-    /// <summary>
-    /// Helps to read
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
-    public abstract bool PopualateFromReader(IDataReader reader);
+    public virtual void PopulateFromReader(IDataReader reader)
+    {
+    }
+     
 
   }
 }

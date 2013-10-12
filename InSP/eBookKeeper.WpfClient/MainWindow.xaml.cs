@@ -29,9 +29,8 @@ namespace eBookKeeper
 //                Index = index;
 
 //            Index.AllBooks.Sort();
-//            DataContext = this;
-//
-//            Books = new ObservableCollection<Book>(Index.AllBooks);
+            DataContext = this;
+            Books = new ObservableCollection<Book>(Index.AllBooks);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -60,7 +59,7 @@ namespace eBookKeeper
 
         private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Book newBook = Index.CreateBook("Brand new book!");
+            Book newBook = Index.CreateBook("New book!");
             Books.Insert(0, newBook); // show recently added items first
             BooksList.SelectedItem = newBook;
         }

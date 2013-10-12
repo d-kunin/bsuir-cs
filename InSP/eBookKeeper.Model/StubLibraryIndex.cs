@@ -38,14 +38,13 @@ namespace eBookKeeper.Model
             return AllBooks.FindAll(predicate);
         }
 
-        public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null, List<string> tableOfContent = null)
+        public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null)
         {
             var book = new Book
             {
                 Title = title,
                 Authors = authors,
                 Categories = categories,
-                TableOfContent = tableOfContent
             };
 
             AllBooks.Add(book);
