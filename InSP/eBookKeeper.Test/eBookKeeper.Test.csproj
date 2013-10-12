@@ -51,13 +51,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="IndexTests.cs" />
+    <Compile Include="MySqlDbIndexTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BookTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eBookKeeper.Model\eBookKeeper.Model.csproj">
       <Project>{080c106e-526d-4165-932b-869762274769}</Project>
       <Name>eBookKeeper.Model</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Choose>

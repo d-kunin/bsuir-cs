@@ -53,6 +53,7 @@ namespace eBookKeeper
         private void RemoveButton_OnClick(object sender, RoutedEventArgs e)
         {
             Book bookToRemove = (Book) BooksList.SelectedItem;
+
             Index.Delete(bookToRemove);
             Books.Remove(bookToRemove);
         }

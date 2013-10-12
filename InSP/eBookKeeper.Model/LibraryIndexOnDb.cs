@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -32,7 +33,7 @@ namespace eBookKeeper.Model
 
       if (Connection.State != ConnectionState.Open)
       {
-        var message = "Не могу отрыть подключение к базе: " + Connection.State;
+        var message = "Не могу открыть подключение к базе: " + Connection.State;
         Console.WriteLine(message);
         throw new IOException(message);
       }
@@ -57,7 +58,7 @@ namespace eBookKeeper.Model
 
     public int NumberOfBooks()
     {
-      throw new NotImplementedException();
+      return SelectCountFromTable(MySqlStatements.TableBooks);
     }
 
     public List<Book> AllBooks
@@ -82,7 +83,7 @@ namespace eBookKeeper.Model
 
     public int NumberOfAuthors()
     {
-      throw new NotImplementedException();
+      return SelectCountFromTable(MySqlStatements.TableAuthors);
     }
 
     public List<Author> AllAuthors
@@ -107,7 +108,7 @@ namespace eBookKeeper.Model
 
     public int NumberOfCategories()
     {
-      throw new NotImplementedException();
+      return SelectCountFromTable(MySqlStatements.TableCategories);
     }
 
     public List<Category> AllCategories
@@ -117,7 +118,9 @@ namespace eBookKeeper.Model
 
     public bool Save()
     {
-      throw new NotImplementedException();
+      DropTables(); // strange ha?
+
+      return true;
     }
 
     public ILibraryIndex Restore()
@@ -127,19 +130,59 @@ namespace eBookKeeper.Model
       return this;
     }
 
-    private void InitTables()
+    public void DropTables()
     {
+      // drop mappings first
+      var tables = new ArrayList()
+      {
+        MySqlStatements.TableBook2Author,
+        MySqlStatements.TableBook2Category,
+        MySqlStatements.TableBooks,
+        MySqlStatements.TableAuthors,
+        MySqlStatements.TableCategories
+      };
+
+      foreach (var table in tables)
+      {
+        IDbCommand dropTable = new MySqlCommand(MySqlStatements.DropTable + table, 
+          (MySqlConnection) Connection);
+        dropTable.ExecuteNonQuery();
+      }
+    }
+
+    public void InitTables()
+    {
+      // init books, authors, categories
       IDbCommand createTablesCommand = 
         new MySqlCommand(MySqlStatements.CreateTables,
                          (MySqlConnection) Connection);
 
       createTablesCommand.ExecuteNonQuery();
 
+      // init mappings
       IDbCommand createMappingCommand = 
         new MySqlCommand(MySqlStatements.CreateMappingTables,
                           (MySqlConnection) Connection);
 
       createMappingCommand.ExecuteNonQuery();
+    }
+
+    private int LastInsertId()
+    {
+      IDbCommand lastIdCommand = new MySqlCommand(
+         MySqlStatements.SelectLastInsertId,
+        (MySqlConnection) Connection);
+
+      return (int) lastIdCommand.ExecuteScalar();
+    }
+
+    private int SelectCountFromTable(string tableName)
+    {
+      IDbCommand selectCountCommand = new MySqlCommand(
+         MySqlStatements.SelectCountFrom + tableName,
+        (MySqlConnection) Connection);
+
+      return (int) selectCountCommand.ExecuteScalar();
     }
   }
 }

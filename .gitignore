@@ -155,3 +155,5 @@ CMakeLists.txt.user
 #build dirs
 *-build/
 *txt.user*
+
+*.run

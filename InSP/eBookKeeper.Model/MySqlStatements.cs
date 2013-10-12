@@ -12,7 +12,7 @@ namespace eBookKeeper.Model
     public const string TableCategories = "categories";
     public const string TableAuthors = "authors";
     public const string TableBook2Author = "book_to_author_map";
-    public const string TableBook2Category = "book_to_author_map";
+    public const string TableBook2Category = "book_to_category_map";
 
     public const string CreateTables = "CREATE TABLE IF NOT EXISTS bsuir.books (" +
                                        "Id INT PRIMARY KEY AUTO_INCREMENT," +
@@ -51,6 +51,9 @@ namespace eBookKeeper.Model
                                               "foreign key (AuthorId) references bsuir.authors(Id)" +
                                               ");";
 
-    public const string DropTables   = "";
+    public const string DropTable   = "DROP TABLE IF EXISTS ";
+
+    public const string SelectLastInsertId = "SELECT LAST_INSERT_ID()";
+    public const string SelectCountFrom = "SELECT COUNT(*) FROM ";
   }
 }

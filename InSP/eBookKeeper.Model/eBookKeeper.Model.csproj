@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Book.cs" />
+    <Compile Include="DbObject.cs" />
     <Compile Include="ILibraryIndex.cs" />
     <Compile Include="IIndex.cs" />
     <Compile Include="LibraryIndexOnDb.cs" />
