@@ -65,26 +65,26 @@ namespace eBookKeeper.Model
 
       public override void PopulateFromReader(IDataReader reader)
       {
-        Id          = Convert.ToUInt32(reader.GetInt32(MySqlStatements.BookIdIndex));
-        Title       = reader.GetString(MySqlStatements.BookTitleIndex);
-        Description = reader.GetString(MySqlStatements.BookDescriptionIndex);
-        Edition     = Convert.ToUInt16(reader.GetInt16(MySqlStatements.BookEditionIndex));
+        Id          = Convert.ToUInt32(reader.GetInt32(DbConsts.BookIdIndex));
+        Title       = reader.GetString(DbConsts.BookTitleIndex);
+        Description = reader.GetString(DbConsts.BookDescriptionIndex);
+        Edition     = Convert.ToUInt16(reader.GetInt16(DbConsts.BookEditionIndex));
       }
 
       public override void Update(IDbConnection connection)
       {
         IDbCommand updateCommand = 
-          new MySqlCommand(MySqlStatements.BookUpdate, (MySqlConnection) connection);
+          new MySqlCommand(DbConsts.BookUpdate, (MySqlConnection) connection);
 
-        MySqlStatements.BookTitleParam.Value = Title;
-        MySqlStatements.BookDescriptionParam.Value = Description;
-        MySqlStatements.BookEditionParam.Value = Edition;
-        MySqlStatements.BookIdParam.Value = Id;
+        DbConsts.BookTitleParam.Value = Title;
+        DbConsts.BookDescriptionParam.Value = Description;
+        DbConsts.BookEditionParam.Value = Edition;
+        DbConsts.BookIdParam.Value = Id;
 
-        updateCommand.Parameters.Add(MySqlStatements.BookTitleParam);
-        updateCommand.Parameters.Add(MySqlStatements.BookDescriptionParam);
-        updateCommand.Parameters.Add(MySqlStatements.BookEditionParam);
-        updateCommand.Parameters.Add(MySqlStatements.BookIdParam);
+        updateCommand.Parameters.Add(DbConsts.BookTitleParam);
+        updateCommand.Parameters.Add(DbConsts.BookDescriptionParam);
+        updateCommand.Parameters.Add(DbConsts.BookEditionParam);
+        updateCommand.Parameters.Add(DbConsts.BookIdParam);
 
         updateCommand.ExecuteNonQuery();
       }

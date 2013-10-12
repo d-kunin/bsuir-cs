@@ -59,20 +59,20 @@ namespace eBookKeeper.Model
     public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null)
     {
       IDbCommand insertBookCommand = 
-        new MySqlCommand(MySqlStatements.BookInsert, (MySqlConnection) Connection);
+        new MySqlCommand(DbConsts.BookInsert, (MySqlConnection) Connection);
 
       Book newBook = new Book();
       newBook.Edition = 1;
       newBook.Title = title;
       newBook.Description = "";
       
-      MySqlStatements.BookTitleParam.Value = newBook.Title;
-      MySqlStatements.BookEditionParam.Value = newBook.Edition;
-      MySqlStatements.BookDescriptionParam.Value = newBook.Description;
+      DbConsts.BookTitleParam.Value = newBook.Title;
+      DbConsts.BookEditionParam.Value = newBook.Edition;
+      DbConsts.BookDescriptionParam.Value = newBook.Description;
 
-      insertBookCommand.Parameters.Add(MySqlStatements.BookTitleParam);
-      insertBookCommand.Parameters.Add(MySqlStatements.BookDescriptionParam);
-      insertBookCommand.Parameters.Add(MySqlStatements.BookEditionParam);
+      insertBookCommand.Parameters.Add(DbConsts.BookTitleParam);
+      insertBookCommand.Parameters.Add(DbConsts.BookDescriptionParam);
+      insertBookCommand.Parameters.Add(DbConsts.BookEditionParam);
 
       insertBookCommand.ExecuteNonQuery();
       newBook.Id = LastInsertId();
@@ -84,7 +84,7 @@ namespace eBookKeeper.Model
 
     public long NumberOfBooks()
     {
-      return SelectCountFromTable(MySqlStatements.TableBooks);
+      return SelectCountFromTable(DbConsts.TableBooks);
     }
 
     public List<Book> AllBooks
@@ -109,7 +109,7 @@ namespace eBookKeeper.Model
 
     public long NumberOfAuthors()
     {
-      return SelectCountFromTable(MySqlStatements.TableAuthors);
+      return SelectCountFromTable(DbConsts.TableAuthors);
     }
 
     public List<Author> AllAuthors
@@ -134,7 +134,7 @@ namespace eBookKeeper.Model
 
     public long NumberOfCategories()
     {
-      return SelectCountFromTable(MySqlStatements.TableCategories);
+      return SelectCountFromTable(DbConsts.TableCategories);
     }
 
     public List<Category> AllCategories
@@ -165,7 +165,7 @@ namespace eBookKeeper.Model
       Books.Clear();
 
       IDbCommand selectBooks = 
-        new MySqlCommand(MySqlStatements.BookSelect, (MySqlConnection) Connection);
+        new MySqlCommand(DbConsts.BookSelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectBooks.ExecuteReader();
       while (reader.Read())
@@ -184,16 +184,18 @@ namespace eBookKeeper.Model
       // drop mappings first
       var tables = new ArrayList()
       {
-        MySqlStatements.TableBook2Author,
-        MySqlStatements.TableBook2Category,
-        MySqlStatements.TableBooks,
-        MySqlStatements.TableAuthors,
-        MySqlStatements.TableCategories
+        DbConsts.TableBook2Author,
+        DbConsts.TableBook2Category,
+        DbConsts.TableBook2Keyword,
+        DbConsts.TableBooks,
+        DbConsts.TableAuthors,
+        DbConsts.TableCategories,
+        DbConsts.TableKeywords
       };
 
       foreach (var table in tables)
       {
-        IDbCommand dropTable = new MySqlCommand(MySqlStatements.DropTable + table, 
+        IDbCommand dropTable = new MySqlCommand(DbConsts.DropTable + table, 
           (MySqlConnection) Connection); 
         dropTable.ExecuteNonQuery();
       }
@@ -203,14 +205,14 @@ namespace eBookKeeper.Model
     {
       // init books, authors, categories
       IDbCommand createTablesCommand = 
-        new MySqlCommand(MySqlStatements.CreateTables,
+        new MySqlCommand(DbConsts.CreateTables,
                          (MySqlConnection) Connection);
 
       createTablesCommand.ExecuteNonQuery();
 
       // init mappings
       IDbCommand createMappingCommand = 
-        new MySqlCommand(MySqlStatements.CreateMappingTables,
+        new MySqlCommand(DbConsts.CreateMappingTables,
                           (MySqlConnection) Connection);
 
       createMappingCommand.ExecuteNonQuery();
@@ -219,7 +221,7 @@ namespace eBookKeeper.Model
     private uint LastInsertId()
     {
       IDbCommand lastIdCommand = new MySqlCommand(
-         MySqlStatements.SelectLastInsertId,
+         DbConsts.SelectLastInsertId,
         (MySqlConnection) Connection);
 
       return Convert.ToUInt32(lastIdCommand.ExecuteScalar());
@@ -228,7 +230,7 @@ namespace eBookKeeper.Model
     private long SelectCountFromTable(string tableName)
     {
       IDbCommand selectCountCommand = new MySqlCommand(
-         MySqlStatements.SelectCountFrom + tableName,
+         DbConsts.SelectCountFrom + tableName,
         (MySqlConnection) Connection);
 
 
