@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
@@ -218,14 +211,15 @@ namespace eBookKeeper.Model
       try
       {
         // TODO updating everyting is suboprimal
+
         foreach (var book in Books)
           book.Update(Connection);
 
+        foreach (var category in Categories)
+          category.Update(Connection);
 
-        // update categories
-
-
-        // update authors
+        foreach (var author in Authors)
+          author.Update(Connection);
       }
       finally
       {
@@ -238,9 +232,50 @@ namespace eBookKeeper.Model
     public ILibraryIndex Restore()
     {
       InitTables();
-      Books.Clear();
 
-      IDbCommand selectBooks = 
+      ReadBooks();
+      ReadAuthors();
+      ReadCategories();
+
+      return this;
+    }
+
+    private void ReadCategories()
+    {
+      Categories.Clear();
+      IDbCommand selectCategories =
+        new MySqlCommand(DbConsts.CategorySelect, (MySqlConnection) Connection);
+
+      IDataReader reader = selectCategories.ExecuteReader();
+      while (reader.Read())
+      {
+        Category newCategory = new Category();
+        newCategory.PopulateFromReader(reader);
+        Categories.Add(newCategory);
+      }
+      reader.Close();
+    }
+
+    private void ReadAuthors()
+    {
+      Authors.Clear();
+      IDbCommand selectAuthors =
+        new MySqlCommand(DbConsts.AuthorSelect, (MySqlConnection) Connection);
+
+      IDataReader reader = selectAuthors.ExecuteReader();
+      while (reader.Read())
+      {
+        Author newAuthor = new Author();
+        newAuthor.PopulateFromReader(reader);
+        Authors.Add(newAuthor);
+      }
+      reader.Close();
+    }
+
+    private void ReadBooks()
+    {
+      Books.Clear();
+      IDbCommand selectBooks =
         new MySqlCommand(DbConsts.BookSelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectBooks.ExecuteReader();
@@ -251,8 +286,6 @@ namespace eBookKeeper.Model
         Books.Add(newBook);
       }
       reader.Close();
-
-      return this;
     }
 
     public void DropTables()

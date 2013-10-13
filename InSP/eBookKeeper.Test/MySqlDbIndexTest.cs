@@ -40,11 +40,22 @@ namespace eBookKeeper.Test
     public void AddSaveReadTest()
     {
       AddTestBooks(5);
-      _index.Save();
-      _index.Restore();
+      AddTestAuthors(6);
+      AddTestCategories(7);
 
-      Assert.AreEqual(5, _index.AllBooks.Count);
-      Assert.AreEqual(5, _index.NumberOfBooks());
+      _index.Save();
+
+      var restoredIndex = new LibraryIndexOnDb();
+      restoredIndex.Restore();
+
+      Assert.AreEqual(5, restoredIndex.AllBooks.Count);
+      Assert.AreEqual(5, restoredIndex.NumberOfBooks());
+
+      Assert.AreEqual(6, restoredIndex.AllAuthors.Count);
+      Assert.AreEqual(6, restoredIndex.NumberOfAuthors());
+
+      Assert.AreEqual(7, restoredIndex.AllCategories.Count);
+      Assert.AreEqual(7, restoredIndex.NumberOfCategories());
     }
 
     [TestMethod]
