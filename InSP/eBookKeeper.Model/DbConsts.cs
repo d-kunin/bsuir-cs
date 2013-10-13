@@ -77,6 +77,7 @@ namespace eBookKeeper.Model
     public const string SelectLastInsertId = "SELECT LAST_INSERT_ID()";
     public const string SelectCountFrom = "SELECT COUNT(*) FROM ";
 
+    #region book
     // Book stuff
     public static readonly MySqlParameter BookIdParam = new MySqlParameter("@id", MySqlDbType.Int32);
     public static readonly MySqlParameter BookTitleParam = new MySqlParameter("@title", MySqlDbType.VarChar);
@@ -100,6 +101,9 @@ namespace eBookKeeper.Model
     public const string BookSelect = 
       "SELECT * FROM " + TableBooks + " ORDER BY Title";
 
+    #endregion
+
+    #region category
     // Category stuff
     public static readonly MySqlParameter CategoryIdParam = new MySqlParameter("@id", MySqlDbType.Int32);
     public static readonly MySqlParameter CategoryNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
@@ -117,8 +121,9 @@ namespace eBookKeeper.Model
 
     public const string CategorySelect =
       "SELECT * FROM " + TableCategories + " ORDER BY Name";
+  #endregion 
 
-
+    #region author
     // Author stuff
     public static readonly MySqlParameter AuthorIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
     public static readonly MySqlParameter AuthorNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
@@ -136,8 +141,9 @@ namespace eBookKeeper.Model
 
     public const string AuthorSelect =
       "SELECT * FROM " + TableAuthors + " ORDER BY Name";
+    #endregion
 
-
+    #region keyword
     // Keyword stuff
     public static readonly MySqlParameter KeywordIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
     public static readonly MySqlParameter KeywordNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
@@ -155,5 +161,6 @@ namespace eBookKeeper.Model
 
     public const string KeywordSelect =
       "SELECT * FROM " + TableKeywords + " ORDER BY Name";
+#endregion
   }
 }

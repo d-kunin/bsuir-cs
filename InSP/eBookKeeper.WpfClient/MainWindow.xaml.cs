@@ -61,7 +61,7 @@ namespace eBookKeeper
         {
             Book newBook = Index.CreateBook("New book!");
             Books.Insert(0, newBook); // show recently added items first
-            Index.AllBooks.Insert(0, newBook);
+
             BooksList.SelectedItem = newBook;
         }
       

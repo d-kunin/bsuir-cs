@@ -31,7 +31,9 @@ namespace eBookKeeper.Test
     public void CreateBooksTest()
     {
       AddTestBooks(3);
-      Assert.AreEqual(_index.NumberOfBooks(), 3);
+
+      Assert.AreEqual(3, _index.NumberOfBooks());
+      Assert.AreEqual(3, _index.AllBooks.Count);
     }
 
     [TestMethod]
@@ -41,7 +43,8 @@ namespace eBookKeeper.Test
       _index.Save();
       _index.Restore();
 
-      Assert.AreEqual(5, _index.Books.Count);
+      Assert.AreEqual(5, _index.AllBooks.Count);
+      Assert.AreEqual(5, _index.NumberOfBooks());
     }
 
     [TestMethod]
@@ -49,10 +52,10 @@ namespace eBookKeeper.Test
     {
       AddTestBooks(5);
 
-      Assert.AreEqual(5, _index.Books.Count);
+      Assert.AreEqual(5, _index.AllBooks.Count);
 
-      var b1 = _index.Books[0];
-      var b2 = _index.Books[3];
+      var b1 = _index.AllBooks[0];
+      var b2 = _index.AllBooks[3];
 
       _index.Delete(b1);
       
@@ -64,10 +67,80 @@ namespace eBookKeeper.Test
     }
 
 
+    [TestMethod]
+    public void CreateAuthorsTest()
+    {
+      AddTestAuthors(99);
+
+      Assert.AreEqual(99, _index.NumberOfAuthors());
+      Assert.AreEqual(99, _index.AllAuthors.Count);
+    }
+
+    [TestMethod]
+    public void CreateCategoriesTest()
+    {
+      AddTestCategories(42);
+  
+      Assert.AreEqual(42, _index.NumberOfCategories());
+      Assert.AreEqual(42, _index.AllCategories.Count);
+    }
+
+    [TestMethod]
+    public void DeleteAuthorTest()
+    {
+      AddTestAuthors(42);
+
+      var a1 = _index.AllAuthors[13];
+      var a2 = _index.AllAuthors[0];
+
+      _index.Delete(a1);
+
+      Assert.AreEqual(41, _index.NumberOfAuthors());
+      Assert.AreEqual(41, _index.AllAuthors.Count);
+
+      _index.Delete(a2);
+
+      Assert.AreEqual(40, _index.NumberOfAuthors());
+      Assert.AreEqual(40, _index.AllAuthors.Count);
+    }
+
+    [TestMethod]
+    public void DeleteCategoriesTest()
+    {
+      AddTestCategories(42);
+
+      var c1 = _index.AllCategories[41];
+      var c2 = _index.AllCategories[13];
+      var c3 = _index.AllCategories[0];
+
+      _index.Delete(c3);
+
+      Assert.AreEqual(41, _index.NumberOfCategories());
+      Assert.AreEqual(41, _index.AllCategories.Count);
+
+      _index.Delete(c2);
+      _index.Delete(c1);
+
+      Assert.AreEqual(39, _index.NumberOfCategories());
+      Assert.AreEqual(39, _index.AllCategories.Count);
+    }
+    
     private void AddTestBooks(int count)
     {
       for (int i = 0; i < count; ++i)
         _index.CreateBook("Book " + i);
+    }
+
+    private void AddTestAuthors(int count)
+    {
+      for (int i = 0; i < count; ++i)
+        _index.CreateAuthor("Author " + i);
+    }
+
+    private void AddTestCategories(int count)
+    {
+      for (int i = 0; i < count; ++i)
+        _index.CreateCategory("Category " + i);
     }
   }
 }

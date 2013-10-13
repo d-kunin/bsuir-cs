@@ -140,17 +140,17 @@ namespace eBookKeeper.Model
       IDbCommand insertAuthor = new MySqlCommand(DbConsts.AuthorInsert, 
         (MySqlConnection) Connection);
 
-      Author author = new Author() {Name = name};
+      Author newAuthor = new Author() {Name = name};
 
       DbConsts.AuthorNameParam.Value = name;
       insertAuthor.Parameters.Add(DbConsts.AuthorNameParam);
 
       insertAuthor.ExecuteNonQuery();
-      author.Id = LastInsertId();
+      newAuthor.Id = LastInsertId();
 
-      AllAuthors.Add(author);
+      AllAuthors.Insert(0, newAuthor);
 
-      return author;
+      return newAuthor;
     }
 
     public long NumberOfAuthors()
@@ -167,11 +167,12 @@ namespace eBookKeeper.Model
     {
       if (Categories.Remove(item))
       {
-        IDbCommand deleteCategor = new MySqlCommand(DbConsts.CategoryDelete, 
+        IDbCommand deleteCategory = new MySqlCommand(DbConsts.CategoryDelete, 
           (MySqlConnection) Connection);
 
         DbConsts.CategoryIdParam.Value = item.Id;
-        deleteCategor.Parameters.Add(DbConsts.CategoryIdParam);
+        deleteCategory.Parameters.Add(DbConsts.CategoryIdParam);
+        deleteCategory.ExecuteNonQuery();
 
         return true;
       }
@@ -196,7 +197,7 @@ namespace eBookKeeper.Model
       insertCategory.ExecuteNonQuery();
       newCategory.Id = LastInsertId();
 
-      Categories.Add(newCategory);
+      Categories.Insert(0,newCategory);
 
       return newCategory;
     }
