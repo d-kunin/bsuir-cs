@@ -6,18 +6,17 @@ using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
 {
-
-    [Serializable]
     public class Book : DbObject, IComparable<Book>
     {
         public Book()
         {
-            Edition = 1;
+          Edition = 1;
+          Description = "";
         }
 
-        private List<Author> _mAuthors = new List<Author>(); 
+        private List<Author>   _mAuthors    = new List<Author>(); 
         private List<Category> _mCategories = new List<Category>();
-        private string _mTitle = String.Empty;
+        private string         _mTitle      = String.Empty;
 
         public string Title
         {
@@ -89,37 +88,4 @@ namespace eBookKeeper.Model
         updateCommand.ExecuteNonQuery();
       }
     }
-
-    [Serializable]
-    public class Category : IComparable<Category>
-    {
-        public string Name { get; set; }
-
-        public int CompareTo(Category other)
-        {
-            return String.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
-
-    [Serializable]
-    public class Author : IComparable<Author>
-    {
-        public string Name { get; set; }
-
-        public int CompareTo(Author other)
-        {
-            return String.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
-
 }

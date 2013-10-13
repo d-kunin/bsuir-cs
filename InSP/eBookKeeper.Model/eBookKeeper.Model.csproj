@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Author.cs" />
     <Compile Include="Book.cs" />
+    <Compile Include="Category.cs" />
     <Compile Include="DbObject.cs" />
     <Compile Include="ILibraryIndex.cs" />
     <Compile Include="IIndex.cs" />

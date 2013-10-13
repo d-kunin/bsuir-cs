@@ -44,6 +44,25 @@ namespace eBookKeeper.Test
       Assert.AreEqual(5, _index.Books.Count);
     }
 
+    [TestMethod]
+    public void DeleteBookTest()
+    {
+      AddTestBooks(5);
+
+      Assert.AreEqual(5, _index.Books.Count);
+
+      var b1 = _index.Books[0];
+      var b2 = _index.Books[3];
+
+      _index.Delete(b1);
+      
+      Assert.AreEqual(4, _index.NumberOfBooks());
+
+      _index.Delete(b2);
+
+      Assert.AreEqual(3, _index.NumberOfBooks());
+    }
+
 
     private void AddTestBooks(int count)
     {

@@ -103,9 +103,57 @@ namespace eBookKeeper.Model
     // Category stuff
     public static readonly MySqlParameter CategoryIdParam = new MySqlParameter("@id", MySqlDbType.Int32);
     public static readonly MySqlParameter CategoryNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
+    public static readonly int CategoryIdIndex = 0;
+    public static readonly int CategoryNameIndex = 1;
+
+    public const string CategoryInsert =
+      "INSERT INTO " + TableCategories + " (Name) values (@name)";
+
+    public const string CategoryUpdate =
+      "UPDATE " + TableCategories + " SET Name=@name WHERE Id=@id";
+
+    public const string CategoryDelete =
+      "DELETE FROM " + TableCategories + " WHERE Id=@id";
+
+    public const string CategorySelect =
+      "SELECT * FROM " + TableCategories + " ORDER BY Name";
+
 
     // Author stuff
     public static readonly MySqlParameter AuthorIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
     public static readonly MySqlParameter AuthorNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
+    public static readonly int AuthorIdIndex = 0;
+    public static readonly int AuthorNameIndex = 1;
+
+    public const string AuthorInsert =
+      "INSERT INTO " + TableAuthors + " (Name) values (@name)";
+
+    public const string AuthorUpdate =
+      "UPDATE " + TableAuthors + " SET Name=@name WHERE Id=@id";
+
+    public const string AuthorDelete =
+      "DELETE FROM " + TableAuthors + " WHERE Id=@id";
+
+    public const string AuthorSelect =
+      "SELECT * FROM " + TableAuthors + " ORDER BY Name";
+
+
+    // Keyword stuff
+    public static readonly MySqlParameter KeywordIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
+    public static readonly MySqlParameter KeywordNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
+    public static readonly int KeywordIdIndex = 0;
+    public static readonly int KeywordNameIndex = 1;
+     
+    public const string KeywordInsert =
+      "INSERT INTO " + TableKeywords + " (Name) values (@name)";
+
+    public const string KeywordUpdate =
+      "UPDATE " + TableKeywords + " SET Name=@name WHERE Id=@id";
+
+    public const string KeywordDelete =
+      "DELETE FROM " + TableKeywords + " WHERE Id=@id";
+
+    public const string KeywordSelect =
+      "SELECT * FROM " + TableKeywords + " ORDER BY Name";
   }
 }
