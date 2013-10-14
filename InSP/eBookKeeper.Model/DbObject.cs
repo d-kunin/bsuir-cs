@@ -9,22 +9,12 @@ using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
 {
-  public class DbObject
+  public abstract class DbObject
   {
+    public abstract void Update(IDbConnection connection);
+    public abstract void PopulateFromReader(IDataReader reader);
 
     public uint Id { get; internal set; }
-
-    public virtual void Update(IDbConnection connection)
-    {
-      // we do not want to force client to override this methods
-      // but we client must not rely on them
-      throw new NotSupportedException();
-    }
-
-    public virtual void PopulateFromReader(IDataReader reader)
-    {
-      throw new NotSupportedException();
-    }
 
     public void BindId(IDbCommand command, DbParameter param)
     {
