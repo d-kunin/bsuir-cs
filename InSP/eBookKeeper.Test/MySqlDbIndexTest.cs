@@ -1,5 +1,4 @@
-﻿using System;
-using eBookKeeper.Model;
+﻿using eBookKeeper.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace eBookKeeper.Test
@@ -7,14 +6,13 @@ namespace eBookKeeper.Test
   [TestClass]
   public class MySqlDbIndexTest
   {
-
     private LibraryIndexOnDb _index;
 
     [TestInitialize]
     public void SetUp()
     {
       _index = new LibraryIndexOnDb();
-      
+
       _index.DropTables();
       _index.InitTables();
     }
@@ -65,11 +63,11 @@ namespace eBookKeeper.Test
 
       Assert.AreEqual(5, _index.AllBooks.Count);
 
-      var b1 = _index.AllBooks[0];
-      var b2 = _index.AllBooks[3];
+      Book b1 = _index.AllBooks[0];
+      Book b2 = _index.AllBooks[3];
 
       _index.Delete(b1);
-      
+
       Assert.AreEqual(4, _index.NumberOfBooks());
 
       _index.Delete(b2);
@@ -91,7 +89,7 @@ namespace eBookKeeper.Test
     public void CreateCategoriesTest()
     {
       AddTestCategories(42);
-  
+
       Assert.AreEqual(42, _index.NumberOfCategories());
       Assert.AreEqual(42, _index.AllCategories.Count);
     }
@@ -101,8 +99,8 @@ namespace eBookKeeper.Test
     {
       AddTestAuthors(42);
 
-      var a1 = _index.AllAuthors[13];
-      var a2 = _index.AllAuthors[0];
+      Author a1 = _index.AllAuthors[13];
+      Author a2 = _index.AllAuthors[0];
 
       _index.Delete(a1);
 
@@ -120,9 +118,9 @@ namespace eBookKeeper.Test
     {
       AddTestCategories(42);
 
-      var c1 = _index.AllCategories[41];
-      var c2 = _index.AllCategories[13];
-      var c3 = _index.AllCategories[0];
+      Category c1 = _index.AllCategories[41];
+      Category c2 = _index.AllCategories[13];
+      Category c3 = _index.AllCategories[0];
 
       _index.Delete(c3);
 
@@ -161,7 +159,7 @@ namespace eBookKeeper.Test
         Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Categories.Count == i).Count);
       }
     }
-    
+
     private void AddTestBooks(int count)
     {
       for (int i = 0; i < count; ++i)

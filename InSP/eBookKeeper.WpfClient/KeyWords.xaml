@@ -2,42 +2,42 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="KeyWordStyle" TargetType="ItemsControl">
-        
+
         <Style.Resources>
             <Style TargetType="TextBlock">
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </Style.Resources>
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border 
-                        BorderBrush="LightGray" 
+                    <Border
+                        BorderBrush="LightGray"
                         BorderThickness="1"
                         Padding="4"
                         Margin="4"
                         CornerRadius="3">
-                        
+
                         <StackPanel>
-                            <TextBlock Text="Keywords: "/>
-                            <ItemsPresenter/>
+                            <TextBlock Text="Keywords: " />
+                            <ItemsPresenter />
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>    
+                    <WrapPanel />
+                </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -46,14 +46,14 @@
                         Background="DarkOrange"
                         Padding="4"
                         Margin="4">
-                        
-                        <TextBlock 
+
+                        <TextBlock
                             Foreground="White"
-                            Text="{Binding Path=.}"/>
+                            Text="{Binding Path=.}" />
                     </Border>
                 </DataTemplate>
             </Setter.Value>
-            
+
         </Setter>
 
     </Style>

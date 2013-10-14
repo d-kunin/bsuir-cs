@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using System.Windows.Documents.DocumentStructures;
 using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
@@ -22,7 +21,7 @@ namespace eBookKeeper.Model
 
     public override void Update(IDbConnection connection)
     {
-      IDbCommand updateCommand = new MySqlCommand(DbConsts.CategoryUpdate, 
+      IDbCommand updateCommand = new MySqlCommand(DbConsts.CategoryUpdate,
         (MySqlConnection) connection);
 
       BindId(updateCommand, DbConsts.CategoryIdParam);

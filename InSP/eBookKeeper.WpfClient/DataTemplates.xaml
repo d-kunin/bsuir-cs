@@ -4,36 +4,36 @@
 
 
     <Style x:Key="ListItemMainText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Padding" Value="3"/>
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Padding" Value="3" />
     </Style>
 
     <Style x:Key="ListItemSubText" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Padding" Value="3"/>
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Padding" Value="3" />
     </Style>
 
     <DataTemplate x:Key="BookListItemTemplate" DataType="model:Book">
-        
-            <Grid Background="DarkOrange">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                
-                <TextBlock
-                    Style="{StaticResource ListItemMainText}"
-                    Text="{Binding Title}"
-                    Grid.Row="0"/>
+        <Grid Background="DarkOrange">
 
-                <TextBlock
-                    Style="{StaticResource ListItemSubText}"
-                    Text="{Binding FormatedAuthors}"
-                    Grid.Row="1"/>
-            </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Style="{StaticResource ListItemMainText}"
+                Text="{Binding Title}"
+                Grid.Row="0" />
+
+            <TextBlock
+                Style="{StaticResource ListItemSubText}"
+                Text="{Binding FormatedAuthors}"
+                Grid.Row="1" />
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>
