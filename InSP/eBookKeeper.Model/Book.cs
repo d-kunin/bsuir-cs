@@ -12,7 +12,7 @@ namespace eBookKeeper.Model
         public Book()
         {
           Edition = 1;
-          Description = "";
+          Description = String.Empty;
           Keywords = new List<string>();
         }
 

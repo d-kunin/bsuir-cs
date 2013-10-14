@@ -59,7 +59,9 @@ namespace eBookKeeper.Model
         deleteBook.Parameters.Add(DbConsts.BookIdParam);
         deleteBook.ExecuteNonQuery();
 
-        // TODO: remove all records from keyword, category, author
+        //delete from mappings
+        DeleteFromMappingTable(DbConsts.TableBook2Author, "BookId=" + item.Id);
+        DeleteFromMappingTable(DbConsts.TableBook2Category, "BookId=" + item.Id);
 
         return true;
       }
@@ -112,8 +114,9 @@ namespace eBookKeeper.Model
           (MySqlConnection) Connection);
 
         item.BindId(deleteAuthor, DbConsts.AuthorIdParam);
-
         deleteAuthor.ExecuteNonQuery();
+        // remove from mapping
+        DeleteFromMappingTable(DbConsts.TableBook2Author, "AuthorId=" + item.Id);
 
         return true;
       }
@@ -161,6 +164,8 @@ namespace eBookKeeper.Model
 
         item.BindId(deleteCategory, DbConsts.CategoryIdParam);
         deleteCategory.ExecuteNonQuery();
+        // remove from mapping
+        DeleteFromMappingTable(DbConsts.TableBook2Category, "CategoryId=" + item.Id);
 
         return true;
       }
@@ -375,6 +380,15 @@ namespace eBookKeeper.Model
         (MySqlConnection) Connection);
 
       return (long)selectCountCommand.ExecuteScalar();
+    }
+
+    private void DeleteFromMappingTable(string mappingTable, string where)
+    {
+      IDbCommand deleteCommand = 
+        new MySqlCommand("DELETE FROM " + mappingTable + " WHERE " + where,
+          (MySqlConnection) Connection);
+
+      deleteCommand.ExecuteNonQuery();
     }
 
     public void Dispose()
