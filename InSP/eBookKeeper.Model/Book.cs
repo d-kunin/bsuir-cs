@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using MySql.Data.MySqlClient;
 
@@ -75,17 +76,30 @@ namespace eBookKeeper.Model
         IDbCommand updateCommand = 
           new MySqlCommand(DbConsts.BookUpdate, (MySqlConnection) connection);
 
-        DbConsts.BookTitleParam.Value = Title;
-        DbConsts.BookDescriptionParam.Value = Description;
-        DbConsts.BookEditionParam.Value = Edition;
-        DbConsts.BookIdParam.Value = Id;
-
-        updateCommand.Parameters.Add(DbConsts.BookTitleParam);
-        updateCommand.Parameters.Add(DbConsts.BookDescriptionParam);
-        updateCommand.Parameters.Add(DbConsts.BookEditionParam);
-        updateCommand.Parameters.Add(DbConsts.BookIdParam);
+        BindId(updateCommand, DbConsts.BookIdParam);
+        BindTitle(updateCommand, DbConsts.BookTitleParam);
+        BindEdition(updateCommand, DbConsts.BookEditionParam);
+        BindDescription(updateCommand, DbConsts.BookDescriptionParam);
 
         updateCommand.ExecuteNonQuery();
+      }
+
+      public void BindTitle(IDbCommand command, DbParameter param)
+      {
+        param.Value = Title;
+        command.Parameters.Add(param);
+      }
+
+      public void BindEdition(IDbCommand command, DbParameter param)
+      {
+        param.Value = Edition;
+        command.Parameters.Add(param);
+      }
+
+      public void BindDescription(IDbCommand command, DbParameter param)
+      {
+        param.Value = Description;
+        command.Parameters.Add(param);
       }
     }
 }

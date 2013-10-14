@@ -79,17 +79,15 @@ namespace eBookKeeper.Model
 
       Book newBook = new Book() { Title = title };
       
-      DbConsts.BookTitleParam.Value = newBook.Title;
-      DbConsts.BookEditionParam.Value = newBook.Edition;
-      DbConsts.BookDescriptionParam.Value = newBook.Description;
 
-      insertBookCommand.Parameters.Add(DbConsts.BookTitleParam);
-      insertBookCommand.Parameters.Add(DbConsts.BookDescriptionParam);
-      insertBookCommand.Parameters.Add(DbConsts.BookEditionParam);
+      newBook.BindTitle(insertBookCommand, DbConsts.BookTitleParam);
+      newBook.BindDescription(insertBookCommand, DbConsts.BookDescriptionParam);
+      newBook.BindEdition(insertBookCommand, DbConsts.BookEditionParam);
+
 
       insertBookCommand.ExecuteNonQuery();
-      newBook.Id = LastInsertId();
 
+      newBook.Id = LastInsertId();
       Books.Insert(0, newBook);
 
       //TODO add mapping to author, key, category
@@ -114,8 +112,8 @@ namespace eBookKeeper.Model
         IDbCommand deleteAuthor = new MySqlCommand(DbConsts.AuthorDelete, 
           (MySqlConnection) Connection);
 
-        DbConsts.AuthorIdParam.Value = item.Id;
-        deleteAuthor.Parameters.Add(DbConsts.AuthorIdParam);
+        item.BindId(deleteAuthor, DbConsts.AuthorIdParam);
+
         deleteAuthor.ExecuteNonQuery();
 
         return true;
@@ -135,8 +133,7 @@ namespace eBookKeeper.Model
 
       Author newAuthor = new Author() {Name = name};
 
-      DbConsts.AuthorNameParam.Value = name;
-      insertAuthor.Parameters.Add(DbConsts.AuthorNameParam);
+      newAuthor.BindName(insertAuthor, DbConsts.AuthorNameParam);
 
       insertAuthor.ExecuteNonQuery();
       newAuthor.Id = LastInsertId();
@@ -163,8 +160,7 @@ namespace eBookKeeper.Model
         IDbCommand deleteCategory = new MySqlCommand(DbConsts.CategoryDelete, 
           (MySqlConnection) Connection);
 
-        DbConsts.CategoryIdParam.Value = item.Id;
-        deleteCategory.Parameters.Add(DbConsts.CategoryIdParam);
+        item.BindId(deleteCategory, DbConsts.CategoryIdParam);
         deleteCategory.ExecuteNonQuery();
 
         return true;
@@ -184,14 +180,12 @@ namespace eBookKeeper.Model
 
       Category newCategory = new Category() { Name = name };
 
-      DbConsts.CategoryNameParam.Value = name;
-      insertCategory.Parameters.Add(DbConsts.CategoryNameParam);
-
+      newCategory.BindName(insertCategory, DbConsts.CategoryNameParam);
       insertCategory.ExecuteNonQuery();
+
       newCategory.Id = LastInsertId();
 
       Categories.Insert(0,newCategory);
-
       return newCategory;
     }
 
