@@ -79,7 +79,7 @@ namespace eBookKeeper.Model
 
     #region book
     // Book stuff
-    public static readonly MySqlParameter BookIdParam = new MySqlParameter("@id", MySqlDbType.Int32);
+    public static readonly MySqlParameter BookIdParam = new MySqlParameter("@idBook", MySqlDbType.Int32);
     public static readonly MySqlParameter BookTitleParam = new MySqlParameter("@title", MySqlDbType.VarChar);
     public static readonly MySqlParameter BookDescriptionParam = new MySqlParameter("@descr", MySqlDbType.Text);
     public static readonly MySqlParameter BookEditionParam = new MySqlParameter("@edition", MySqlDbType.UByte);
@@ -93,10 +93,10 @@ namespace eBookKeeper.Model
       "INSERT INTO " + TableBooks + " (Title, Description, Edition) values (@title, @descr, @edition)";
 
     public const string BookUpdate =
-      "UPDATE " + TableBooks +" SET Title=@title, Description=@descr, Edition=@edition WHERE Id=@id";
+      "UPDATE " + TableBooks +" SET Title=@title, Description=@descr, Edition=@edition WHERE Id=@idBook";
 
     public const string BookDelete =
-      "DELETE FROM " + TableBooks + " WHERE Id=@id";
+      "DELETE FROM " + TableBooks + " WHERE Id=@idBook";
 
     public const string BookSelect = 
       "SELECT * FROM " + TableBooks + " ORDER BY Title";
@@ -105,7 +105,7 @@ namespace eBookKeeper.Model
 
     #region category
     // Category stuff
-    public static readonly MySqlParameter CategoryIdParam = new MySqlParameter("@id", MySqlDbType.Int32);
+    public static readonly MySqlParameter CategoryIdParam = new MySqlParameter("@idCat", MySqlDbType.Int32);
     public static readonly MySqlParameter CategoryNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
     public static readonly int CategoryIdIndex = 0;
     public static readonly int CategoryNameIndex = 1;
@@ -114,10 +114,10 @@ namespace eBookKeeper.Model
       "INSERT INTO " + TableCategories + " (Name) values (@name)";
 
     public const string CategoryUpdate =
-      "UPDATE " + TableCategories + " SET Name=@name WHERE Id=@id";
+      "UPDATE " + TableCategories + " SET Name=@name WHERE Id=@idCat";
 
     public const string CategoryDelete =
-      "DELETE FROM " + TableCategories + " WHERE Id=@id";
+      "DELETE FROM " + TableCategories + " WHERE Id=@idCat";
 
     public const string CategorySelect =
       "SELECT * FROM " + TableCategories + " ORDER BY Name";
@@ -125,7 +125,7 @@ namespace eBookKeeper.Model
 
     #region author
     // Author stuff
-    public static readonly MySqlParameter AuthorIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
+    public static readonly MySqlParameter AuthorIdParam = new MySqlParameter("@idAuth", MySqlDbType.VarChar);
     public static readonly MySqlParameter AuthorNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
     public static readonly int AuthorIdIndex = 0;
     public static readonly int AuthorNameIndex = 1;
@@ -134,10 +134,10 @@ namespace eBookKeeper.Model
       "INSERT INTO " + TableAuthors + " (Name) values (@name)";
 
     public const string AuthorUpdate =
-      "UPDATE " + TableAuthors + " SET Name=@name WHERE Id=@id";
+      "UPDATE " + TableAuthors + " SET Name=@name WHERE Id=@idAuth";
 
     public const string AuthorDelete =
-      "DELETE FROM " + TableAuthors + " WHERE Id=@id";
+      "DELETE FROM " + TableAuthors + " WHERE Id=@idAuth";
 
     public const string AuthorSelect =
       "SELECT * FROM " + TableAuthors + " ORDER BY Name";
@@ -145,7 +145,7 @@ namespace eBookKeeper.Model
 
     #region keyword
     // Keyword stuff
-    public static readonly MySqlParameter KeywordIdParam = new MySqlParameter("@id", MySqlDbType.VarChar);
+    public static readonly MySqlParameter KeywordIdParam = new MySqlParameter("@idKeyword", MySqlDbType.VarChar);
     public static readonly MySqlParameter KeywordNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
     public static readonly int KeywordIdIndex = 0;
     public static readonly int KeywordNameIndex = 1;
@@ -154,13 +154,25 @@ namespace eBookKeeper.Model
       "INSERT INTO " + TableKeywords + " (Name) values (@name)";
 
     public const string KeywordUpdate =
-      "UPDATE " + TableKeywords + " SET Name=@name WHERE Id=@id";
+      "UPDATE " + TableKeywords + " SET Name=@name WHERE Id=@idKeyword";
 
     public const string KeywordDelete =
-      "DELETE FROM " + TableKeywords + " WHERE Id=@id";
+      "DELETE FROM " + TableKeywords + " WHERE Id=@idKeyword";
 
     public const string KeywordSelect =
       "SELECT * FROM " + TableKeywords + " ORDER BY Name";
 #endregion
+
+    // insert book2X
+    public const string InsertBook2Category = "INSERT INTO " + TableBook2Category +
+                                              " (BookId, CategoryId) VALUE (@idBook, @idCat)";
+
+    public const string InsertBook2Author = "INSERT INTO " + TableBook2Author +
+                                            "(BookId, AuthorId) VALUE (@idBook, @idAuth)";
+
+    public const string InsertBook2Keyword = "INSERT INTO " + TableBook2Keyword +
+                                             "(BookId, KeywordId) VALUE (@idBook, @idKeyword)";
+
+    public const string SelectBase = "SELECT * FROM ";
   }
 }

@@ -135,6 +135,32 @@ namespace eBookKeeper.Test
       Assert.AreEqual(39, _index.NumberOfCategories());
       Assert.AreEqual(39, _index.AllCategories.Count);
     }
+
+    [TestMethod]
+    public void Map2CategoryAuthorTest()
+    {
+      AddTestAuthors(5);
+      AddTestBooks(5);
+      AddTestCategories(5);
+
+      for (int i = 0; i < 5; ++i)
+        for (int j = 0; j <= i; ++j)
+        {
+          _index.AllBooks[i].Authors.Add(_index.AllAuthors[j]);
+          _index.AllBooks[i].Categories.Add(_index.AllCategories[j]);
+        }
+
+      _index.Save();
+
+      var restoredIndex = new LibraryIndexOnDb();
+      restoredIndex.Restore();
+
+      for (int i = 1; i <= 5; ++i)
+      {
+        Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Authors.Count == i).Count);
+        Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Categories.Count == i).Count);
+      }
+    }
     
     private void AddTestBooks(int count)
     {

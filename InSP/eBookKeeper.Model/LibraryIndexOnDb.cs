@@ -15,7 +15,6 @@ namespace eBookKeeper.Model
       // TODO: is is not best idea to establish connection in constructor
       OpenConnection();
 
-
       // Exception in constructor =(
       if (Connection.State != ConnectionState.Open)
       {
@@ -231,7 +230,44 @@ namespace eBookKeeper.Model
       ReadAuthors();
       ReadCategories();
 
+      Book2Catetory();
+      Book2Author();
+
       return this;
+    }
+
+    private void Book2Author()
+    {
+      IDbCommand selectBook2Author = 
+        new MySqlCommand(DbConsts.SelectBase + DbConsts.TableBook2Author,
+          (MySqlConnection) Connection);
+
+      IDataReader reader = selectBook2Author.ExecuteReader();
+      while (reader.Read())
+      {
+        uint bookId = Convert.ToUInt32(reader.GetInt32(0));
+        uint authorId = Convert.ToUInt32(reader.GetInt32(1));
+
+        AllBooks.Find(b => b.Id == bookId).Authors.Add(AllAuthors.Find(a => a.Id == authorId));
+      }
+      reader.Close();
+    }
+
+    private void Book2Catetory()
+    {
+      IDbCommand selectBook2Category =
+        new MySqlCommand(DbConsts.SelectBase + DbConsts.TableBook2Category,
+          (MySqlConnection)Connection);
+
+      IDataReader reader = selectBook2Category.ExecuteReader();
+      while (reader.Read())
+      {
+        uint bookId = Convert.ToUInt32(reader.GetInt32(0));
+        uint categoryId = Convert.ToUInt32(reader.GetInt32(1));
+
+        AllBooks.Find(b => b.Id == bookId).Categories.Add(AllCategories.Find(a => a.Id == categoryId));
+      }
+      reader.Close();
     }
 
     private void ReadCategories()

@@ -13,6 +13,7 @@ namespace eBookKeeper.Model
         {
           Edition = 1;
           Description = "";
+          Keywords = new List<string>();
         }
 
         private List<Author>   _mAuthors    = new List<Author>(); 
@@ -82,6 +83,40 @@ namespace eBookKeeper.Model
         BindDescription(updateCommand, DbConsts.BookDescriptionParam);
 
         updateCommand.ExecuteNonQuery();
+
+        // write categories
+        foreach (var category in Categories)
+        {
+          IDbCommand map2Category = new MySqlCommand(DbConsts.InsertBook2Category, 
+            (MySqlConnection) connection);
+
+          BindId(map2Category, DbConsts.BookIdParam);
+          category.BindId(map2Category, DbConsts.CategoryIdParam);
+          map2Category.ExecuteNonQuery();
+        }
+
+        // write authors
+        foreach (var author in  Authors)
+        {
+           IDbCommand map2Author = new MySqlCommand(DbConsts.InsertBook2Author, 
+             (MySqlConnection) connection);
+
+           BindId(map2Author, DbConsts.BookIdParam);
+           author.BindId(map2Author, DbConsts.AuthorIdParam);
+           map2Author.ExecuteNonQuery();
+        }
+
+        // write keywords
+        foreach (var keyword in Keywords)
+        {
+          IDbCommand map2Keyword = new MySqlCommand(DbConsts.InsertBook2Keyword,
+            (MySqlConnection)connection);
+
+//          BindId(map2Keyword, DbConsts.BookIdParam);
+//          keyword.BindId(map2Keyword, DbConsts.AuthorIdParam);
+//          map2Author.ExecuteNonQuery();
+          //TODO implement keyword mapping
+        }
       }
 
       public void BindTitle(IDbCommand command, DbParameter param)
