@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <string>
 
+#include <cassert>
+
 using namespace std;
 
 template <typename T>
@@ -31,21 +33,26 @@ int main()
   list_to_cout(intList);
   list_to_cout(strList);
 
-  for (int i = 0; i < 10; ++i)
+  for (size_t i = 0; i < 10; ++i)
+  {
     intList->add(i);
+    // проверка основных функций доступа к данным
+    assert(intList->size() == i + 1);
+    assert(intList->get(i) == i);
+    assert(intList->head() == 0);
+  }
 
   cout << "Int list:" << endl;
   list_to_cout(intList);
 
-  cout << "Removed 2: " << intList->remove(2) << endl;
-  list_to_cout(intList);
-  cout << "Removed 42: " << intList->remove(42) << endl;
-  list_to_cout(intList);
+  assert(intList->remove(2));
+  assert(!intList->remove(42));
   intList->remove(0);
   intList->remove(9);
+  //  После удаления 2,9,0
   list_to_cout(intList);
 
-  // try-catch test
+  // Проверка на получение исключений при недопустимых операциях
   try
   {
     (*intList)[42];
@@ -54,7 +61,6 @@ int main()
   {
     cout << "Tried to get index " << e._index << " when size is " << e._size << endl; 
   }
-
   try
   {
     strList->tail();
@@ -64,7 +70,7 @@ int main()
     cout << "Tail is not supported for empty lists." << endl;
   }
 
-  // String list test
+  // Работа со списком строк
   strList->add("Hello");
   strList->add(",");
   strList->add("World");
@@ -75,6 +81,7 @@ int main()
   strList->remove(",");
   list_to_cout(strList);
 
+  // Проверка шаблонных функций
   cout << "Max is: " << listalg::max(intList) << endl;
   cout << "Max string is: " << listalg::max(strList) << endl;
 

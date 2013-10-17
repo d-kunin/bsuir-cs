@@ -18,6 +18,9 @@ public:
 
   virtual size_t add(T const & item) = 0;
   virtual bool   remove(T const & item) = 0;
+
+  virtual T const & get(size_t index) const = 0;
+  virtual T &       get(size_t index) = 0;
 };
 
 class EmptyListException
@@ -91,7 +94,7 @@ public:
     if (isEmpty())
     {
       _head.reset(new Node(item));
-       return 0; 
+       return ++_size; 
     }
 
     nodeptr current = _head; 
@@ -99,7 +102,7 @@ public:
       current = current->_next;
 
     current->_next = nodeptr(new Node(item));
-    return _size++;
+    return ++_size;
   }
 
   bool remove(T const & item) override
@@ -128,9 +131,31 @@ public:
     return false;
   }
 
+  T & get(size_t index) override
+  {
+    if (index >= _size)
+      throw IndexOutOfRangeException(index, _size);
+
+    nodeptr node = _head;
+    for (size_t step = 0; step < index; ++step, node = node->_next);
+
+    return node->_data;
+  }
+
+  T const & get(size_t index) const override 
+  {
+    if (index >= _size)
+      throw IndexOutOfRangeException(index, _size);
+
+    nodeptr node = _head;
+    for (size_t step = 0; step < index; ++step, node = node->_next);
+
+    return node->_data;
+  }
+
   T const & operator[](size_t index) const
   {
-    if (index > _size)
+    if (index >= _size)
       throw IndexOutOfRangeException(index, _size);
 
     if (index > 0)
@@ -141,7 +166,7 @@ public:
 
   T & operator[](size_t index)
   {
-    if (index > _size)
+    if (index >= _size)
       throw IndexOutOfRangeException(index, _size);
 
     if (index > 0)
