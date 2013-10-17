@@ -22,7 +22,7 @@ public:
 
 class EmptyListException
 {
-  // just simple for head and tail calls
+  // исключение на случай вызова head, tail для пустого списка
 };
 
 class IndexOutOfRangeException
@@ -58,6 +58,7 @@ class SLList : public List<T>
 private:
   typedef SLLNode<T> Node;
   typedef shared_ptr<Node> nodeptr;
+  typedef shared_ptr<SLList<T>> listptr;
 
   nodeptr _head;
   size_t _size;
@@ -77,55 +78,53 @@ public:
     return _head->_data;
   }
 
-  T const & head() const  override
+  T const & head() const override
   {
+    if (isEmpty())
+      throw EmptyListException();
+
     return _head->_data;
   }
 
   size_t add(T const & item)
   {
-    nodeptr current = _head;
-    nodeptr prev = NULL;
-    nodeptr node(new Node(item));
-
-    while (current)
+    if (isEmpty())
     {
-      prev = current;
-      current = current->_next;
+      _head.reset(new Node(item));
+       return 0; 
     }
 
-    if (prev)
-      prev->_next = node;
-    else
-      _head = node;
-    ++_size;
+    nodeptr current = _head; 
+    while (current->_next)
+      current = current->_next;
 
-    return 0;
+    current->_next = nodeptr(new Node(item));
+    return _size++;
   }
 
   bool remove(T const & item) override
   {
-    nodeptr current = _head;
-    nodeptr prev    = NULL;
+    if (isEmpty())
+      return false;
 
-    bool found = false;
-    while (!(found = current->_data == item)
-	   && current->_next)
+    if (head() == item)
     {
-      prev = current;
-      current = current->_next;
+      _head = _head->_next;
+       --_size;
+       return true;
     }
 
-    if (found)
+    nodeptr current = _head;
+    while (current->_next && current->_next->_data != item)
+      current = current->_next;
+    
+    if (current->_next)
     {
-      if (prev) // not head
-	prev->_next = current->_next;
-      else // item is head
-	_head = current->_next;
+       current->_next = current->_next->_next;
       --_size;
-
       return true;
     }
+
     return false;
   }
 
@@ -151,32 +150,34 @@ public:
       return head();
   }
 
-  shared_ptr<SLList<T>> const tail() const
+  listptr const tail() const
   {
-    if (isEmpty()) throw EmptyListException();
-    return shared_ptr<SLList<T>>(new SLList(_head->_next, _size-1));
+    if (isEmpty()) 
+      throw EmptyListException();
+    return new listptr(new SLList(_head->_next, _size-1));
   }
 
-  shared_ptr<SLList<T>> tail()
+  listptr tail()
   {
-    if (isEmpty()) throw EmptyListException();
-    return shared_ptr<SLList<T>>(new SLList(_head->_next, _size-1));
+    if (isEmpty()) 
+      throw EmptyListException();
+    return listptr(new SLList(_head->_next, _size-1));
   }
 };
 
 namespace listalg
 {
   template <typename T>
-  T _max(T max, shared_ptr<SLList<T>> const & list)
+  T rec_max(T max, shared_ptr<SLList<T>> const & list)
   {
     if (list->isEmpty())
       return max;
-    else return _max(max > list->head() ? max : list->head(), list->tail());
+    else return rec_max(max > list->head() ? max : list->head(), list->tail());
   }
 
   template <typename T>
   T max(shared_ptr<SLList<T>> const & list)
   {
-    return _max(list->head(), list->tail());
+    return rec_max(list->head(), list->tail());
   }
 }

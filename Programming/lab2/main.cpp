@@ -19,9 +19,7 @@ void _rec_list_to_cout(shared_ptr<SLList<T>> const & list)
 template <typename T>
 void list_to_cout(shared_ptr<SLList<T>> const & list)
 {
-  cout << "List: [";
-  _rec_list_to_cout(list);
-  cout << "]" << endl;
+  cout << "List: ["; _rec_list_to_cout(list); cout << "]" << endl;
 }
 
 int main()
@@ -42,6 +40,9 @@ int main()
   cout << "Removed 2: " << intList->remove(2) << endl;
   list_to_cout(intList);
   cout << "Removed 42: " << intList->remove(42) << endl;
+  list_to_cout(intList);
+  intList->remove(0);
+  intList->remove(9);
   list_to_cout(intList);
 
   // try-catch test
