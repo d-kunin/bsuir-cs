@@ -135,7 +135,7 @@ namespace eBookKeeper.Test
     }
 
     [TestMethod]
-    public void Map2CategoryAuthorTest()
+    public void Map2CategoryAuthorKeywordTest()
     {
       AddTestAuthors(5);
       AddTestBooks(5);
@@ -144,8 +144,10 @@ namespace eBookKeeper.Test
       for (int i = 0; i < 5; ++i)
         for (int j = 0; j <= i; ++j)
         {
-          _index.AllBooks[i].Authors.Add(_index.AllAuthors[j]);
-          _index.AllBooks[i].Categories.Add(_index.AllCategories[j]);
+          var book = _index.AllBooks[i];
+          book.Authors.Add(_index.AllAuthors[j]);
+          book.Categories.Add(_index.AllCategories[j]);
+          book.Keywords.Add("Keyword " + i + j);
         }
 
       _index.Save();
@@ -157,13 +159,14 @@ namespace eBookKeeper.Test
       {
         Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Authors.Count == i).Count);
         Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Categories.Count == i).Count);
+        Assert.AreEqual(1, restoredIndex.AllBooks.FindAll(b => b.Keywords.Count == i).Count);
       }
     }
 
     private void AddTestBooks(int count)
     {
       for (int i = 0; i < count; ++i)
-        _index.CreateBook("Book " + i);
+        _index.CreateBook("Book " + i).Description = "Lorem Impus Blablabla!";
     }
 
     private void AddTestAuthors(int count)

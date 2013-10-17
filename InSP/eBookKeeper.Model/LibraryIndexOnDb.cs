@@ -224,6 +224,7 @@ namespace eBookKeeper.Model
       ReadBooks();
       ReadAuthors();
       ReadCategories();
+      ReadKeyword();
 
       Book2Catetory();
       Book2Author();
@@ -296,6 +297,22 @@ namespace eBookKeeper.Model
       reader.Close();
     }
 
+
+    private void ReadKeyword()
+    {
+      IDbCommand selectKeywords =
+        new MySqlCommand(DbConsts.KeywordSelect, (MySqlConnection) Connection);
+
+      IDataReader reader = selectKeywords.ExecuteReader();
+      while (reader.Read())
+      {
+        var id = Convert.ToUInt32(reader.GetInt32(DbConsts.KeywordBookIdIndex));
+        // there must not exists any id when there is no book for it, so we don't check for null
+        Books.Find(b => b.Id == id).Keywords.Add(reader.GetString(DbConsts.KeywordNameIndex));
+      }
+      reader.Close();
+    }
+
     private void ReadAuthors()
     {
       Authors.Clear();
@@ -335,11 +352,10 @@ namespace eBookKeeper.Model
       {
         DbConsts.TableBook2Author,
         DbConsts.TableBook2Category,
-        DbConsts.TableBook2Keyword,
+        DbConsts.TableKeywords,
         DbConsts.TableBooks,
         DbConsts.TableAuthors,
-        DbConsts.TableCategories,
-        DbConsts.TableKeywords
+        DbConsts.TableCategories
       };
 
       foreach (object table in tables)

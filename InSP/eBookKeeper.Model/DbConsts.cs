@@ -10,7 +10,6 @@ namespace eBookKeeper.Model
     public const string TableKeywords = "keywords";
     public const string TableBook2Author = "book_to_author_map";
     public const string TableBook2Category = "book_to_category_map";
-    public const string TableBook2Keyword = "book_to_keyword_map";
 
     public const string CreateTables = "CREATE TABLE IF NOT EXISTS bsuir.books (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
@@ -28,7 +27,9 @@ namespace eBookKeeper.Model
                                        ");" +
                                        "CREATE TABLE IF NOT EXISTS bsuir.keywords (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
-                                       "Name varchar(255) character set cp1251 NOT NULL UNIQUE" +
+                                       "Name varchar(255) character set cp1251 NOT NULL," +
+                                       "BookId INT UNSIGNED NOT NULL," +
+                                       "constraint foreign key (BookId) references bsuir.books(Id)" +
                                        ");";
 
 
@@ -47,14 +48,6 @@ namespace eBookKeeper.Model
                                               "foreign key (BookId) references bsuir.books(Id)," +
                                               "constraint fk_authorId2Book " +
                                               "foreign key (AuthorId) references bsuir.authors(Id)" +
-                                              ");" +
-                                              "CREATE TABLE IF NOT EXISTS bsuir.book_to_keyword_map (" +
-                                              "BookId INT UNSIGNED NOT NULL, " +
-                                              "KeywordId INT UNSIGNED NOT NULL, " +
-                                              "constraint fk_bookId2Keyword " +
-                                              "foreign key (BookId) references bsuir.books(Id), " +
-                                              "constraint fk_keywordId2Book " +
-                                              "foreign key (KeywordId) references bsuir.keywords(Id)" +
                                               ");";
 
     public const string DropTable = "DROP TABLE IF EXISTS ";
@@ -68,9 +61,6 @@ namespace eBookKeeper.Model
 
     public const string InsertBook2Author = "INSERT INTO " + TableBook2Author +
                                             "(BookId, AuthorId) VALUE (@idBook, @idAuth)";
-
-    public const string InsertBook2Keyword = "INSERT INTO " + TableBook2Keyword +
-                                             "(BookId, KeywordId) VALUE (@idBook, @idKeyword)";
 
     public const string SelectBase = "SELECT * FROM ";
 
@@ -152,13 +142,16 @@ namespace eBookKeeper.Model
     // Keyword stuff
 
     public const string KeywordInsert =
-      "INSERT INTO " + TableKeywords + " (Name) values (@name)";
+      "INSERT INTO " + TableKeywords + " (Name, BookId) values (@name, @idBook)";
 
     public const string KeywordUpdate =
       "UPDATE " + TableKeywords + " SET Name=@name WHERE Id=@idKeyword";
 
-    public const string KeywordDelete =
+    public const string KeywordDeleteById =
       "DELETE FROM " + TableKeywords + " WHERE Id=@idKeyword";
+
+    public const string KeywordDeleteByBookId =
+      "DELETE FROM " + TableKeywords + " WHERE BookId=@idBook";
 
     public const string KeywordSelect =
       "SELECT * FROM " + TableKeywords + " ORDER BY Name";
@@ -167,6 +160,7 @@ namespace eBookKeeper.Model
     public static readonly MySqlParameter KeywordNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
     public static readonly int KeywordIdIndex = 0;
     public static readonly int KeywordNameIndex = 1;
+    public static readonly int KeywordBookIdIndex = 2;
 
     #endregion
   }

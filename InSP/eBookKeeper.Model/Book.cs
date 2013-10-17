@@ -107,13 +107,14 @@ namespace eBookKeeper.Model
       // write keywords
       foreach (string keyword in Keywords)
       {
-        IDbCommand map2Keyword = new MySqlCommand(DbConsts.InsertBook2Keyword,
+        IDbCommand keywordInsert = new MySqlCommand(DbConsts.KeywordInsert,
           (MySqlConnection) connection);
 
-//          BindId(map2Keyword, DbConsts.BookIdParam);
-//          keyword.BindId(map2Keyword, DbConsts.AuthorIdParam);
-//          map2Author.ExecuteNonQuery();
-        //TODO implement keyword mapping
+        BindId(keywordInsert, DbConsts.BookIdParam);
+        keywordInsert.Parameters.Add(DbConsts.KeywordNameParam);
+        DbConsts.KeywordNameParam.Value = keyword;
+
+        keywordInsert.ExecuteNonQuery();
       }
     }
 
