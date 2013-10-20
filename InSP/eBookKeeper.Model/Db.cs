@@ -1,31 +1,32 @@
-﻿using MySql.Data.MySqlClient;
+﻿using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
 {
   public static class Db
   {
-    public const string TableBooks = "books";
-    public const string TableCategories = "categories";
-    public const string TableAuthors = "authors";
-    public const string TableKeywords = "keywords";
-    public const string TableBook2Author = "book_to_author_map";
+    public const string TableBooks         = "books";
+    public const string TableCategories    = "categories";
+    public const string TableAuthors       = "authors";
+    public const string TableKeywords      = "keywords";
+    public const string TableBook2Author   = "book_to_author_map";
     public const string TableBook2Category = "book_to_category_map";
 
-    public const string CreateTables = "CREATE TABLE IF NOT EXISTS bsuir.books (" +
+    public const string CreateTables = "CREATE TABLE IF NOT EXISTS " + TableBooks + " (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                                        "Title varchar(255) character set cp1251 DEFAULT 'no name' ," +
                                        "Description TEXT   character set cp1251," +
                                        "Edition TINYINT UNSIGNED DEFAULT 1" +
-                                       ");" +
-                                       "CREATE TABLE IF NOT EXISTS bsuir.authors (" +
+                                       ");" + 
+                                       "CREATE TABLE IF NOT EXISTS " + TableAuthors + " (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                                        "Name varchar(255)character set cp1251 NOT NULL" +
                                        ");" +
-                                       "CREATE TABLE IF NOT EXISTS bsuir.categories (" +
+                                       "CREATE TABLE IF NOT EXISTS " + TableCategories + " (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                                        "Name varchar(255) character set cp1251 NOT NULL" +
                                        ");" +
-                                       "CREATE TABLE IF NOT EXISTS bsuir.keywords (" +
+                                       "CREATE TABLE IF NOT EXISTS " + TableKeywords + " (" +
                                        "Id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT," +
                                        "Name varchar(255) character set cp1251 NOT NULL," +
                                        "BookId INT UNSIGNED NOT NULL," +
@@ -33,7 +34,7 @@ namespace eBookKeeper.Model
                                        ");";
 
 
-    public const string CreateMappingTables = "CREATE TABLE IF NOT EXISTS bsuir.book_to_category_map (" +
+    public const string CreateMappingTables = "CREATE TABLE IF NOT EXISTS " + TableBook2Category +" (" +
                                               "BookId INT UNSIGNED NOT NULL," +
                                               "CategoryId INT UNSIGNED NOT NULL," +
                                               "constraint fk_bookId2Category " +
@@ -41,7 +42,7 @@ namespace eBookKeeper.Model
                                               "constraint fk_categoryId2Book " +
                                               "foreign key (CategoryId) references bsuir.categories(Id)" +
                                               ");" +
-                                              "CREATE TABLE IF NOT EXISTS bsuir.book_to_author_map (" +
+                                              "CREATE TABLE IF NOT EXISTS " + TableBook2Author + " (" +
                                               "BookId INT UNSIGNED NOT NULL," +
                                               "AuthorId INT UNSIGNED NOT NULL," +
                                               "constraint fk_bookId2Author " +
@@ -51,18 +52,9 @@ namespace eBookKeeper.Model
                                               ");";
 
     public const string DropTable = "DROP TABLE IF EXISTS ";
-
     public const string SelectLastInsertId = "SELECT LAST_INSERT_ID()";
     public const string SelectCountFrom = "SELECT COUNT(*) FROM ";
-
-    // insert book2X
-    public const string InsertBook2Category = "INSERT INTO " + TableBook2Category +
-                                              " (BookId, CategoryId) VALUE (@idBook, @idCat)";
-
-    public const string InsertBook2Author = "INSERT INTO " + TableBook2Author +
-                                            "(BookId, AuthorId) VALUE (@idBook, @idAuth)";
-
-    public const string SelectBase = "SELECT * FROM ";
+    public const string SelectAllFrom = "SELECT * FROM ";
 
     #region book
 
@@ -139,25 +131,6 @@ namespace eBookKeeper.Model
 
     #region keyword
 
-    // Keyword stuff
-
-    public const string KeywordInsert =
-      "INSERT INTO " + TableKeywords + " (Name, BookId) values (@name, @idBook)";
-
-    public const string KeywordUpdate =
-      "UPDATE " + TableKeywords + " SET Name=@name WHERE Id=@idKeyword";
-
-    public const string KeywordDeleteById =
-      "DELETE FROM " + TableKeywords + " WHERE Id=@idKeyword";
-
-    public const string KeywordDeleteByBookId =
-      "DELETE FROM " + TableKeywords + " WHERE BookId=@idBook";
-
-    public const string KeywordSelect =
-      "SELECT * FROM " + TableKeywords + " ORDER BY Name";
-
-    public static readonly MySqlParameter KeywordIdParam = new MySqlParameter("@idKeyword", MySqlDbType.VarChar);
-    public static readonly MySqlParameter KeywordNameParam = new MySqlParameter("@name", MySqlDbType.VarChar);
     public static readonly int KeywordIdIndex = 0;
     public static readonly int KeywordNameIndex = 1;
     public static readonly int KeywordBookIdIndex = 2;

@@ -13,10 +13,11 @@ namespace eBookKeeper.Model
   {
     public LibraryIndexOnDb()
     {
-      // TODO: is is not best idea projection establish connection in constructor
+      // is is not best idea projection establish connection in constructor
+      // but lets keep it simple
       OpenConnection();
 
-      // Exception in constructor =(
+      // thats why it is a bad idea
       if (Connection.State != ConnectionState.Open)
       {
         string message = "Не могу открыть подключение к базе: " + Connection.State;
@@ -100,7 +101,13 @@ namespace eBookKeeper.Model
       newBook.Id = LastInsertId();
       Books.Insert(0, newBook);
 
-      //TODO add mapping projection author, key, category
+      if (categories != null)
+        foreach (var category in categories)
+          newBook.AddCategory(category);
+
+      if (authors != null)
+        foreach (var author in authors)
+          newBook.AddAuthor(author);  
 
       return newBook;
     }
@@ -119,13 +126,14 @@ namespace eBookKeeper.Model
     {
       if (AllAuthors.Remove(item))
       {
+        // remove from mapping
+        DeleteFrom(Db.TableBook2Author, "AuthorId=" + item.Id);
+
         IDbCommand deleteAuthor = new MySqlCommand(Db.AuthorDelete,
           (MySqlConnection) Connection);
 
         item.BindId(deleteAuthor, Db.AuthorIdParam);
         deleteAuthor.ExecuteNonQuery();
-        // remove from mapping
-        DeleteFrom(Db.TableBook2Author, "AuthorId=" + item.Id);
 
         return true;
       }
@@ -168,14 +176,15 @@ namespace eBookKeeper.Model
     {
       if (Categories.Remove(item))
       {
+        // remove from mapping
+        DeleteFrom(Db.TableBook2Category, "CategoryId=" + item.Id);
+
         IDbCommand deleteCategory = new MySqlCommand(Db.CategoryDelete,
           (MySqlConnection) Connection);
 
         item.BindId(deleteCategory, Db.CategoryIdParam);
         deleteCategory.ExecuteNonQuery();
-        // remove from mapping
-        DeleteFrom(Db.TableBook2Category, "CategoryId=" + item.Id);
-
+        
         return true;
       }
       return false;
@@ -217,7 +226,7 @@ namespace eBookKeeper.Model
       IDbTransaction transaction = Connection.BeginTransaction();
       try
       {
-        // TODO updating everyting is suboprimal
+        // TODO updating everything is suboptimal
 
         foreach (Book book in Books)
           book.Update(Connection);
@@ -245,8 +254,8 @@ namespace eBookKeeper.Model
       ReadCategories();
       ReadKeyword();
 
-      Book2Catetory();
-      Book2Author();
+      ReadBook2Catetory();
+      ReadBook2Author();
 
       return this;
     }
@@ -255,10 +264,10 @@ namespace eBookKeeper.Model
 
 #region Read data
 
-    private void Book2Author()
+    private void ReadBook2Author()
     {
       IDbCommand selectBook2Author =
-        new MySqlCommand(Db.SelectBase + Db.TableBook2Author,
+        new MySqlCommand(Db.SelectAllFrom + Db.TableBook2Author,
           (MySqlConnection) Connection);
 
       IDataReader reader = selectBook2Author.ExecuteReader();
@@ -272,10 +281,10 @@ namespace eBookKeeper.Model
       reader.Close();
     }
 
-    private void Book2Catetory()
+    private void ReadBook2Catetory()
     {
       IDbCommand selectBook2Category =
-        new MySqlCommand(Db.SelectBase + Db.TableBook2Category,
+        new MySqlCommand(Db.SelectAllFrom + Db.TableBook2Category,
           (MySqlConnection) Connection);
 
       IDataReader reader = selectBook2Category.ExecuteReader();
@@ -308,7 +317,7 @@ namespace eBookKeeper.Model
     private void ReadKeyword()
     {
       IDbCommand selectKeywords =
-        new MySqlCommand(Db.KeywordSelect, (MySqlConnection) Connection);
+        new MySqlCommand(Db.SelectAllFrom + Db.TableKeywords, (MySqlConnection) Connection);
 
       IDataReader reader = selectKeywords.ExecuteReader();
       while (reader.Read())
