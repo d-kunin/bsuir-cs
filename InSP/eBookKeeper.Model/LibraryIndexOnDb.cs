@@ -29,12 +29,6 @@ namespace eBookKeeper.Model
       Categories = new List<Category>();
     }
 
-    private List<Book> Books { get; set; }
-    private List<Author> Authors { get; set; }
-    private List<Category> Categories { get; set; }
-
-    public IDbConnection Connection { get; private set; }
-
     public void Dispose()
     {
       Connection.Close();
@@ -266,104 +260,94 @@ namespace eBookKeeper.Model
 
     private void ReadBook2Author()
     {
-      IDbCommand selectBook2Author =
-        new MySqlCommand(Db.SelectAllFrom + Db.TableBook2Author,
-          (MySqlConnection) Connection);
-
-      IDataReader reader = selectBook2Author.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readMapping = reader =>
       {
         uint bookId = Convert.ToUInt32(reader.GetInt32(0));
         uint authorId = Convert.ToUInt32(reader.GetInt32(1));
-
         AllBooks.Find(b => b.Id == bookId).Add(AllAuthors.Find(a => a.Id == authorId));
-      }
-      reader.Close();
+      };
+
+      Read(Db.SelectAllFrom + Db.TableBook2Author, readMapping);
     }
 
     private void ReadBook2Catetory()
     {
-      IDbCommand selectBook2Category =
-        new MySqlCommand(Db.SelectAllFrom + Db.TableBook2Category,
-          (MySqlConnection) Connection);
-
-      IDataReader reader = selectBook2Category.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readMapping = reader =>
       {
         uint bookId = Convert.ToUInt32(reader.GetInt32(0));
         uint categoryId = Convert.ToUInt32(reader.GetInt32(1));
-
         AllBooks.Find(b => b.Id == bookId).Add(AllCategories.Find(a => a.Id == categoryId));
-      }
-      reader.Close();
+      };
+
+      Read(Db.SelectAllFrom + Db.TableBook2Category, readMapping);
     }
 
     private void ReadCategories()
     {
       Categories.Clear();
-      IDbCommand selectCategories =
-        new MySqlCommand(Db.CategorySelect, (MySqlConnection) Connection);
-
-      IDataReader reader = selectCategories.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readCategory = reader =>
       {
         var newCategory = new Category(this);
         newCategory.PopulateFromReader(reader);
         Categories.Add(newCategory);
-      }
-      reader.Close();
+      };
+      Read(Db.CategorySelect, readCategory);
     }
 
     private void ReadKeyword()
     {
-      IDbCommand selectKeywords =
-        new MySqlCommand(Db.SelectAllFrom + Db.TableKeywords, (MySqlConnection) Connection);
-
-      IDataReader reader = selectKeywords.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readKeyword = reader =>
       {
         var id = Convert.ToUInt32(reader.GetInt32(Db.KeywordBookIdIndex));
         // there must not exists any id when there is no book for it, so we don't check for null
         Books.Find(b => b.Id == id).Add(reader.GetString(Db.KeywordNameIndex));
-      }
-      reader.Close();
+      };
+ 
+      Read(Db.SelectAllFrom + Db.TableKeywords, readKeyword);
     }
 
     private void ReadAuthors()
     {
       Authors.Clear();
-      IDbCommand selectAuthors =
-        new MySqlCommand(Db.AuthorSelect, (MySqlConnection) Connection);
 
-      IDataReader reader = selectAuthors.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readAuthor = reader =>
       {
         var newAuthor = new Author(this);
         newAuthor.PopulateFromReader(reader);
         Authors.Add(newAuthor);
-      }
-      reader.Close();
+      };
+
+      Read(Db.AuthorSelect, readAuthor);
     }
 
     private void ReadBooks()
     {
       Books.Clear();
-      IDbCommand selectBooks =
-        new MySqlCommand(Db.BookSelect, (MySqlConnection) Connection);
 
-      IDataReader reader = selectBooks.ExecuteReader();
-      while (reader.Read())
+      Action<IDataReader> readBook = reader =>
       {
-        var newBook = new Book(this);
-        newBook.PopulateFromReader(reader);
-        Books.Add(newBook);
-      }
-      reader.Close();
+                var newBook = new Book(this);
+                newBook.PopulateFromReader(reader);
+                Books.Add(newBook);
+      };
+
+      Read(Db.BookSelect, readBook);
     }
 
 #endregion
 
-#region MapData
+#region CommonUtilities
+
+    internal void Read(string selectStmt, Action<IDataReader> readAction)
+    {
+      IDbCommand readCommand = 
+        new MySqlCommand(selectStmt, (MySqlConnection) Connection);
+
+      IDataReader reader = readCommand.ExecuteReader();
+      while (reader.Read())
+        readAction(reader);
+      reader.Close();
+    }
 
     internal void InsertInto(string tableName, string projection, string values)
     {
@@ -381,6 +365,24 @@ namespace eBookKeeper.Model
           (MySqlConnection)Connection);
 
       deleteCommand.ExecuteNonQuery();
+    }
+
+    private uint LastInsertId()
+    {
+      IDbCommand lastIdCommand = new MySqlCommand(
+        Db.SelectLastInsertId,
+        (MySqlConnection)Connection);
+
+      return Convert.ToUInt32(lastIdCommand.ExecuteScalar());
+    }
+
+    private long SelectCountFromTable(string tableName)
+    {
+      IDbCommand selectCountCommand = new MySqlCommand(
+        Db.SelectCountFrom + tableName,
+        (MySqlConnection)Connection);
+
+      return (long)selectCountCommand.ExecuteScalar();
     }
 
 #endregion
@@ -423,24 +425,10 @@ namespace eBookKeeper.Model
       createMappingCommand.ExecuteNonQuery();
     }
 
+    public IDbConnection Connection { get; private set; }
 
-    private uint LastInsertId()
-    {
-      IDbCommand lastIdCommand = new MySqlCommand(
-        Db.SelectLastInsertId,
-        (MySqlConnection) Connection);
-
-      return Convert.ToUInt32(lastIdCommand.ExecuteScalar());
-    }
-
-    private long SelectCountFromTable(string tableName)
-    {
-      IDbCommand selectCountCommand = new MySqlCommand(
-        Db.SelectCountFrom + tableName,
-        (MySqlConnection) Connection);
-
-      return (long) selectCountCommand.ExecuteScalar();
-    }
-
+    private List<Book> Books { get; set; }
+    private List<Author> Authors { get; set; }
+    private List<Category> Categories { get; set; }
   }
 }
