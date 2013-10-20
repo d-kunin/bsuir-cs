@@ -7,6 +7,9 @@ namespace eBookKeeper.Model
 {
   public class Author : DbObject, IComparable<Author>
   {
+    internal Author(LibraryIndexOnDb index) : base(index)
+    {}
+
     public string Name { get; set; }
 
     public int CompareTo(Author other)
@@ -21,19 +24,19 @@ namespace eBookKeeper.Model
 
     public override void Update(IDbConnection connection)
     {
-      IDbCommand updateCommand = new MySqlCommand(DbConsts.AuthorUpdate,
+      IDbCommand updateCommand = new MySqlCommand(Db.AuthorUpdate,
         (MySqlConnection) connection);
 
-      BindId(updateCommand, DbConsts.AuthorIdParam);
-      BindName(updateCommand, DbConsts.AuthorNameParam);
+      BindId(updateCommand, Db.AuthorIdParam);
+      BindName(updateCommand, Db.AuthorNameParam);
 
       updateCommand.ExecuteNonQuery();
     }
 
     public override void PopulateFromReader(IDataReader reader)
     {
-      Id = Convert.ToUInt32(reader.GetInt32(DbConsts.AuthorIdIndex));
-      Name = reader.GetString(DbConsts.AuthorNameIndex);
+      Id = Convert.ToUInt32(reader.GetInt32(Db.AuthorIdIndex));
+      Name = reader.GetString(Db.AuthorNameIndex);
     }
 
     public void BindName(IDbCommand command, DbParameter param)

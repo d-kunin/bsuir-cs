@@ -2,7 +2,7 @@
 
 namespace eBookKeeper.Model
 {
-  public class DbConsts
+  public static class Db
   {
     public const string TableBooks = "books";
     public const string TableCategories = "categories";
@@ -163,5 +163,11 @@ namespace eBookKeeper.Model
     public static readonly int KeywordBookIdIndex = 2;
 
     #endregion
+  
+    // some helper methods
+    public static string Quoted(this string s)
+    {
+      return "'" + s + "'";
+    }
   }
 }

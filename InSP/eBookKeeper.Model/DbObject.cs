@@ -9,6 +9,13 @@ namespace eBookKeeper.Model
     public abstract void Update(IDbConnection connection);
     public abstract void PopulateFromReader(IDataReader reader);
 
+    protected LibraryIndexOnDb _index;
+
+    protected DbObject(LibraryIndexOnDb index)
+    {
+      _index = index;
+    }
+
     public void BindId(IDbCommand command, DbParameter param)
     {
       param.Value = Id;

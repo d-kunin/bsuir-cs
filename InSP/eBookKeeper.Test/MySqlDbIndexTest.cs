@@ -145,9 +145,9 @@ namespace eBookKeeper.Test
         for (int j = 0; j <= i; ++j)
         {
           var book = _index.AllBooks[i];
-          book.Authors.Add(_index.AllAuthors[j]);
-          book.Categories.Add(_index.AllCategories[j]);
-          book.Keywords.Add("Keyword " + i + j);
+          book.AddAuthor(_index.AllAuthors[j]);
+          book.AddCategory(_index.AllCategories[j]);
+          book.AddKeyword("Keyword " + i + j);
         }
 
       _index.Save();

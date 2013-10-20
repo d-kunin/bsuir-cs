@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Windows.Media.Animation;
 using MySql.Data.MySqlClient;
 
 namespace eBookKeeper.Model
@@ -12,7 +13,7 @@ namespace eBookKeeper.Model
   {
     public LibraryIndexOnDb()
     {
-      // TODO: is is not best idea to establish connection in constructor
+      // TODO: is is not best idea projection establish connection in constructor
       OpenConnection();
 
       // Exception in constructor =(
@@ -38,20 +39,38 @@ namespace eBookKeeper.Model
       Connection.Close();
     }
 
+    private void OpenConnection()
+    {
+      var builder = new MySqlConnectionStringBuilder
+      {
+        Server = "ec2-54-218-67-170.us-west-2.compute.amazonaws.com",
+        UserID = "bsuir",
+        Password = "bsuir",
+        Database = "bsuir",
+        Port = 3306
+      };
+
+      Connection = new MySqlConnection(builder.ToString());
+      Connection.Open();
+    }
+
+#region LibraryInterface
+
     public bool Delete(Book item)
     {
       if (Books.Remove(item))
       {
-        IDbCommand deleteBook =
-          new MySqlCommand(DbConsts.BookDelete, (MySqlConnection) Connection);
-
-        DbConsts.BookIdParam.Value = item.Id;
-        deleteBook.Parameters.Add(DbConsts.BookIdParam);
-        deleteBook.ExecuteNonQuery();
-
         //delete from mappings
-        DeleteFromMappingTable(DbConsts.TableBook2Author, "BookId=" + item.Id);
-        DeleteFromMappingTable(DbConsts.TableBook2Category, "BookId=" + item.Id);
+        DeleteFrom(Db.TableBook2Author, "BookId=" + item.Id);
+        DeleteFrom(Db.TableBook2Category, "BookId=" + item.Id);
+        DeleteFrom(Db.TableKeywords, "BookId=" + item.Id);
+
+        IDbCommand deleteBook =
+          new MySqlCommand(Db.BookDelete, (MySqlConnection) Connection);
+
+        Db.BookIdParam.Value = item.Id;
+        deleteBook.Parameters.Add(Db.BookIdParam);
+        deleteBook.ExecuteNonQuery();
 
         return true;
       }
@@ -66,14 +85,14 @@ namespace eBookKeeper.Model
     public Book CreateBook(string title, List<Author> authors = null, List<Category> categories = null)
     {
       IDbCommand insertBookCommand =
-        new MySqlCommand(DbConsts.BookInsert, (MySqlConnection) Connection);
+        new MySqlCommand(Db.BookInsert, (MySqlConnection) Connection);
 
-      var newBook = new Book {Title = title};
+      var newBook = new Book(this) {Title = title};
 
 
-      newBook.BindTitle(insertBookCommand, DbConsts.BookTitleParam);
-      newBook.BindDescription(insertBookCommand, DbConsts.BookDescriptionParam);
-      newBook.BindEdition(insertBookCommand, DbConsts.BookEditionParam);
+      newBook.BindTitle(insertBookCommand, Db.BookTitleParam);
+      newBook.BindDescription(insertBookCommand, Db.BookDescriptionParam);
+      newBook.BindEdition(insertBookCommand, Db.BookEditionParam);
 
 
       insertBookCommand.ExecuteNonQuery();
@@ -81,14 +100,14 @@ namespace eBookKeeper.Model
       newBook.Id = LastInsertId();
       Books.Insert(0, newBook);
 
-      //TODO add mapping to author, key, category
+      //TODO add mapping projection author, key, category
 
       return newBook;
     }
 
     public long NumberOfBooks()
     {
-      return SelectCountFromTable(DbConsts.TableBooks);
+      return SelectCountFromTable(Db.TableBooks);
     }
 
     public List<Book> AllBooks
@@ -100,13 +119,13 @@ namespace eBookKeeper.Model
     {
       if (AllAuthors.Remove(item))
       {
-        IDbCommand deleteAuthor = new MySqlCommand(DbConsts.AuthorDelete,
+        IDbCommand deleteAuthor = new MySqlCommand(Db.AuthorDelete,
           (MySqlConnection) Connection);
 
-        item.BindId(deleteAuthor, DbConsts.AuthorIdParam);
+        item.BindId(deleteAuthor, Db.AuthorIdParam);
         deleteAuthor.ExecuteNonQuery();
         // remove from mapping
-        DeleteFromMappingTable(DbConsts.TableBook2Author, "AuthorId=" + item.Id);
+        DeleteFrom(Db.TableBook2Author, "AuthorId=" + item.Id);
 
         return true;
       }
@@ -120,12 +139,12 @@ namespace eBookKeeper.Model
 
     public Author CreateAuthor(string name)
     {
-      IDbCommand insertAuthor = new MySqlCommand(DbConsts.AuthorInsert,
+      IDbCommand insertAuthor = new MySqlCommand(Db.AuthorInsert,
         (MySqlConnection) Connection);
 
-      var newAuthor = new Author {Name = name};
+      var newAuthor = new Author(this) {Name = name};
 
-      newAuthor.BindName(insertAuthor, DbConsts.AuthorNameParam);
+      newAuthor.BindName(insertAuthor, Db.AuthorNameParam);
 
       insertAuthor.ExecuteNonQuery();
       newAuthor.Id = LastInsertId();
@@ -137,7 +156,7 @@ namespace eBookKeeper.Model
 
     public long NumberOfAuthors()
     {
-      return SelectCountFromTable(DbConsts.TableAuthors);
+      return SelectCountFromTable(Db.TableAuthors);
     }
 
     public List<Author> AllAuthors
@@ -149,13 +168,13 @@ namespace eBookKeeper.Model
     {
       if (Categories.Remove(item))
       {
-        IDbCommand deleteCategory = new MySqlCommand(DbConsts.CategoryDelete,
+        IDbCommand deleteCategory = new MySqlCommand(Db.CategoryDelete,
           (MySqlConnection) Connection);
 
-        item.BindId(deleteCategory, DbConsts.CategoryIdParam);
+        item.BindId(deleteCategory, Db.CategoryIdParam);
         deleteCategory.ExecuteNonQuery();
         // remove from mapping
-        DeleteFromMappingTable(DbConsts.TableBook2Category, "CategoryId=" + item.Id);
+        DeleteFrom(Db.TableBook2Category, "CategoryId=" + item.Id);
 
         return true;
       }
@@ -169,12 +188,12 @@ namespace eBookKeeper.Model
 
     public Category CreateCategory(string name)
     {
-      IDbCommand insertCategory = new MySqlCommand(DbConsts.CategoryInsert,
+      IDbCommand insertCategory = new MySqlCommand(Db.CategoryInsert,
         (MySqlConnection) Connection);
 
-      var newCategory = new Category {Name = name};
+      var newCategory = new Category(this) {Name = name};
 
-      newCategory.BindName(insertCategory, DbConsts.CategoryNameParam);
+      newCategory.BindName(insertCategory, Db.CategoryNameParam);
       insertCategory.ExecuteNonQuery();
 
       newCategory.Id = LastInsertId();
@@ -185,7 +204,7 @@ namespace eBookKeeper.Model
 
     public long NumberOfCategories()
     {
-      return SelectCountFromTable(DbConsts.TableCategories);
+      return SelectCountFromTable(Db.TableCategories);
     }
 
     public List<Category> AllCategories
@@ -232,25 +251,14 @@ namespace eBookKeeper.Model
       return this;
     }
 
-    private void OpenConnection()
-    {
-      var builder = new MySqlConnectionStringBuilder();
+#endregion
 
-      builder.Server = "ec2-54-218-67-170.us-west-2.compute.amazonaws.com";
-      // bsuir is ours everything
-      builder.UserID = "bsuir";
-      builder.Password = "bsuir";
-      builder.Database = "bsuir";
-      builder.Port = 3306;
-
-      Connection = new MySqlConnection(builder.ToString());
-      Connection.Open();
-    }
+#region Read data
 
     private void Book2Author()
     {
       IDbCommand selectBook2Author =
-        new MySqlCommand(DbConsts.SelectBase + DbConsts.TableBook2Author,
+        new MySqlCommand(Db.SelectBase + Db.TableBook2Author,
           (MySqlConnection) Connection);
 
       IDataReader reader = selectBook2Author.ExecuteReader();
@@ -259,7 +267,7 @@ namespace eBookKeeper.Model
         uint bookId = Convert.ToUInt32(reader.GetInt32(0));
         uint authorId = Convert.ToUInt32(reader.GetInt32(1));
 
-        AllBooks.Find(b => b.Id == bookId).Authors.Add(AllAuthors.Find(a => a.Id == authorId));
+        AllBooks.Find(b => b.Id == bookId).Add(AllAuthors.Find(a => a.Id == authorId));
       }
       reader.Close();
     }
@@ -267,7 +275,7 @@ namespace eBookKeeper.Model
     private void Book2Catetory()
     {
       IDbCommand selectBook2Category =
-        new MySqlCommand(DbConsts.SelectBase + DbConsts.TableBook2Category,
+        new MySqlCommand(Db.SelectBase + Db.TableBook2Category,
           (MySqlConnection) Connection);
 
       IDataReader reader = selectBook2Category.ExecuteReader();
@@ -276,7 +284,7 @@ namespace eBookKeeper.Model
         uint bookId = Convert.ToUInt32(reader.GetInt32(0));
         uint categoryId = Convert.ToUInt32(reader.GetInt32(1));
 
-        AllBooks.Find(b => b.Id == bookId).Categories.Add(AllCategories.Find(a => a.Id == categoryId));
+        AllBooks.Find(b => b.Id == bookId).Add(AllCategories.Find(a => a.Id == categoryId));
       }
       reader.Close();
     }
@@ -285,30 +293,29 @@ namespace eBookKeeper.Model
     {
       Categories.Clear();
       IDbCommand selectCategories =
-        new MySqlCommand(DbConsts.CategorySelect, (MySqlConnection) Connection);
+        new MySqlCommand(Db.CategorySelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectCategories.ExecuteReader();
       while (reader.Read())
       {
-        var newCategory = new Category();
+        var newCategory = new Category(this);
         newCategory.PopulateFromReader(reader);
         Categories.Add(newCategory);
       }
       reader.Close();
     }
 
-
     private void ReadKeyword()
     {
       IDbCommand selectKeywords =
-        new MySqlCommand(DbConsts.KeywordSelect, (MySqlConnection) Connection);
+        new MySqlCommand(Db.KeywordSelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectKeywords.ExecuteReader();
       while (reader.Read())
       {
-        var id = Convert.ToUInt32(reader.GetInt32(DbConsts.KeywordBookIdIndex));
+        var id = Convert.ToUInt32(reader.GetInt32(Db.KeywordBookIdIndex));
         // there must not exists any id when there is no book for it, so we don't check for null
-        Books.Find(b => b.Id == id).Keywords.Add(reader.GetString(DbConsts.KeywordNameIndex));
+        Books.Find(b => b.Id == id).Add(reader.GetString(Db.KeywordNameIndex));
       }
       reader.Close();
     }
@@ -317,12 +324,12 @@ namespace eBookKeeper.Model
     {
       Authors.Clear();
       IDbCommand selectAuthors =
-        new MySqlCommand(DbConsts.AuthorSelect, (MySqlConnection) Connection);
+        new MySqlCommand(Db.AuthorSelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectAuthors.ExecuteReader();
       while (reader.Read())
       {
-        var newAuthor = new Author();
+        var newAuthor = new Author(this);
         newAuthor.PopulateFromReader(reader);
         Authors.Add(newAuthor);
       }
@@ -333,34 +340,58 @@ namespace eBookKeeper.Model
     {
       Books.Clear();
       IDbCommand selectBooks =
-        new MySqlCommand(DbConsts.BookSelect, (MySqlConnection) Connection);
+        new MySqlCommand(Db.BookSelect, (MySqlConnection) Connection);
 
       IDataReader reader = selectBooks.ExecuteReader();
       while (reader.Read())
       {
-        var newBook = new Book();
+        var newBook = new Book(this);
         newBook.PopulateFromReader(reader);
         Books.Add(newBook);
       }
       reader.Close();
     }
 
+#endregion
+
+#region MapData
+
+    internal void InsertInto(string tableName, string projection, string values)
+    {
+      IDbCommand insertCommand =
+        new MySqlCommand("INSERT INTO " + tableName + " (" + projection + ") VALUE (" + values + ")",
+          (MySqlConnection) Connection);
+
+      insertCommand.ExecuteNonQuery();
+    }
+
+    internal void DeleteFrom(string mappingTable, string where)
+    {
+      IDbCommand deleteCommand =
+        new MySqlCommand("DELETE FROM " + mappingTable + " WHERE " + where,
+          (MySqlConnection)Connection);
+
+      deleteCommand.ExecuteNonQuery();
+    }
+
+#endregion
+
     public void DropTables()
     {
       // drop mappings first
       var tables = new ArrayList
       {
-        DbConsts.TableBook2Author,
-        DbConsts.TableBook2Category,
-        DbConsts.TableKeywords,
-        DbConsts.TableBooks,
-        DbConsts.TableAuthors,
-        DbConsts.TableCategories
+        Db.TableBook2Author,
+        Db.TableBook2Category,
+        Db.TableKeywords,
+        Db.TableBooks,
+        Db.TableAuthors,
+        Db.TableCategories
       };
 
       foreach (object table in tables)
       {
-        IDbCommand dropTable = new MySqlCommand(DbConsts.DropTable + table,
+        IDbCommand dropTable = new MySqlCommand(Db.DropTable + table,
           (MySqlConnection) Connection);
         dropTable.ExecuteNonQuery();
       }
@@ -370,14 +401,14 @@ namespace eBookKeeper.Model
     {
       // init books, authors, categories
       IDbCommand createTablesCommand =
-        new MySqlCommand(DbConsts.CreateTables,
+        new MySqlCommand(Db.CreateTables,
           (MySqlConnection) Connection);
 
       createTablesCommand.ExecuteNonQuery();
 
       // init mappings
       IDbCommand createMappingCommand =
-        new MySqlCommand(DbConsts.CreateMappingTables,
+        new MySqlCommand(Db.CreateMappingTables,
           (MySqlConnection) Connection);
 
       createMappingCommand.ExecuteNonQuery();
@@ -387,7 +418,7 @@ namespace eBookKeeper.Model
     private uint LastInsertId()
     {
       IDbCommand lastIdCommand = new MySqlCommand(
-        DbConsts.SelectLastInsertId,
+        Db.SelectLastInsertId,
         (MySqlConnection) Connection);
 
       return Convert.ToUInt32(lastIdCommand.ExecuteScalar());
@@ -396,19 +427,11 @@ namespace eBookKeeper.Model
     private long SelectCountFromTable(string tableName)
     {
       IDbCommand selectCountCommand = new MySqlCommand(
-        DbConsts.SelectCountFrom + tableName,
+        Db.SelectCountFrom + tableName,
         (MySqlConnection) Connection);
 
       return (long) selectCountCommand.ExecuteScalar();
     }
 
-    private void DeleteFromMappingTable(string mappingTable, string where)
-    {
-      IDbCommand deleteCommand =
-        new MySqlCommand("DELETE FROM " + mappingTable + " WHERE " + where,
-          (MySqlConnection) Connection);
-
-      deleteCommand.ExecuteNonQuery();
-    }
   }
 }

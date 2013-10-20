@@ -100,13 +100,15 @@
                 Text="{Binding (model:Book.Description)}" />
 
             <ListView
+                Name = "ListAuthors"
                 Grid.Row="2"
                 Grid.Column="2"
                 ItemsSource="{Binding 
                                 ElementName=BooksList,
-                                Path=SelectedItem.(model:Book.Authors)}" />
+                                Path=SelectedItem.(model:Book.Authors)}"/>
 
             <ListView
+                Name="ListCats"
                 Grid.Row="2"
                 Grid.Column="3"
                 ItemsSource="{Binding 
@@ -114,6 +116,7 @@
                                 Path=SelectedItem.(model:Book.Categories)}" />
 
             <ItemsControl
+                Name="Keywords"
                 Style="{StaticResource KeyWordStyle}"
                 Grid.Row="3"
                 Grid.Column="0"

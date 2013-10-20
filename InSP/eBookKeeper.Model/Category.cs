@@ -7,6 +7,10 @@ namespace eBookKeeper.Model
 {
   public class Category : DbObject, IComparable<Category>
   {
+    internal Category(LibraryIndexOnDb index) : base(index)
+    {}
+
+
     public string Name { get; set; }
 
     public int CompareTo(Category other)
@@ -21,19 +25,19 @@ namespace eBookKeeper.Model
 
     public override void Update(IDbConnection connection)
     {
-      IDbCommand updateCommand = new MySqlCommand(DbConsts.CategoryUpdate,
+      IDbCommand updateCommand = new MySqlCommand(Db.CategoryUpdate,
         (MySqlConnection) connection);
 
-      BindId(updateCommand, DbConsts.CategoryIdParam);
-      BindName(updateCommand, DbConsts.CategoryNameParam);
+      BindId(updateCommand, Db.CategoryIdParam);
+      BindName(updateCommand, Db.CategoryNameParam);
 
       updateCommand.ExecuteNonQuery();
     }
 
     public override void PopulateFromReader(IDataReader reader)
     {
-      Id = Convert.ToUInt32(reader.GetInt32(DbConsts.CategoryIdIndex));
-      Name = reader.GetString(DbConsts.CategoryNameIndex);
+      Id = Convert.ToUInt32(reader.GetInt32(Db.CategoryIdIndex));
+      Name = reader.GetString(Db.CategoryNameIndex);
     }
 
     public void BindName(IDbCommand command, DbParameter param)

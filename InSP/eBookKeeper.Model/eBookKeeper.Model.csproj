@@ -48,9 +48,8 @@
     <Compile Include="ILibraryIndex.cs" />
     <Compile Include="IIndex.cs" />
     <Compile Include="LibraryIndexOnDb.cs" />
-    <Compile Include="DbConsts.cs" />
+    <Compile Include="Db.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StubLibraryIndex.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
