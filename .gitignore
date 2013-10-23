@@ -157,3 +157,6 @@ CMakeLists.txt.user
 *txt.user*
 
 *.run
+Programming/GEM/build-gem_lib-Desktop_Qt_5_1_0_clang_64bit-Debug/Makefile
+Programming/GEM/build-gem_lib-Desktop_Qt_5_1_0_clang_64bit-Debug/gem_lib
+Programming/GEM/build-gem_lib-Desktop_Qt_5_1_0_clang_64bit-Debug/main.o
