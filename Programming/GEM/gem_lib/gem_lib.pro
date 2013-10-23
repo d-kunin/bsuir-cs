@@ -9,5 +9,9 @@ HEADERS += \
     Commons.hpp \
     Geometry/PrimitiveGeometry.hpp \
     Geometry/ComplexGeometry.hpp \
+    Painter/Painter.hpp \
+    Geometry/Geometry.hpp \
+    Painter/Scene.hpp \
+    Painter/Drawable.hpp
 
 cache()
