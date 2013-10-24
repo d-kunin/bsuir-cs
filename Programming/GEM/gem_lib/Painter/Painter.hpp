@@ -10,7 +10,7 @@ using geometry::Ellipse;
 namespace painter {
 
 typedef Point2D<float> PointF;
-typedef Line<float> LineF;
+typedef Line2D<float> LineF;
 typedef Rect<float> RectF;
 typedef Ellipse<float> EllipseF;
 

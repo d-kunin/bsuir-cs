@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PrimitiveGeometry.hpp"
-#include "Commons.hpp"
+#include "../Commons.hpp"
 
 namespace geometry {
 
@@ -9,7 +9,7 @@ template <typename T>
 class Polyline {
 public:
 
-  vector<Point2D<T>> & Points() {
+  vector<Point2D<T> > & Points() {
     return _points;
   }
 
@@ -22,13 +22,16 @@ public:
   }
 
 private:
-  vector<Point2D<T>> _points;
+  vector<Point2D<T> > _points;
 };
 
 template <typename T>
 class Rect {
 public:
   Point2D<T> _topleft, _bottomright;
+
+  Rect(Point2D<T> topleft, Point2D<T> bottomright)
+    : _topleft(topleft), _bottomright(bottomright) {}
 
   T Width() {
     return _bottomright._x - _topleft._x;
@@ -45,6 +48,9 @@ public:
   Point2D<T> _center;
   T _rh;
   T _rv;
+
+  Ellipse(Point2D<T> center, T rh, T rv)
+    : _center(center), _rh(rh), _rv(rv) {}
 };
 
 }
