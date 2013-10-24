@@ -15,7 +15,7 @@ private:
 public:
 
   /**
-   * @todo this is temporar solution
+   * @todo this is temporal solution
    *
    * @brief Drawables
    * @return

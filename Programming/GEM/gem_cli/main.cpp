@@ -1,5 +1,8 @@
 
 #include "ConsolePainter.hpp"
+#include "../gem_lib/Painter/DrawableGeometry.hpp"
+#include "../gem_lib/Painter/Scene.hpp"
+
 #include <iostream>
 
 using namespace std;
@@ -16,10 +19,18 @@ int main()
 
   ConsolePainter painter;
 
-  painter.drawPoint(p1);
-  painter.drawLine(l);
-  painter.drawRect(r);
-  painter.drawEllipse(e);
+  Scene * innerScene = new Scene();
+  innerScene->Drawables().push_back(new PointDrawable(p1));
+  innerScene->Drawables().push_back(new LineDrawable(l));
+  innerScene->Drawables().push_back(new RectDrawable(r));
+  innerScene->Drawables().push_back(new EllipseDrawable(e));
+
+  Scene * outterScene = new Scene();
+  outterScene->Drawables().push_back(innerScene);
+  outterScene->Drawables().push_back(new PointDrawable(p2));
+  outterScene->Drawables().push_back(innerScene);
+
+  outterScene->Draw(&painter);
 
   return 0;
 }

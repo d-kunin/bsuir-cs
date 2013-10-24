@@ -33,6 +33,8 @@ public:
   Rect(Point2D<T> topleft, Point2D<T> bottomright)
     : _topleft(topleft), _bottomright(bottomright) {}
 
+  Rect() {}
+
   T Width() {
     return _bottomright._x - _topleft._x;
   }
@@ -51,6 +53,9 @@ public:
 
   Ellipse(Point2D<T> center, T rh, T rv)
     : _center(center), _rh(rh), _rv(rv) {}
+
+  Ellipse()
+    : _rh(0), _rv(0) {}
 };
 
 }

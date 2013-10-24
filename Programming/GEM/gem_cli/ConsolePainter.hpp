@@ -8,10 +8,10 @@ class ConsolePainter : public painter::Painter
 {
 public:
 
-  void drawPoint(PointF const & point) override;
-  void drawLine(LineF const & line) override;
-  void drawRect(RectF const & rect) override;
-  void drawEllipse(EllipseF const & ellipse) override;
+  void DrawPoint(PointF const & point) override;
+  void DrawLine(LineF const & line) override;
+  void DrawRect(RectF const & rect) override;
+  void DrawEllipse(EllipseF const & ellipse) override;
 
   virtual float TargetWidth()  override  { return 0; }
   virtual float TargetHeight() override  { return 0; }

@@ -14,17 +14,15 @@ typedef Line2D<float> LineF;
 typedef Rect<float> RectF;
 typedef Ellipse<float> EllipseF;
 
-
 class Painter {
 
 public:
-
   virtual ~Painter() {}
 
-  virtual void drawPoint(PointF const & point) = 0;
-  virtual void drawLine(LineF const & line) = 0;
-  virtual void drawRect(RectF const & rect) = 0;
-  virtual void drawEllipse(EllipseF const & ellipse) = 0;
+  virtual void DrawPoint(PointF const & point) = 0;
+  virtual void DrawLine(LineF const & line) = 0;
+  virtual void DrawRect(RectF const & rect) = 0;
+  virtual void DrawEllipse(EllipseF const & ellipse) = 0;
 
   //{@ We need to know target bounds
   virtual float TargetWidth() = 0;
