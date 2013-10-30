@@ -2,9 +2,9 @@
 
 namespace geometry {
 
-//@{
 template <typename T>
-class Point2D {
+class Point2D
+{
 public:
   T _x;
   T _y;
@@ -14,11 +14,12 @@ public:
 
   Point2D(T x, T y)
     : _x(x), _y(y) {}
-
 };
 
+
 template <typename T>
-class Line2D {
+class Line2D
+{
 public:
   Point2D<T> _start;
   Point2D<T> _end;

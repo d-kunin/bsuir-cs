@@ -13,6 +13,9 @@ HEADERS += \
     Painter/Scene.hpp \
     Painter/Drawable.hpp \
     Geometry/Utils.hpp \
-    Painter/DrawableGeometry.hpp
+    Painter/DrawableGeometry.hpp \
+    Painter/Paint.hpp \
+    Painter/Color.hpp \
+    Geometry/Matrix.hpp
 
 cache()

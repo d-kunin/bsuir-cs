@@ -28,7 +28,7 @@ template <typename T>
 string ToStr(Rect<T> const & rect)
 {
   ostringstream ss;
-  ss << "r:[ tl=" << ToStr(rect._topleft) << ", br=" << ToStr(rect._bottomright) << "]";
+  ss << "r:[ tl=" << ToStr(rect._topLeft) << ", br=" << ToStr(rect._bottomRight) << "]";
   return ss.str();
 }
 
@@ -36,7 +36,7 @@ template <typename T>
 string ToStr(Ellipse<T> const & elli)
 {
   ostringstream ss;
-  ss << "e:[ c=" << ToStr(elli._center) << ", rh=" << elli._rx << " rv=" << elli._ry << "]";
+  ss << "e:[ c=" << ToStr(elli._center) << ", rh=" << elli._rX << " rv=" << elli._rY << "]";
   return ss.str();
 }
 

@@ -13,6 +13,8 @@ public:
   void DrawRect(RectF const & rect) override;
   void DrawEllipse(EllipseF const & ellipse) override;
 
-  virtual float TargetWidth()  override  { return 0; }
-  virtual float TargetHeight() override  { return 0; }
+  void UsePaint(const Paint *paint) override;
+
+  float TargetWidth()  override  { return 0; }
+  float TargetHeight() override  { return 0; }
 };

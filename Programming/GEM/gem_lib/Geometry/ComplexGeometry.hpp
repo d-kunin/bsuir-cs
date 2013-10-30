@@ -5,45 +5,46 @@
 
 namespace geometry {
 
-//{@ Shapes
 template <typename T>
-class Rect {
+class Rect
+{
 public:
-  Point2D<T> _topleft, _bottomright;
+  Point2D<T> _topLeft, _bottomRight;
 
   Rect(Point2D<T> topleft, Point2D<T> bottomright)
-    : _topleft(topleft), _bottomright(bottomright) {}
+    : _topLeft(topleft), _bottomRight(bottomright) {}
 
   Rect() {}
 
   T Width() {
-    return _bottomright._x - _topleft._x;
+    return _bottomRight._x - _topLeft._x;
   }
 
   T Height() {
-    return _bottomright.y - _topleft._y;
+    return _bottomRight.y - _topLeft._y;
   }
 };
 
 
 template <typename T>
-class Ellipse {
+class Ellipse
+{
 public:
   Point2D<T> _center;
-  T _rx;
-  T _ry;
+  T _rX;
+  T _rY;
 
   Ellipse(Point2D<T> center, T rh, T rv)
-    : _center(center), _rx(rh), _ry(rv) {}
+    : _center(center), _rX(rh), _rY(rv) {}
 
   Ellipse()
-    : _rx(0), _ry(0) {}
+    : _rX(0), _rY(0) {}
 };
 
 template <typename T>
-class Polygon {
+class Polygon
+{
 //NO-OP
 };
 
-//{@
 }
