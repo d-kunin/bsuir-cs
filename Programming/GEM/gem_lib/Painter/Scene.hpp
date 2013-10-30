@@ -4,9 +4,6 @@
 
 namespace painter {
 
-/**
- * @brief The Scene class, hold drawables
- */
 class Scene: public Drawable {
 
 private:
@@ -14,12 +11,6 @@ private:
 
 public:
 
-  /**
-   * @todo this is temporal solution
-   *
-   * @brief Drawables
-   * @return
-   */
   vector<Drawable*> & Drawables() {
     return _drawables;
   }
@@ -33,7 +24,6 @@ public:
     for (Drawable * drawable : _drawables)
       delete drawable;
   }
-
 };
 
 }

@@ -2,6 +2,7 @@
 #include "ConsolePainter.hpp"
 #include "../gem_lib/Painter/DrawableGeometry.hpp"
 #include "../gem_lib/Painter/Scene.hpp"
+#include "../gem_lib/Geometry/Utils.hpp"
 
 #include <iostream>
 
@@ -31,6 +32,8 @@ int main()
   outterScene->Drawables().push_back(innerScene);
 
   outterScene->Draw(&painter);
+
+  cout << p1;
 
   return 0;
 }

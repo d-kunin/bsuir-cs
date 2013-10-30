@@ -1,6 +1,5 @@
 #pragma once
 
-#include "PrimitiveGeometry.hpp"
 #include "ComplexGeometry.hpp"
 
 #include <string>
@@ -37,6 +36,12 @@ template <typename T>
 string ToStr(Ellipse<T> const & elli)
 {
   ostringstream ss;
-  ss << "e:[ c=" << ToStr(elli._center) << ", rh=" << elli._rh << " rv=" << elli._rv << "]";
+  ss << "e:[ c=" << ToStr(elli._center) << ", rh=" << elli._rx << " rv=" << elli._ry << "]";
   return ss.str();
+}
+
+template<template<typename> class G, typename T>
+ostream & operator<<(ostream & out, G<T> const & geometry)
+{
+  return out << ToStr(geometry);
 }

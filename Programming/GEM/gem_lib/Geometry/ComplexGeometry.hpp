@@ -5,26 +5,7 @@
 
 namespace geometry {
 
-template <typename T>
-class Polyline {
-public:
-
-  vector<Point2D<T> > & Points() {
-    return _points;
-  }
-
-  Point2D<T> & PointAt(size_t index) {
-    return _points[index];
-  }
-
-  size_t PointsCount() {
-    return _points.size();
-  }
-
-private:
-  vector<Point2D<T> > _points;
-};
-
+//{@ Shapes
 template <typename T>
 class Rect {
 public:
@@ -44,18 +25,25 @@ public:
   }
 };
 
+
 template <typename T>
 class Ellipse {
 public:
   Point2D<T> _center;
-  T _rh;
-  T _rv;
+  T _rx;
+  T _ry;
 
   Ellipse(Point2D<T> center, T rh, T rv)
-    : _center(center), _rh(rh), _rv(rv) {}
+    : _center(center), _rx(rh), _ry(rv) {}
 
   Ellipse()
-    : _rh(0), _rv(0) {}
+    : _rx(0), _ry(0) {}
 };
 
+template <typename T>
+class Polygon {
+//NO-OP
+};
+
+//{@
 }

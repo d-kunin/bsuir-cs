@@ -9,17 +9,17 @@ using std::cout;
 using std::endl;
 
 void ConsolePainter::DrawPoint(PointF const & point) {
-  cout << ToStr(point) << endl;
+  cout << point << endl;
 }
 
 void ConsolePainter::DrawLine(LineF const & line) {
-  cout << ToStr(line) << endl;
+  cout << line << endl;
 }
 
 void ConsolePainter::DrawRect(RectF const & rect) {
-  cout << ToStr(rect) << endl;
+  cout << rect << endl;
 }
 
 void ConsolePainter::DrawEllipse(EllipseF const & ellipse) {
-  cout << ToStr(ellipse) << endl;
+  cout << ellipse << endl;
 }

@@ -2,6 +2,7 @@
 
 namespace geometry {
 
+//@{
 template <typename T>
 class Point2D {
 public:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Geometry/Geometry.hpp"
+#include "../Geometry/ComplexGeometry.hpp"
 
 using geometry::Point2D;
 using geometry::Line2D;
