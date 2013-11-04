@@ -16,6 +16,7 @@ class Matrix
 public:
   virtual ~Matrix();
 
+  Matrix();
   static Matrix<N,N,T> Identity();
   static Matrix<N,N,T> Diagonal(T value);
 
@@ -38,7 +39,6 @@ public:
 
 protected:
   T ** _data;
-  Matrix();
 };
 
 template <size_t N, size_t M, typename T>
@@ -165,4 +165,18 @@ void Matrix<N, M, T>::ForEach(Functor<T> & f)
   for (size_t i = 0; i < N; ++i)
     for (size_t j = 0; j < M; ++j)
       f.Apply(operator()(i,j));
+}
+
+// m1(N,M) x m2(M, Q) = c(N,Q)
+template <size_t N, size_t M, size_t Q, typename T>
+Matrix<N, Q, T> operator * (Matrix<N, M, T> const & m1, Matrix<M, Q, T> const & m2)
+{
+  Matrix<N, Q, T> m;
+
+  for (size_t i = 0; i < N; ++i)
+    for (size_t j = 0; j < Q; ++j)
+      for (size_t r = 0; r < M; ++r)
+        m(i,j) += m1(i,r)*m2(r,j);
+
+  return m;
 }
