@@ -4,6 +4,7 @@
 #include "../gem_lib/Painter/Scene.hpp"
 #include "../gem_lib/Geometry/Utils.hpp"
 #include "../gem_lib/Geometry/Matrix.hpp"
+#include "../gem_lib/Geometry/Transform.hpp"
 
 #include <iostream>
 
@@ -35,20 +36,22 @@ int main()
 
   ConsolePainter * painter = new ConsolePainter();
 
-//  Scene * innerScene = new Scene();
-//  innerScene->Drawables().push_back(new PointDrawable(p1));
-//  innerScene->Drawables().push_back(new LineDrawable(l));
-//  innerScene->Drawables().push_back(new RectDrawable(r));
-//  innerScene->Drawables().push_back(new EllipseDrawable(e));
+  Transform<float> t;
 
-//  Scene * outterScene = new Scene();
-//  outterScene->Drawables().push_back(innerScene);
-//  outterScene->Drawables().push_back(new PointDrawable(p2));
-//  outterScene->Drawables().push_back(innerScene);
+  Scene * innerScene = new Scene();
+  innerScene->Drawables().push_back(new PointDrawable(p1));
+  innerScene->Drawables().push_back(new LineDrawable(l));
+  innerScene->Drawables().push_back(new RectDrawable(r));
+  innerScene->Drawables().push_back(new EllipseDrawable(e));
 
-//  outterScene->Draw(painter);
+  Scene * outterScene = new Scene();
+  outterScene->Drawables().push_back(innerScene);
+  outterScene->Drawables().push_back(new PointDrawable(p2));
+  outterScene->Drawables().push_back(innerScene);
 
-//  cout << p1;
+  outterScene->Draw(painter);
+
+  cout << p1;
 
   mat.ForEach(pf);
 

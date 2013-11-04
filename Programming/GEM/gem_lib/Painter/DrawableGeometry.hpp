@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../gem_lib/Geometry/ComplexGeometry.hpp"
+#include "../gem_lib/Geometry/Geometry.hpp"
 #include "Drawable.hpp"
 #include "Painter.hpp"
 

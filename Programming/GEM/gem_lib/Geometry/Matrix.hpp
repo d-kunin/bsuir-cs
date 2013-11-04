@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iostream>
+#include <cstddef>
 
 template<typename T>
 class Functor
@@ -65,8 +65,6 @@ Matrix<N, M, T>::Matrix()
   for (size_t i = 0; i < N; ++i)
     _data[i] = new T[M];
 
-  cout << "Created matrix" << N << "x" << M << endl;
-
   for (size_t i = 0; i < N; ++i)
     for (size_t j = 0; j < M; ++j)
       _data[i][j] = 0;
@@ -102,8 +100,6 @@ Matrix<N, M, T>::~Matrix()
     delete[] _data[i];
 
   delete[] _data;
-
-  cout << "Deleted matrix" << N << "x" << M << endl;
 }
 
 template <size_t N, size_t M, typename T>

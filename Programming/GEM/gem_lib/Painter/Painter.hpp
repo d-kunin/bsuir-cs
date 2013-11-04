@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Geometry/ComplexGeometry.hpp"
+#include "../Geometry/Geometry.hpp"
 #include "Paint.hpp"
 
 using geometry::Point2D;
