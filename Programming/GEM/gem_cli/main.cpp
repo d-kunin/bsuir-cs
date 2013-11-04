@@ -12,9 +12,8 @@ using namespace std;
 using namespace painter;
 
 
-class PrintFunctor : public Functor<float>
+struct PrintFunctor : public Functor<float>
 {
-public:
   void Apply(float & argument) override
   {
     cout << " " << argument;
@@ -66,7 +65,7 @@ void matrixTest(void)
   cout << endl;
 }
 
-void painterTest()
+void painterTest(void)
 {
   PointF p1(1,2);
   PointF p2(3,4);
@@ -91,10 +90,34 @@ void painterTest()
   outterScene->Draw(painter);
 }
 
+void transformTest()
+{
+  PointF px[] = {
+    PointF(1,1),
+    PointF(1,0),
+    PointF(0,1),
+    PointF(0,0),
+  };
+
+  Transform<float> tx[] = {
+    Transform<float>::Scale(2,3),
+    Transform<float>::RotateCW(acos(0)),
+    Transform<float>::Translate(1,-1)
+  };
+
+  for (PointF & p : px)
+  {
+    cout << "initial: " << p << endl;
+    for (auto & t : tx)
+      cout << t*p << endl;
+  }
+}
+
 int main()
 {
   painterTest();
   matrixTest();
+  transformTest();
 
   return 0;
 }

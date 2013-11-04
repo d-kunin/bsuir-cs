@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Transform.hpp"
-
 namespace geometry {
 
 template <typename T>
