@@ -39,15 +39,17 @@ void PaintWidget::mouseReleaseEvent(QMouseEvent * event)
   OnMouseRelease(event);
 }
 
-void PaintWidget::paintEvent(QPaintEvent *event)
+void PaintWidget::paintEvent(QPaintEvent * /*event*/)
 {
   _painter.begin(this);
-  _xPainter.setPainter(&_painter);
-  _scene.Draw(&_xPainter);
-
-  if (_isToolActive)
   {
-    _tool->GetDrawable()->Draw(&_xPainter);
+    _xPainter.setPainter(&_painter);
+    _scene.Draw(&_xPainter);
+
+    if (_isToolActive)
+    {
+      _tool->GetDrawable()->Draw(&_xPainter);
+    }
   }
   _painter.end();
 }

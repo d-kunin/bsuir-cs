@@ -95,7 +95,7 @@ public:
       return;
 
     painter->UsePaint(&_paint);
-    for (int i = 1; i < _polyline._points.size(); ++i)
+    for (size_t i = 1; i < _polyline._points.size(); ++i)
     {
       PointF & p0 = _polyline._points[i - 1];
       PointF & p1 = _polyline._points[i];

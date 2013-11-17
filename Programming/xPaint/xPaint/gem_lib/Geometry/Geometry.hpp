@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <algorithm>
 
 namespace geometry {
 
@@ -42,12 +43,55 @@ public:
 
   Rect() {}
 
-  T Width() const {
+  T Width() const
+  {
     return _bottomRight._x - _topLeft._x;
   }
 
-  T Height() const {
+  T Height() const
+  {
     return _bottomRight._y - _topLeft._y;
+  }
+
+  bool Contains(Point2D<T> const & point) const
+  {
+    T minX = std::min(_bottomRight._x ,_topLeft._x);
+    T maxX = std::max(_bottomRight._x, _topLeft._x);
+    T minY = std::min(_bottomRight._y, _topLeft._y);
+    T maxY = std::min(_bottomRight._y, _topLeft._y);
+
+    return (point._x <= maxX && point._x >= minX)
+        && (point._y <= maxY && point._y >= minY);
+  }
+
+  bool Contains(T x, T y)
+  {
+    return Contains(Point2D<T>(x, y));
+  }
+
+  void Inflate(Point2D<T> const & point)
+  {
+    if (Contains(point))
+      return;
+
+    // change borders
+    T minX = std::min(_bottomRight._x ,_topLeft._x);
+    T maxX = std::max(_bottomRight._x, _topLeft._x);
+    T minY = std::min(_bottomRight._y, _topLeft._y);
+    T maxY = std::min(_bottomRight._y, _topLeft._y);
+
+    if (point._x > maxX)
+      maxX = point._x;
+    else if (point._x < minX)
+      minX = point._x;
+
+    if (point._y > maxY)
+      maxY = point._y;
+    else if (point._y < minY)
+      minY = point._y;
+
+    _bottomRight = Point2D<T>(maxX, maxY);
+    _topLeft = Point2D<T>(minX, minY);
   }
 };
 
