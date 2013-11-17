@@ -10,7 +10,16 @@ struct Color
   unsigned char b;
 
   Color()
-    : a(0), r(0), g(0), b(0)
+    : a(255), r(255), g(0), b(0)
   {}
+
+  Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255)
+  {
+    this->a = a;
+    this->r = r;
+    this->g = g;
+    this->b = b;
+  }
+
 };
 }

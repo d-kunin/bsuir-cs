@@ -19,6 +19,9 @@ SOURCES += main.cpp\
 HEADERS  += xpaintwindow.hpp \
          paintwidget.hpp \
          gem_lib/Painter/Scene.hpp \
+         gem_lib/Painter/Drawable.hpp \
+         gem_lib/Painter/DrawableGeometry.hpp \
+         gem_lib/Painter/Paint.hpp \
          QxPainter.hpp \
          Tool.hpp
 

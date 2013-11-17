@@ -25,7 +25,7 @@ public:
   virtual void DrawRect(RectF const & rect) = 0;
   virtual void DrawEllipse(EllipseF const & ellipse) = 0;
 
-  virtual void UsePaint(Paint const * paint) = 0;
+  virtual void UsePaint(Paint * paint) = 0;
 
   //{@ We need to know target bounds
   virtual float TargetWidth() = 0;

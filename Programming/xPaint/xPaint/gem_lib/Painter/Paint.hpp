@@ -30,8 +30,8 @@ public:
   void SetStrokeColor(Color const & color) { _strokeColor = color; }
   void SetStrokeStyle(StrokeStyle style)   { _strokeStyle = style; }
 
-  float   GetStrokeWidth() const { return _strokeWidth; }
-  Color   GetStrokeColor() const { return _strokeColor; }
+  float & GetStrokeWidth() { return _strokeWidth; }
+  Color & GetStrokeColor() { return _strokeColor; }
   StrokeStyle GetStrokeStyle() const { return _strokeStyle; }
 
 

@@ -24,7 +24,7 @@ public:
 
   virtual void DrawLine(LineF const & line)
   {
-    _nativePainter->drawLine(QLine(line._start._x, line._start._y, line._end._x, line._end._y));
+    _nativePainter->drawLine(line._start._x, line._start._y, line._end._x, line._end._y);
   }
 
   virtual void DrawRect(RectF const & rect)
@@ -38,8 +38,14 @@ public:
                                 static_cast<int>(ellipse._rX), static_cast<int>(ellipse._rY));
   }
 
-  virtual void UsePaint(Paint const * paint)
+  virtual void UsePaint(Paint * paint)
   {
+    QPen pen;
+    pen.setWidth(paint->GetStrokeWidth());
+    Color c = paint->GetStrokeColor();
+    pen.setColor(QColor(c.r,c.g,c.b, c.a));
+
+    _nativePainter->setPen(pen);
   }
 
   float TargetWidth() { return 0; }

@@ -16,6 +16,9 @@ public:
   explicit PaintWidget(QWidget *parent = 0);
   void SetTool(Tool * tool);
   painter::Scene & GetScene() { return _scene; }
+  painter::Paint & GetPaint() { return _paint; }
+
+  void OnPaintUpdate();
 
 signals:
 
@@ -41,4 +44,5 @@ private:
 
   Tool * _tool;
   bool _isToolActive;
+  Paint _paint;
 };

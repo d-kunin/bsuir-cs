@@ -35,15 +35,33 @@
    </property>
    <widget class="QMenu" name="menuSelect_Tool">
     <property name="title">
-     <string>Action ...</string>
+     <string>Shape</string>
     </property>
+    <addaction name="actionLine"/>
     <addaction name="actionRect"/>
     <addaction name="actionEllipse"/>
     <addaction name="separator"/>
     <addaction name="actionRemove_Last"/>
     <addaction name="actionClear_All"/>
    </widget>
+   <widget class="QMenu" name="menuColor">
+    <property name="title">
+     <string>Color</string>
+    </property>
+    <addaction name="actionRed"/>
+    <addaction name="actionGreen"/>
+    <addaction name="actionBlue"/>
+   </widget>
+   <widget class="QMenu" name="menuStroke">
+    <property name="title">
+     <string>Stroke</string>
+    </property>
+    <addaction name="actionIncWidth"/>
+    <addaction name="actionDecWidth"/>
+   </widget>
    <addaction name="menuSelect_Tool"/>
+   <addaction name="menuColor"/>
+   <addaction name="menuStroke"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -72,6 +90,36 @@
   <action name="actionClear_All">
    <property name="text">
     <string>Clear All</string>
+   </property>
+  </action>
+  <action name="actionLine">
+   <property name="text">
+    <string>Line</string>
+   </property>
+  </action>
+  <action name="actionRed">
+   <property name="text">
+    <string>Red</string>
+   </property>
+  </action>
+  <action name="actionGreen">
+   <property name="text">
+    <string>Green</string>
+   </property>
+  </action>
+  <action name="actionBlue">
+   <property name="text">
+    <string>Blue</string>
+   </property>
+  </action>
+  <action name="actionIncWidth">
+   <property name="text">
+    <string>+ Width</string>
+   </property>
+  </action>
+  <action name="actionDecWidth">
+   <property name="text">
+    <string>- Width</string>
    </property>
   </action>
  </widget>

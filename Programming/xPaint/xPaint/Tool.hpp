@@ -7,15 +7,13 @@
 class Tool
 {
 public:
-
   void virtual OnRecieveStartPoint(int x, int y) = 0;
   void virtual OnRecieveIntermPoint(int x, int y) = 0;
   void virtual OnRecieveEndPoint(int x, int y) = 0;
   virtual painter::Drawable * GetDrawable() = 0;
+  virtual ~Tool() {}
 
   void SetScene(painter::Scene * scene) { _scene = scene; }
-
-  ~Tool() {}
 
 protected:
   painter::Scene * _scene;
@@ -46,7 +44,9 @@ public:
 
   void OnRecieveEndPoint(int x, int y)
   {
-    _scene->Drawables().push_back(new RectDrawable(_rect));
+    RectDrawable * rd = new RectDrawable(_rect);
+    rd->SetPaint(_paint);
+    _scene->Drawables().push_back(rd);
   }
 
   painter::Drawable * GetDrawable() { return this; }
@@ -81,10 +81,45 @@ public:
 
   void OnRecieveEndPoint(int x, int y)
   {
-    _scene->Drawables().push_back(new EllipseDrawable(_ellipse));
+    EllipseDrawable * ed = new EllipseDrawable(_ellipse);
+    ed->SetPaint(_paint);
+    _scene->Drawables().push_back(ed);
   }
 
   painter::Drawable * GetDrawable() { return this; }
 };
 
+class LineTool: public Tool, public painter::LineDrawable
+{
+public:
+  LineTool()
+  {
+    _scene = NULL;
+  }
+
+  LineTool(painter::Scene * scene)
+  {
+    _scene = scene;
+  }
+
+  void OnRecieveStartPoint(int x, int y)
+  {
+    _line._start = painter::PointF(x,y);
+    _line._end   = painter::PointF(x,y);
+  }
+
+  void OnRecieveIntermPoint(int x, int y)
+  {
+    _line._end = painter::PointF(x,y);
+  }
+
+  void OnRecieveEndPoint(int x, int y)
+  {
+    LineDrawable * ld = new LineDrawable(_line);
+    ld->SetPaint(_paint);
+    _scene->Drawables().push_back(ld);
+  }
+
+  painter::Drawable * GetDrawable() { return this; }
+};
 
