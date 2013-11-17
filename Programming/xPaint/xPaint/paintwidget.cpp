@@ -9,7 +9,8 @@
 PaintWidget::PaintWidget(QWidget *parent) :
   QWidget(parent), _isToolActive(false)
 {
-  _tool = new RectTool(&_scene);
+  _tool = new RectTool();
+  _tool->SetScene(&_scene);
 }
 
 void PaintWidget::SetTool(Tool * tool)

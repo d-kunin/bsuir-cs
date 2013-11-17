@@ -7,6 +7,7 @@ using geometry::Point2D;
 using geometry::Line2D;
 using geometry::Rect;
 using geometry::Ellipse;
+using geometry::Polyline;
 
 namespace painter {
 
@@ -14,6 +15,7 @@ typedef Point2D<float> PointF;
 typedef Line2D<float> LineF;
 typedef Rect<float> RectF;
 typedef Ellipse<float> EllipseF;
+typedef Polyline<float> PolylineF;
 
 class Painter {
 

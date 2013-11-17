@@ -38,6 +38,8 @@ private slots:
 
   void on_actionDecWidth_triggered();
 
+  void on_actionPolyline_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;

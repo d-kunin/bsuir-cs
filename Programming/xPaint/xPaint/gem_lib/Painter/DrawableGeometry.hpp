@@ -22,7 +22,8 @@ public:
   }
 };
 
-class LineDrawable: public Drawable {
+class LineDrawable: public Drawable
+{
 public:
   LineF _line;
 
@@ -57,7 +58,8 @@ public:
   }
 };
 
-class EllipseDrawable: public Drawable {
+class EllipseDrawable: public Drawable
+{
 public:
   EllipseF _ellipse;
 
@@ -71,6 +73,35 @@ public:
   {
     painter->UsePaint(&_paint);
     painter->DrawEllipse(_ellipse);
+  }
+};
+
+class PolylineDrawable: public Drawable
+{
+public:
+  PolylineF _polyline;
+
+  PolylineDrawable()
+  {}
+
+  PolylineDrawable(PolylineF const & polyline)
+  {
+    _polyline = polyline;
+  }
+
+  void Draw(Painter * painter)
+  {
+    if (_polyline._points.size() < 2)
+      return;
+
+    painter->UsePaint(&_paint);
+    for (int i = 1; i < _polyline._points.size(); ++i)
+    {
+      PointF & p0 = _polyline._points[i - 1];
+      PointF & p1 = _polyline._points[i];
+      LineF l(p0, p1);
+      painter->DrawLine(l);
+    }
   }
 };
 

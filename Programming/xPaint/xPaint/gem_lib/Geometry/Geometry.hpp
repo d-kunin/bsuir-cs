@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace geometry {
 
 template <typename T>
@@ -65,9 +67,20 @@ public:
 };
 
 template <typename T>
-class Polygon
+class Polyline
 {
-//NO-OP
+public:
+  std::vector<Point2D<T> > _points;
+
+  Polyline()
+  {}
+
+  Polyline(std::vector<Point2D<T> > points)
+  {
+    _points = points;
+  }
+
+  void Add(T x, T y) { _points.push_back(Point2D<T>(x,y)); }
 };
 
 }

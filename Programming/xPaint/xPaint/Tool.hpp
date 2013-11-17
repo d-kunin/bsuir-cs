@@ -13,6 +13,10 @@ public:
   virtual painter::Drawable * GetDrawable() = 0;
   virtual ~Tool() {}
 
+  Tool()
+    : _scene(NULL)
+  {}
+
   void SetScene(painter::Scene * scene) { _scene = scene; }
 
 protected:
@@ -26,11 +30,6 @@ public:
   RectTool()
   {}
 
-  RectTool(painter::Scene * scene)
-  {
-    _scene = scene;
-  }
-
   void OnRecieveStartPoint(int x, int y)
   {
     _rect._topLeft = painter::PointF(x,y);
@@ -42,7 +41,7 @@ public:
     _rect._bottomRight = painter::PointF(x,y);
   }
 
-  void OnRecieveEndPoint(int x, int y)
+  void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
     RectDrawable * rd = new RectDrawable(_rect);
     rd->SetPaint(_paint);
@@ -57,14 +56,7 @@ class EllipseTool: public Tool, public painter::EllipseDrawable
 {
 public:
   EllipseTool()
-  {
-    _scene = NULL;
-  }
-
-  EllipseTool(painter::Scene * scene)
-  {
-    _scene = scene;
-  }
+  {}
 
   void OnRecieveStartPoint(int x, int y)
   {
@@ -79,7 +71,7 @@ public:
     _ellipse._rY = _ellipse._center._y - y;
   }
 
-  void OnRecieveEndPoint(int x, int y)
+  void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
     EllipseDrawable * ed = new EllipseDrawable(_ellipse);
     ed->SetPaint(_paint);
@@ -93,14 +85,7 @@ class LineTool: public Tool, public painter::LineDrawable
 {
 public:
   LineTool()
-  {
-    _scene = NULL;
-  }
-
-  LineTool(painter::Scene * scene)
-  {
-    _scene = scene;
-  }
+  {}
 
   void OnRecieveStartPoint(int x, int y)
   {
@@ -113,11 +98,38 @@ public:
     _line._end = painter::PointF(x,y);
   }
 
-  void OnRecieveEndPoint(int x, int y)
+  void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
     LineDrawable * ld = new LineDrawable(_line);
     ld->SetPaint(_paint);
     _scene->Drawables().push_back(ld);
+  }
+
+  painter::Drawable * GetDrawable() { return this; }
+};
+
+class PolylineTool: public Tool, public painter::PolylineDrawable
+{
+public:
+  PolylineTool()
+  {}
+
+  void OnRecieveStartPoint(int x, int y)
+  {
+    _polyline._points.clear();
+    _polyline.Add(x, y);
+  }
+
+  void OnRecieveIntermPoint(int x, int y)
+  {
+    _polyline.Add(x, y);
+  }
+
+  void OnRecieveEndPoint(int /*x*/, int /*y*/)
+  {
+    PolylineDrawable * pd = new PolylineDrawable(_polyline);
+    pd->SetPaint(_paint);
+    _scene->Drawables().push_back(pd);
   }
 
   painter::Drawable * GetDrawable() { return this; }

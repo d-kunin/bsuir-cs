@@ -21,17 +21,17 @@ xPaintWindow::~xPaintWindow()
 
 void xPaintWindow::on_actionRect_triggered()
 {
-  _paintWidget->SetTool(new RectTool());
+  _paintWidget->SetTool(new RectTool);
 }
 
 void xPaintWindow::on_actionEllipse_triggered()
 {
-  _paintWidget->SetTool(new EllipseTool());
+  _paintWidget->SetTool(new EllipseTool);
 }
 
 void xPaintWindow::on_actionLine_triggered()
 {
-  _paintWidget->SetTool(new LineTool());
+  _paintWidget->SetTool(new LineTool);
 }
 
 void xPaintWindow::on_actionRemove_Last_triggered()
@@ -78,4 +78,9 @@ void xPaintWindow::on_actionDecWidth_triggered()
 {
   _paintWidget->GetPaint().GetStrokeWidth()--;
   _paintWidget->OnPaintUpdate();
+}
+
+void xPaintWindow::on_actionPolyline_triggered()
+{
+  _paintWidget->SetTool(new PolylineTool);
 }
