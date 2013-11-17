@@ -7,8 +7,16 @@
 
 
 PaintWidget::PaintWidget(QWidget *parent) :
-  QWidget(parent), _geometry(NONE), _currentDrawable(NULL)
+  QWidget(parent), _isToolActive(false)
 {
+  _tool = new RectTool(&_scene);
+}
+
+void PaintWidget::SetTool(Tool * tool)
+{
+  delete _tool;
+  _tool = tool;
+  _tool->SetScene(&_scene);
 }
 
 void PaintWidget::mouseMoveEvent(QMouseEvent * event)
@@ -32,14 +40,14 @@ void PaintWidget::mouseReleaseEvent(QMouseEvent * event)
 void PaintWidget::paintEvent(QPaintEvent *event)
 {
   _painter.begin(this);
+
   _xPainter.setPainter(&_painter);
 
-  if (_currentDrawable)
-  {
-    _currentDrawable->Draw(&_xPainter);
-  }
+  if (_isToolActive)
+    _tool->GetDrawable()->Draw(&_xPainter);
 
   _scene.Draw(&_xPainter);
+
   _painter.end();
 }
 
@@ -47,38 +55,33 @@ void PaintWidget::OnMouseMove(QMouseEvent *event)
 {
   _endPoint = QPoint(event->x(), event->y());
 
-  if (_currentDrawable)
-  {
-    RectDrawable * rd = dynamic_cast<RectDrawable*>(_currentDrawable);
-    if (rd)
-    {
-      rd->_rect._bottomRight = PointF(_endPoint.x(), _endPoint.y());
-    }
-  }
+  if (_tool)
+    _tool->OnRecieveIntermPoint(event->x(), event->y());
 
   update();
 }
 
 void PaintWidget::OnMousePress(QMouseEvent *event)
 {
+  _isToolActive = true;
+
+
   _startPoint = QPoint(event->x(), event->y());
 
-  // for now let it be rect
-  _currentDrawable = new RectDrawable(RectF(PointF(_startPoint.x(), _startPoint.y()),
-                                      PointF(_startPoint.x(), _startPoint.y())));
+  if (_tool)
+    _tool->OnRecieveStartPoint(event->x(), event->y());
 
   update();
 }
 
 void PaintWidget::OnMouseRelease(QMouseEvent *event)
 {
+  _isToolActive = false;
+
   _endPoint = QPoint(event->x(), event->y());
 
-  if (_currentDrawable)
-  {
-    _scene.Drawables().push_back(_currentDrawable);
-    _currentDrawable = NULL;
-  }
+  if (_tool)
+    _tool->OnRecieveEndPoint(event->x(), event->y());
 
   update();
 }

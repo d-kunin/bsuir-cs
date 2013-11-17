@@ -18,8 +18,8 @@ SOURCES += main.cpp\
 
 HEADERS  += xpaintwindow.hpp \
          paintwidget.hpp \
-         Geometry.hpp \
          gem_lib/Painter/Scene.hpp \
-    QxPainter.hpp
+         QxPainter.hpp \
+         Tool.hpp
 
 FORMS    += xpaintwindow.ui

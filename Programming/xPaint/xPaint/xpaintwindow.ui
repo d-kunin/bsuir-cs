@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QVBoxLayout" name="_layout" stretch="">
+     <layout class="QVBoxLayout" name="_layout">
       <property name="sizeConstraint">
        <enum>QLayout::SetMaximumSize</enum>
       </property>
@@ -33,6 +33,17 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuSelect_Tool">
+    <property name="title">
+     <string>Action ...</string>
+    </property>
+    <addaction name="actionRect"/>
+    <addaction name="actionEllipse"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemove_Last"/>
+    <addaction name="actionClear_All"/>
+   </widget>
+   <addaction name="menuSelect_Tool"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -43,6 +54,26 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionRect">
+   <property name="text">
+    <string>Rect</string>
+   </property>
+  </action>
+  <action name="actionEllipse">
+   <property name="text">
+    <string>Ellipse</string>
+   </property>
+  </action>
+  <action name="actionRemove_Last">
+   <property name="text">
+    <string>Remove Last</string>
+   </property>
+  </action>
+  <action name="actionClear_All">
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

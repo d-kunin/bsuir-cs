@@ -40,7 +40,6 @@ public:
 
   virtual void UsePaint(Paint const * paint)
   {
-
   }
 
   float TargetWidth() { return 0; }

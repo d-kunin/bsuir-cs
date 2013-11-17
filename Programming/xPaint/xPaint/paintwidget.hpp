@@ -1,7 +1,6 @@
-#ifndef PAINTWIDGET_HPP
-#define PAINTWIDGET_HPP
+#pragma once
 
-#include "Geometry.hpp"
+#include "Tool.hpp"
 #include "QxPainter.hpp"
 
 #include "gem_lib/Painter/Scene.hpp"
@@ -15,6 +14,8 @@ class PaintWidget : public QWidget
 
 public:
   explicit PaintWidget(QWidget *parent = 0);
+  void SetTool(Tool * tool);
+  painter::Scene & GetScene() { return _scene; }
 
 signals:
 
@@ -24,22 +25,20 @@ public slots:
   void OnMouseMove(QMouseEvent * event);
 
 protected:
-     void paintEvent(QPaintEvent *event);
+  void paintEvent(QPaintEvent *event);
 
-     void mouseMoveEvent(QMouseEvent *);
-     void mousePressEvent(QMouseEvent *);
-     void mouseReleaseEvent(QMouseEvent *);
+  void mouseMoveEvent(QMouseEvent *);
+  void mousePressEvent(QMouseEvent *);
+  void mouseReleaseEvent(QMouseEvent *);
 
 private:
-     bool _isDrawing;
-     QPoint _startPoint;
-     QPoint _endPoint;
-     QxPainter _xPainter;
-     QPainter _painter;
-     GeometryType _geometry;
-     painter::Scene _scene;
+  QPoint _startPoint;
+  QPoint _endPoint;
 
-     Drawable * _currentDrawable;
+  QxPainter _xPainter;
+  QPainter _painter;
+  painter::Scene _scene;
+
+  Tool * _tool;
+  bool _isToolActive;
 };
-
-#endif // PAINTWIDGET_HPP

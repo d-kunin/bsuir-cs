@@ -34,6 +34,9 @@ class RectDrawable: public Drawable {
 public:
   RectF _rect;
 
+  RectDrawable()
+  {};
+
   RectDrawable(RectF const & rect)
     : _rect(rect) {}
 
@@ -45,6 +48,9 @@ public:
 class EllipseDrawable: public Drawable {
 public:
   EllipseF _ellipse;
+
+  EllipseDrawable ()
+  {}
 
   EllipseDrawable(EllipseF const & ellipse)
     : _ellipse(ellipse) {}
