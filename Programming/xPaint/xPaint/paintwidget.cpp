@@ -18,7 +18,9 @@ void PaintWidget::SetTool(Tool * tool)
   delete _tool;
   _tool = tool;
   _tool->SetScene(&_scene);
-  _tool->GetDrawable()->SetPaint(_paint);
+
+  if (_tool->GetDrawable())
+    _tool->GetDrawable()->SetPaint(_paint);
 }
 
 void PaintWidget::mouseMoveEvent(QMouseEvent * event)
@@ -46,7 +48,7 @@ void PaintWidget::paintEvent(QPaintEvent * /*event*/)
     _xPainter.setPainter(&_painter);
     _scene.Draw(&_xPainter);
 
-    if (_isToolActive)
+    if (_isToolActive && _tool->GetDrawable() != NULL)
     {
       _tool->GetDrawable()->Draw(&_xPainter);
     }

@@ -58,13 +58,13 @@ public:
     T minX = std::min(_bottomRight._x ,_topLeft._x);
     T maxX = std::max(_bottomRight._x, _topLeft._x);
     T minY = std::min(_bottomRight._y, _topLeft._y);
-    T maxY = std::min(_bottomRight._y, _topLeft._y);
+    T maxY = std::max(_bottomRight._y, _topLeft._y);
 
-    return (point._x <= maxX && point._x >= minX)
-        && (point._y <= maxY && point._y >= minY);
+    return (point._x <= maxX) && (point._x >= minX)
+        && (point._y <= maxY) && (point._y >= minY);
   }
 
-  bool Contains(T x, T y)
+  bool Contains(T x, T y) const
   {
     return Contains(Point2D<T>(x, y));
   }
@@ -78,7 +78,7 @@ public:
     T minX = std::min(_bottomRight._x ,_topLeft._x);
     T maxX = std::max(_bottomRight._x, _topLeft._x);
     T minY = std::min(_bottomRight._y, _topLeft._y);
-    T maxY = std::min(_bottomRight._y, _topLeft._y);
+    T maxY = std::max(_bottomRight._y, _topLeft._y);
 
     if (point._x > maxX)
       maxX = point._x;

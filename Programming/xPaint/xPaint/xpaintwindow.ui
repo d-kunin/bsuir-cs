@@ -44,6 +44,7 @@
     <addaction name="separator"/>
     <addaction name="actionRemove_Last"/>
     <addaction name="actionClear_All"/>
+    <addaction name="actionSelection_Tool"/>
    </widget>
    <widget class="QMenu" name="menuColor">
     <property name="title">
@@ -126,6 +127,11 @@
   <action name="actionPolyline">
    <property name="text">
     <string>Polyline</string>
+   </property>
+  </action>
+  <action name="actionSelection_Tool">
+   <property name="text">
+    <string>Selection Tool</string>
    </property>
   </action>
  </widget>

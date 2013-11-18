@@ -9,7 +9,7 @@ class Drawable {
 
 public:
   virtual void Draw(Painter * painter) = 0;
-  virtual bool Contains(PointF const & p) { return false; }
+  virtual bool Contains(PointF const & /*p*/) { return false; }
   virtual ~Drawable() {}
 
   void    SetPaint(Paint const & paint) { _paint = paint; }

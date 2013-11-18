@@ -4,9 +4,14 @@
 #include "gem_lib/Painter/Painter.hpp"
 #include "gem_lib/Painter/Scene.hpp"
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 class Tool
 {
 public:
+
   void virtual OnRecieveStartPoint(int x, int y) = 0;
   void virtual OnRecieveIntermPoint(int x, int y) = 0;
   void virtual OnRecieveEndPoint(int x, int y) = 0;
@@ -27,8 +32,6 @@ protected:
 class RectTool : public Tool, public painter::RectDrawable
 {
 public:
-  RectTool()
-  {}
 
   void OnRecieveStartPoint(int x, int y)
   {
@@ -55,8 +58,6 @@ public:
 class EllipseTool: public Tool, public painter::EllipseDrawable
 {
 public:
-  EllipseTool()
-  {}
 
   void OnRecieveStartPoint(int x, int y)
   {
@@ -84,8 +85,6 @@ public:
 class LineTool: public Tool, public painter::LineDrawable
 {
 public:
-  LineTool()
-  {}
 
   void OnRecieveStartPoint(int x, int y)
   {
@@ -111,9 +110,6 @@ public:
 class PolylineTool: public Tool, public painter::PolylineDrawable
 {
 public:
-  PolylineTool()
-  {}
-
   void OnRecieveStartPoint(int x, int y)
   {
     _polyline._points.clear();
@@ -135,3 +131,49 @@ public:
   painter::Drawable * GetDrawable() { return this; }
 };
 
+class SelectionTool: public Tool
+{
+public:
+  SelectionTool()
+  {
+    _selectedDrawable = NULL;
+    _selectionPaint.SetStrokeColor(painter::Color(255,255,0));
+  }
+
+  void OnRecieveStartPoint(int x, int y)
+  {
+    painter::Drawable * hit = _scene->FindDrawableForPoint(painter::PointF(x,y));
+
+    if (hit)
+    {
+      _selectedDrawable = hit;
+      _originalPaint = hit->GetPaint();
+      hit->SetPaint(_selectionPaint);
+
+      cout << "Hit!" << endl;
+    }
+    else
+      cout << "Miss" << endl;
+  }
+
+  void OnRecieveIntermPoint(int /*x*/, int /*y*/)
+  {
+    // DO NOTHING
+  }
+
+  void OnRecieveEndPoint(int /*x*/, int /*y*/)
+  {
+    if (_selectedDrawable)
+    {
+      _selectedDrawable->SetPaint(_originalPaint);
+      _selectedDrawable = NULL;
+    }
+  }
+
+  painter::Drawable * GetDrawable() { return _selectedDrawable; }
+
+private:
+  painter::Drawable * _selectedDrawable;
+  painter::Paint _selectionPaint;
+  painter::Paint _originalPaint;
+};

@@ -40,6 +40,8 @@ private slots:
 
   void on_actionPolyline_triggered();
 
+  void on_actionSelection_Tool_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Geometry/Geometry.hpp"
+#include "../Geometry/Algorithm.hpp"
 #include "Drawable.hpp"
 #include "Painter.hpp"
 
@@ -38,6 +39,11 @@ public:
     painter->UsePaint(&_paint);
     painter->DrawLine(_line);
   }
+
+  bool Contains(PointF const & p ) override
+  {
+    return algo::Intersects(p._x, p._y, _line);
+  }
 };
 
 class RectDrawable: public Drawable
@@ -56,6 +62,11 @@ public:
     painter->UsePaint(&_paint);
     painter->DrawRect(_rect);
   }
+
+  bool Contains(PointF const & p ) override
+  {
+    return algo::Intersects(p._x, p._y, _rect);
+  }
 };
 
 class EllipseDrawable: public Drawable
@@ -73,6 +84,11 @@ public:
   {
     painter->UsePaint(&_paint);
     painter->DrawEllipse(_ellipse);
+  }
+
+  bool Contains(PointF const & p ) override
+  {
+    return algo::Intersects(p._x, p._y, _ellipse);
   }
 };
 
@@ -102,6 +118,11 @@ public:
       LineF l(p0, p1);
       painter->DrawLine(l);
     }
+  }
+
+  bool Contains(PointF const & p ) override
+  {
+    return algo::Intersects(p._x, p._y, _polyline);
   }
 };
 

@@ -24,6 +24,16 @@ public:
       drawable->Draw(painter);
   }
 
+  Drawable * FindDrawableForPoint(PointF const & p)
+  {
+    for (Drawable * drawable : _drawables)
+    {
+      if (drawable->Contains(p))
+        return drawable;
+    }
+    return NULL;
+  }
+
   ~Scene()
   {
     for (Drawable * drawable : _drawables)

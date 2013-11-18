@@ -1,5 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include "Utils.hpp"
+using std::cout;
+using std::endl;
+
 #include "Geometry.hpp"
 
 using geometry::Point2D;
@@ -14,6 +19,7 @@ namespace algo
 template <typename T>
 bool Intersects(T x, T y, Rect<T> const & r)
 {
+  cout << r << " " << x << " " << y << endl;
   return r.Contains(x, y);
 }
 
@@ -40,7 +46,7 @@ bool Intersects(T x, T y, Polyline<T> const & poly)
     return false;
 
   Rect<T> testRect;
-  for (Point2D<T> & p : poly._points)
+  for (Point2D<T> const & p : poly._points)
     testRect.Inflate(p);
 
   return testRect.Contains(x, y);

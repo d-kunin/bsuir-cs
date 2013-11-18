@@ -84,3 +84,8 @@ void xPaintWindow::on_actionPolyline_triggered()
 {
   _paintWidget->SetTool(new PolylineTool);
 }
+
+void xPaintWindow::on_actionSelection_Tool_triggered()
+{
+  _paintWidget->SetTool(new SelectionTool);
+}
