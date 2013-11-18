@@ -26,10 +26,14 @@ public:
 
   Drawable * FindDrawableForPoint(PointF const & p)
   {
-    for (Drawable * drawable : _drawables)
+    if (_drawables.size() > 0)
     {
-      if (drawable->Contains(p))
-        return drawable;
+      for (int i = _drawables.size() - 1; i >= 0; --i)
+      {
+        Drawable * drawable = _drawables[i];
+        if (drawable->Contains(p))
+          return drawable;
+      }
     }
     return NULL;
   }

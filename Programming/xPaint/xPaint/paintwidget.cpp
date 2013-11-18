@@ -93,7 +93,10 @@ void PaintWidget::OnMouseRelease(QMouseEvent *event)
 
 void PaintWidget::OnPaintUpdate()
 {
-  _tool->GetDrawable()->SetPaint(_paint);
-  update();
+  if (_tool->GetDrawable())
+  {
+    _tool->GetDrawable()->SetPaint(_paint);
+    update();
+  }
 }
 
