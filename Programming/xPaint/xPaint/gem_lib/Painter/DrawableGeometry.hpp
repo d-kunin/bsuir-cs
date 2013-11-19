@@ -8,118 +8,131 @@
 namespace painter
 {
 
-class PointDrawable: public Drawable
+template<typename T>
+class GeometryDrawable: public Drawable
 {
 public:
-  PointF _point;
+  T _geometry;
+
+  void Transform(TransformF const & transform) override
+  {
+    _geometry = transform*_geometry;
+  }
+};
+
+class PointDrawable: public GeometryDrawable<PointF>
+{
+public:
+
+  PointDrawable()
+  {}
 
   PointDrawable(PointF const & point)
-    : _point(point) {}
+  {
+    _geometry = point;
+  }
 
   void Draw(Painter * painter)
   {
     painter->UsePaint(&_paint);
-    painter->DrawPoint(_point);
+    painter->DrawPoint(_geometry);
   }
 };
 
-class LineDrawable: public Drawable
+class LineDrawable: public GeometryDrawable<LineF>
 {
 public:
-  LineF _line;
 
   LineDrawable()
   {}
 
   LineDrawable(LineF const & line)
-    : _line(line) {}
+  {
+    _geometry = line;
+  }
 
   void Draw(Painter * painter)
   {
     painter->UsePaint(&_paint);
-    painter->DrawLine(_line);
+    painter->DrawLine(_geometry);
   }
 
   bool Contains(PointF const & p ) override
   {
-    return algo::Intersects(p._x, p._y, _line);
+    return algo::Intersects(p._x, p._y, _geometry);
   }
 };
 
-class RectDrawable: public Drawable
+class RectDrawable: public GeometryDrawable<RectF>
 {
 public:
-  RectF _rect;
 
   RectDrawable()
   {}
 
   RectDrawable(RectF const & rect)
-    : _rect(rect) {}
+  {
+    _geometry = rect;
+  }
 
   void Draw(Painter * painter)
   {
     painter->UsePaint(&_paint);
-    painter->DrawRect(_rect);
+    painter->DrawRect(_geometry);
   }
 
   bool Contains(PointF const & p ) override
   {
-    return algo::Intersects(p._x, p._y, _rect);
-  }
-
-  void Transform(TransformF const & transform)
-  {
-    _rect = transform*_rect;
+    return algo::Intersects(p._x, p._y, _geometry);
   }
 };
 
-class EllipseDrawable: public Drawable
+class EllipseDrawable: public GeometryDrawable<EllipseF>
 {
 public:
-  EllipseF _ellipse;
 
   EllipseDrawable ()
   {}
 
   EllipseDrawable(EllipseF const & ellipse)
-    : _ellipse(ellipse) {}
+  {
+    _geometry = ellipse;
+  }
 
   void Draw(Painter * painter)
   {
     painter->UsePaint(&_paint);
-    painter->DrawEllipse(_ellipse);
+    painter->DrawEllipse(_geometry);
   }
 
   bool Contains(PointF const & p ) override
   {
-    return algo::Intersects(p._x, p._y, _ellipse);
+    return algo::Intersects(p._x, p._y, _geometry);
   }
 };
 
-class PolylineDrawable: public Drawable
+class PolylineDrawable: public GeometryDrawable<PolylineF>
 {
 public:
-  PolylineF _polyline;
 
   PolylineDrawable()
   {}
 
   PolylineDrawable(PolylineF const & polyline)
   {
-    _polyline = polyline;
+    _geometry = polyline;
   }
 
   void Draw(Painter * painter)
   {
-    if (_polyline._points.size() < 2)
+    if (_geometry._points.size() < 2)
       return;
 
     painter->UsePaint(&_paint);
-    for (size_t i = 1; i < _polyline._points.size(); ++i)
+    for (size_t i = 1; i < _geometry._points.size(); ++i)
     {
-      PointF & p0 = _polyline._points[i - 1];
-      PointF & p1 = _polyline._points[i];
+      PointF & p0 = _geometry._points[i - 1];
+      PointF & p1 = _geometry._points[i];
       LineF l(p0, p1);
       painter->DrawLine(l);
     }
@@ -127,7 +140,7 @@ public:
 
   bool Contains(PointF const & p ) override
   {
-    return algo::Intersects(p._x, p._y, _polyline);
+    return algo::Intersects(p._x, p._y, _geometry);
   }
 };
 

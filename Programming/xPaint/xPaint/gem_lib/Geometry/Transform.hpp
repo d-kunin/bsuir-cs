@@ -38,6 +38,7 @@ public:
 
     return t;
   }
+
   static Transform RotateCW(T alphaRadians)
   {
     Transform t;
@@ -63,6 +64,7 @@ public:
   //}@
 
   //{@ Geometry-specific transforms
+  // POINT
   Point2D<T> operator*(Point2D<T> const & point) const
   {
     HGPointT hgp = MakeHGPoint(point);
@@ -70,11 +72,13 @@ public:
     return FromHG(hgp);
   }
 
+  // RECT
   Rect<T> operator *(Rect<T> const & rect) const
   {
     return Rect<T>((*this)*rect._topLeft, (*this)*rect._bottomRight);
   }
 
+  // ELLIPSE
   Ellipse<T> operator *(Ellipse<T> const & ellipse) const
   {
     /// @todo Add axixes transform
@@ -82,11 +86,24 @@ public:
                       ellipse._rX, ellipse._rY);
   }
 
+  // LINE
   Line2D<T> operator *(Line2D<T> const & line) const
   {
     return Line2D<T>((*this)*line._start, (*this)*line._end);
   }
+
+  // POLYLINE
+  Polyline<T> operator *(Polyline<T> const & poly) const
+  {
+    std::vector<Point2D<T>> points(poly._points.size());
+
+    for (int i = 0; i < points.size(); ++i)
+      points[i] = (*this)*poly._points[i];
+
+    return Polyline<T>(points);
+  }
   //}@
+
 private:
   MatrixT _matrix;
 

@@ -17,39 +17,50 @@ namespace algo
 {
 
 template <typename T>
+Rect<T> BoundingRect(Line2D<T> const & line)
+{
+  return Rect<T>(line._end, line._start);
+}
+
+template <typename T>
+Rect<T> BoundingRect(Ellipse<T> const & e)
+{
+  Point2D<T> tl(e._center._x - e._rX, e._center._y - e._rY);
+  Point2D<T> br(e._center._x + e._rX, e._center._y + e._rY);
+  return Rect<T>(tl, br);
+}
+
+template <typename T>
+Rect<T> BoundingRect(Polyline<T> const & poly)
+{
+  Rect<T> r;
+  for (Point2D<T> const & point : poly._points)
+    r.Inflate(point);
+  return r;
+}
+
+template <typename T>
 bool Intersects(T x, T y, Rect<T> const & r)
 {
-  cout << r << " " << x << " " << y << endl;
   return r.Contains(x, y);
 }
 
 template <typename T>
 bool Intersects(T x, T y, Line2D<T> const & l)
 {
-  Rect<T> testRect(l._end, l._start);
-  return testRect.Contains(x, y);
+  return BoundingRect(l).Contains(x, y);
 }
 
 template <typename T>
-bool Intersects(T x, T y, Ellipse<T> const & e)
+bool Intersects(T x, T y, Ellipse<T> const & ellipse)
 {
-  Point2D<T> tl(e._center._x - e._rX, e._center._y - e._rY);
-  Point2D<T> br(e._center._x + e._rX, e._center._y + e._rY);
-  Rect<T> testRect(tl, br);
-  return testRect.Contains(x, y);
+  return BoundingRect(ellipse).Contains(x, y);
 }
 
 template <typename T>
 bool Intersects(T x, T y, Polyline<T> const & poly)
 {
-  if (poly._points.size() < 2)
-    return false;
-
-  Rect<T> testRect;
-  for (Point2D<T> const & p : poly._points)
-    testRect.Inflate(p);
-
-  return testRect.Contains(x, y);
+  return poly._points.size() < 2 ? false :BoundingRect(poly).Contains(x, y);
 }
 
 }

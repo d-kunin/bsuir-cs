@@ -35,18 +35,18 @@ public:
 
   void OnRecieveStartPoint(int x, int y)
   {
-    _rect._topLeft = painter::PointF(x,y);
-    _rect._bottomRight = painter::PointF(x,y);
+    _geometry._topLeft = painter::PointF(x,y);
+    _geometry._bottomRight = painter::PointF(x,y);
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    _rect._bottomRight = painter::PointF(x,y);
+    _geometry._bottomRight = painter::PointF(x,y);
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
-    RectDrawable * rd = new RectDrawable(_rect);
+    RectDrawable * rd = new RectDrawable(_geometry);
     rd->SetPaint(_paint);
     _scene->Drawables().push_back(rd);
   }
@@ -61,20 +61,20 @@ public:
 
   void OnRecieveStartPoint(int x, int y)
   {
-    _ellipse._center = painter::PointF(x,y);
-    _ellipse._rX = 0;
-    _ellipse._rY = 0;
+    _geometry._center = painter::PointF(x,y);
+    _geometry._rX = 0;
+    _geometry._rY = 0;
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    _ellipse._rX = _ellipse._center._x - x;
-    _ellipse._rY = _ellipse._center._y - y;
+    _geometry._rX = _geometry._center._x - x;
+    _geometry._rY = _geometry._center._y - y;
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
-    EllipseDrawable * ed = new EllipseDrawable(_ellipse);
+    EllipseDrawable * ed = new EllipseDrawable(_geometry);
     ed->SetPaint(_paint);
     _scene->Drawables().push_back(ed);
   }
@@ -88,18 +88,18 @@ public:
 
   void OnRecieveStartPoint(int x, int y)
   {
-    _line._start = painter::PointF(x,y);
-    _line._end   = painter::PointF(x,y);
+    _geometry._start = painter::PointF(x,y);
+    _geometry._end   = painter::PointF(x,y);
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    _line._end = painter::PointF(x,y);
+    _geometry._end = painter::PointF(x,y);
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
-    LineDrawable * ld = new LineDrawable(_line);
+    LineDrawable * ld = new LineDrawable(_geometry);
     ld->SetPaint(_paint);
     _scene->Drawables().push_back(ld);
   }
@@ -112,18 +112,18 @@ class PolylineTool: public Tool, public painter::PolylineDrawable
 public:
   void OnRecieveStartPoint(int x, int y)
   {
-    _polyline._points.clear();
-    _polyline.Add(x, y);
+    _geometry._points.clear();
+    _geometry.Add(x, y);
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    _polyline.Add(x, y);
+    _geometry.Add(x, y);
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
-    PolylineDrawable * pd = new PolylineDrawable(_polyline);
+    PolylineDrawable * pd = new PolylineDrawable(_geometry);
     pd->SetPaint(_paint);
     _scene->Drawables().push_back(pd);
   }
