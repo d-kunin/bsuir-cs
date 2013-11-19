@@ -70,13 +70,13 @@ void xPaintWindow::on_actionBlue_triggered()
 
 void xPaintWindow::on_actionIncWidth_triggered()
 {
-  _paintWidget->GetPaint().GetStrokeWidth()++;
+  _paintWidget->GetPaint().GetStrokeWidth()+=5;
   _paintWidget->OnPaintUpdate();
 }
 
 void xPaintWindow::on_actionDecWidth_triggered()
 {
-  _paintWidget->GetPaint().GetStrokeWidth()--;
+  _paintWidget->GetPaint().GetStrokeWidth()-=5;
   _paintWidget->OnPaintUpdate();
 }
 

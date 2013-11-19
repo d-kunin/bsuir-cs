@@ -137,7 +137,8 @@ public:
   SelectionTool()
   {
     _selectedDrawable = NULL;
-    _selectionPaint.SetStrokeColor(painter::Color(255,255,0));
+    _selectionBorder = NULL;
+    _selectionPaint.SetStrokeColor(painter::Color(255, 255 ,0 ,128));
   }
 
   void OnRecieveStartPoint(int x, int y)
@@ -149,22 +150,23 @@ public:
     if (hit)
     {
       _selectedDrawable = hit;
-      _originalPaint = hit->GetPaint();
-      hit->SetPaint(_selectionPaint);
-
-      cout << "Hit!" << endl;
+      _selectionBorder = new painter::RectDrawable(hit->BoundingRect());
+      _selectionBorder->SetPaint(_selectionPaint);
     }
     else
-      cout << "Miss" << endl;
+    {
+      delete _selectionBorder;
+      _selectionBorder = NULL;
+    }
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    // DO NOTHING
     if (_selectedDrawable)
     {
-      _selectedDrawable->Transform(
-            TransformF::Translate(x - _startX, y - _startY));
+      TransformF transform = TransformF::Translate(x - _startX, y - _startY);
+      _selectedDrawable->Transform(transform);
+      _selectionBorder->Transform(transform);
 
       _startX = x;
       _startY = y;
@@ -173,17 +175,15 @@ public:
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
   {
-    if (_selectedDrawable)
-    {
-      _selectedDrawable->SetPaint(_originalPaint);
-      _selectedDrawable = NULL;
-    }
+    /// @todo
   }
 
-  painter::Drawable * GetDrawable() { return _selectedDrawable; }
+  painter::Drawable * GetDrawable() { return _selectionBorder; }
 
 private:
   painter::Drawable * _selectedDrawable;
+  painter::RectDrawable *_selectionBorder;
+
   painter::Paint _selectionPaint;
   painter::Paint _originalPaint;
 

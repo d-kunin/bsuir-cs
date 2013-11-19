@@ -45,7 +45,12 @@ public:
     Color c = paint->GetStrokeColor();
     pen.setColor(QColor(c.r,c.g,c.b, c.a));
 
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(QColor(0, 0, 255, 64));
+
     _nativePainter->setPen(pen);
+    _nativePainter->setBrush(brush);
   }
 
   float TargetWidth() { return 0; }

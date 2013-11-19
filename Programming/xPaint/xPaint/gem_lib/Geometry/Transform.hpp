@@ -97,7 +97,7 @@ public:
   {
     std::vector<Point2D<T>> points(poly._points.size());
 
-    for (int i = 0; i < points.size(); ++i)
+    for (size_t i = 0; i < points.size(); ++i)
       points[i] = (*this)*poly._points[i];
 
     return Polyline<T>(points);

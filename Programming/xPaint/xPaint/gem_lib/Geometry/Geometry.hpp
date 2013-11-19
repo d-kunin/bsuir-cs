@@ -93,6 +93,12 @@ public:
     _bottomRight = Point2D<T>(maxX, maxY);
     _topLeft = Point2D<T>(minX, minY);
   }
+
+  void Inflate(Rect<T> const & rect)
+  {
+    Inflate(rect._bottomRight);
+    Inflate(rect._topLeft);
+  }
 };
 
 template <typename T>

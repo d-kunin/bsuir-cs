@@ -24,6 +24,16 @@ public:
       drawable->Draw(painter);
   }
 
+  RectF BoundingRect()
+  {
+    RectF bRect = _drawables.front()->BoundingRect();
+
+    for (Drawable * draw : _drawables)
+      bRect.Inflate(draw->BoundingRect());
+
+    return bRect;
+  }
+
   Drawable * FindDrawableForPoint(PointF const & p)
   {
     if (_drawables.size() > 0)

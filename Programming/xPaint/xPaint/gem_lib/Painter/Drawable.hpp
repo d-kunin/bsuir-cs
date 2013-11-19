@@ -12,6 +12,7 @@ class Drawable {
 
 public:
   virtual void Draw(Painter * painter) = 0;
+  virtual RectF BoundingRect() = 0;
 
   virtual bool Contains(PointF const & /*p*/)      { return false; }
   virtual void Transform(TransformF const & /*t*/) { /* do nothing*/ }

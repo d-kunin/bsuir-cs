@@ -18,6 +18,11 @@ public:
   {
     _geometry = transform*_geometry;
   }
+
+  RectF BoundingRect() override
+  {
+    return algo::BoundingRect(_geometry);
+  }
 };
 
 class PointDrawable: public GeometryDrawable<PointF>

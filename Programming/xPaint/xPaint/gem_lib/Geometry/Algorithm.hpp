@@ -17,9 +17,21 @@ namespace algo
 {
 
 template <typename T>
+Rect<T> BoundingRect(Point2D<T> const & point)
+{
+  return Rect<T>(point, point); /// @todo this is incorrect
+}
+
+template <typename T>
 Rect<T> BoundingRect(Line2D<T> const & line)
 {
   return Rect<T>(line._end, line._start);
+}
+
+template <typename T>
+Rect<T> BoundingRect(Rect<T> const & rect)
+{
+  return rect;
 }
 
 template <typename T>
@@ -33,7 +45,9 @@ Rect<T> BoundingRect(Ellipse<T> const & e)
 template <typename T>
 Rect<T> BoundingRect(Polyline<T> const & poly)
 {
-  Rect<T> r;
+  /// @todo remove this 2 points from loop
+  Rect<T> r(poly._points[0], poly._points[1]);
+
   for (Point2D<T> const & point : poly._points)
     r.Inflate(point);
   return r;
