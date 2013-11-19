@@ -24,6 +24,7 @@ HEADERS  += xpaintwindow.hpp \
          gem_lib/Painter/DrawableGeometry.hpp \
          gem_lib/Painter/Paint.hpp \
          gem_lib/Geometry/Geometry.hpp \
+         gem_lib/Geometry/Transform.hpp \
          QxPainter.hpp \
          Tool.hpp \
     gem_lib/Geometry/Algorithm.hpp

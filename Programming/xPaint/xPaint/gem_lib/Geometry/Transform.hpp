@@ -69,6 +69,23 @@ public:
     hgp = hgp*_matrix;
     return FromHG(hgp);
   }
+
+  Rect<T> operator *(Rect<T> const & rect) const
+  {
+    return Rect<T>((*this)*rect._topLeft, (*this)*rect._bottomRight);
+  }
+
+  Ellipse<T> operator *(Ellipse<T> const & ellipse) const
+  {
+    /// @todo Add axixes transform
+    return Ellipse<T>((*this)*ellipse._center,
+                      ellipse._rX, ellipse._rY);
+  }
+
+  Line2D<T> operator *(Line2D<T> const & line) const
+  {
+    return Line2D<T>((*this)*line._start, (*this)*line._end);
+  }
   //}@
 private:
   MatrixT _matrix;

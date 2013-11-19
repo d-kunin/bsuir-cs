@@ -143,6 +143,8 @@ public:
   void OnRecieveStartPoint(int x, int y)
   {
     painter::Drawable * hit = _scene->FindDrawableForPoint(painter::PointF(x,y));
+    _startX = x;
+    _startY = y;
 
     if (hit)
     {
@@ -156,9 +158,17 @@ public:
       cout << "Miss" << endl;
   }
 
-  void OnRecieveIntermPoint(int /*x*/, int /*y*/)
+  void OnRecieveIntermPoint(int x, int y)
   {
     // DO NOTHING
+    if (_selectedDrawable)
+    {
+      _selectedDrawable->Transform(
+            TransformF::Translate(x - _startX, y - _startY));
+
+      _startX = x;
+      _startY = y;
+    }
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
@@ -176,4 +186,7 @@ private:
   painter::Drawable * _selectedDrawable;
   painter::Paint _selectionPaint;
   painter::Paint _originalPaint;
+
+  int _startX;
+  int _startY;
 };

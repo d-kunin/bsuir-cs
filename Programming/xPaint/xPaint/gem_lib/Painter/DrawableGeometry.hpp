@@ -67,6 +67,11 @@ public:
   {
     return algo::Intersects(p._x, p._y, _rect);
   }
+
+  void Transform(TransformF const & transform)
+  {
+    _rect = transform*_rect;
+  }
 };
 
 class EllipseDrawable: public Drawable
