@@ -9,7 +9,6 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   _paintWidget = new PaintWidget();
-
   ui->_layout->addWidget(_paintWidget);
 }
 
@@ -38,15 +37,20 @@ void xPaintWindow::on_actionRemove_Last_triggered()
 {
   if (!_paintWidget->GetScene().Drawables().empty())
   {
+    delete _paintWidget->GetScene().Drawables().back();
     _paintWidget->GetScene().Drawables().pop_back();
+
     _paintWidget->update();
   }
 }
 
 void xPaintWindow::on_actionClear_All_triggered()
 {
-    _paintWidget->GetScene().Drawables().clear();
-    _paintWidget->update();
+  for (Drawable * d : _paintWidget->GetScene().Drawables())
+    delete d;
+  _paintWidget->GetScene().Drawables().clear();
+
+  _paintWidget->update();
 }
 
 void xPaintWindow::on_actionRed_triggered()

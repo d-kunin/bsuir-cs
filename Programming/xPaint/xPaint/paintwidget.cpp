@@ -7,7 +7,7 @@
 
 
 PaintWidget::PaintWidget(QWidget *parent) :
-  QWidget(parent), _isToolActive(false)
+  QWidget(parent)
 {
   _tool = new RectTool();
   _tool->SetScene(&_scene);
@@ -16,11 +16,14 @@ PaintWidget::PaintWidget(QWidget *parent) :
 void PaintWidget::SetTool(Tool * tool)
 {
   delete _tool;
+
   _tool = tool;
   _tool->SetScene(&_scene);
 
   if (_tool->GetDrawable())
     _tool->GetDrawable()->SetPaint(_paint);
+
+  update();
 }
 
 void PaintWidget::mouseMoveEvent(QMouseEvent * event)
@@ -48,18 +51,14 @@ void PaintWidget::paintEvent(QPaintEvent * /*event*/)
     _xPainter.setPainter(&_painter);
     _scene.Draw(&_xPainter);
 
-    if (_isToolActive && _tool->GetDrawable() != NULL)
-    {
+    if (_tool->GetDrawable() != NULL)
       _tool->GetDrawable()->Draw(&_xPainter);
-    }
   }
   _painter.end();
 }
 
 void PaintWidget::OnMouseMove(QMouseEvent *event)
 {
-  _endPoint = QPoint(event->x(), event->y());
-
   if (_tool)
     _tool->OnRecieveIntermPoint(event->x(), event->y());
 
@@ -68,11 +67,6 @@ void PaintWidget::OnMouseMove(QMouseEvent *event)
 
 void PaintWidget::OnMousePress(QMouseEvent *event)
 {
-  _isToolActive = true;
-
-
-  _startPoint = QPoint(event->x(), event->y());
-
   if (_tool)
     _tool->OnRecieveStartPoint(event->x(), event->y());
 
@@ -81,10 +75,6 @@ void PaintWidget::OnMousePress(QMouseEvent *event)
 
 void PaintWidget::OnMouseRelease(QMouseEvent *event)
 {
-  _isToolActive = false;
-
-  _endPoint = QPoint(event->x(), event->y());
-
   if (_tool)
     _tool->OnRecieveEndPoint(event->x(), event->y());
 

@@ -15,17 +15,24 @@ public:
   void virtual OnRecieveStartPoint(int x, int y) = 0;
   void virtual OnRecieveIntermPoint(int x, int y) = 0;
   void virtual OnRecieveEndPoint(int x, int y) = 0;
-  virtual painter::Drawable * GetDrawable() = 0;
-  virtual ~Tool() {}
+
+  virtual painter::Drawable * GetDrawable()
+  {
+    return _drawable;
+  }
+  virtual ~Tool()
+  {}
 
   Tool()
-    : _scene(NULL)
+    : _scene(NULL),
+      _drawable(NULL)
   {}
 
   void SetScene(painter::Scene * scene) { _scene = scene; }
 
 protected:
-  painter::Scene * _scene;
+  painter::Scene    * _scene;
+  painter::Drawable * _drawable;
 };
 
 
@@ -37,6 +44,8 @@ public:
   {
     _geometry._topLeft = painter::PointF(x,y);
     _geometry._bottomRight = painter::PointF(x,y);
+
+    _drawable = this;
   }
 
   void OnRecieveIntermPoint(int x, int y)
@@ -49,9 +58,9 @@ public:
     RectDrawable * rd = new RectDrawable(_geometry);
     rd->SetPaint(_paint);
     _scene->Drawables().push_back(rd);
-  }
 
-  painter::Drawable * GetDrawable() { return this; }
+    _drawable = NULL;
+  }
 };
 
 
@@ -64,6 +73,8 @@ public:
     _geometry._center = painter::PointF(x,y);
     _geometry._rX = 0;
     _geometry._rY = 0;
+
+    _drawable = this;
   }
 
   void OnRecieveIntermPoint(int x, int y)
@@ -77,9 +88,9 @@ public:
     EllipseDrawable * ed = new EllipseDrawable(_geometry);
     ed->SetPaint(_paint);
     _scene->Drawables().push_back(ed);
-  }
 
-  painter::Drawable * GetDrawable() { return this; }
+    _drawable = NULL;
+  }
 };
 
 class LineTool: public Tool, public painter::LineDrawable
@@ -90,6 +101,8 @@ public:
   {
     _geometry._start = painter::PointF(x,y);
     _geometry._end   = painter::PointF(x,y);
+
+    _drawable = this;
   }
 
   void OnRecieveIntermPoint(int x, int y)
@@ -102,9 +115,9 @@ public:
     LineDrawable * ld = new LineDrawable(_geometry);
     ld->SetPaint(_paint);
     _scene->Drawables().push_back(ld);
-  }
 
-  painter::Drawable * GetDrawable() { return this; }
+    _drawable = NULL;
+  }
 };
 
 class PolylineTool: public Tool, public painter::PolylineDrawable
@@ -114,6 +127,8 @@ public:
   {
     _geometry._points.clear();
     _geometry.Add(x, y);
+
+    _drawable = this;
   }
 
   void OnRecieveIntermPoint(int x, int y)
@@ -126,9 +141,9 @@ public:
     PolylineDrawable * pd = new PolylineDrawable(_geometry);
     pd->SetPaint(_paint);
     _scene->Drawables().push_back(pd);
-  }
 
-  painter::Drawable * GetDrawable() { return this; }
+    _drawable = NULL;
+  }
 };
 
 class SelectionTool: public Tool
@@ -181,11 +196,10 @@ public:
   painter::Drawable * GetDrawable() { return _selectionBorder; }
 
 private:
-  painter::Drawable * _selectedDrawable;
-  painter::RectDrawable *_selectionBorder;
-
+  painter::Drawable     * _selectedDrawable;
+  painter::RectDrawable * _selectionBorder;
   painter::Paint _selectionPaint;
-  painter::Paint _originalPaint;
+
 
   int _startX;
   int _startY;

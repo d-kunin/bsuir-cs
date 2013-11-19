@@ -35,14 +35,10 @@ protected:
   void mouseReleaseEvent(QMouseEvent *);
 
 private:
-  QPoint _startPoint;
-  QPoint _endPoint;
-
   QxPainter _xPainter;
   QPainter _painter;
   painter::Scene _scene;
 
   Tool * _tool;
-  bool _isToolActive;
   Paint _paint;
 };
