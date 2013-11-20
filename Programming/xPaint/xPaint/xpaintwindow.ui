@@ -46,14 +46,6 @@
     <addaction name="actionClear_All"/>
     <addaction name="actionSelection_Tool"/>
    </widget>
-   <widget class="QMenu" name="menuColor">
-    <property name="title">
-     <string>Color</string>
-    </property>
-    <addaction name="actionRed"/>
-    <addaction name="actionGreen"/>
-    <addaction name="actionBlue"/>
-   </widget>
    <widget class="QMenu" name="menuStroke">
     <property name="title">
      <string>Stroke</string>
@@ -69,7 +61,6 @@
     <addaction name="actionFill_Color"/>
    </widget>
    <addaction name="menuSelect_Tool"/>
-   <addaction name="menuColor"/>
    <addaction name="menuStroke"/>
    <addaction name="menuColors"/>
   </widget>
@@ -105,21 +96,6 @@
   <action name="actionLine">
    <property name="text">
     <string>Line</string>
-   </property>
-  </action>
-  <action name="actionRed">
-   <property name="text">
-    <string>Red</string>
-   </property>
-  </action>
-  <action name="actionGreen">
-   <property name="text">
-    <string>Green</string>
-   </property>
-  </action>
-  <action name="actionBlue">
-   <property name="text">
-    <string>Blue</string>
    </property>
   </action>
   <action name="actionIncWidth">

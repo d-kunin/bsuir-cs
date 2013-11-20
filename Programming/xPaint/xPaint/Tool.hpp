@@ -198,7 +198,9 @@ public:
   {
     _selectedDrawable = NULL;
     _selectionBorder = NULL;
-    _selectionPaint.SetStrokeColor(painter::Color(255, 255 ,0 ,128));
+    _selectionPaint.SetStrokeColor(painter::Color(0, 0 , 255, 64));
+    _selectionPaint.SetFillColor(painter::Color(0, 0, 255, 32));
+    _selectionPaint.SetStrokeWidth(3);
   }
 
   void OnRecieveStartPoint(int x, int y)
