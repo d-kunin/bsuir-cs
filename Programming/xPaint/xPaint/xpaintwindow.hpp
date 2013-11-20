@@ -42,6 +42,8 @@ private slots:
 
   void on_actionSelection_Tool_triggered();
 
+  void on_actionStroke_Color_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;

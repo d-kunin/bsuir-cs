@@ -61,9 +61,17 @@
     <addaction name="actionIncWidth"/>
     <addaction name="actionDecWidth"/>
    </widget>
+   <widget class="QMenu" name="menuColors">
+    <property name="title">
+     <string>Colors</string>
+    </property>
+    <addaction name="actionStroke_Color"/>
+    <addaction name="actionFill_Color"/>
+   </widget>
    <addaction name="menuSelect_Tool"/>
    <addaction name="menuColor"/>
    <addaction name="menuStroke"/>
+   <addaction name="menuColors"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -132,6 +140,16 @@
   <action name="actionSelection_Tool">
    <property name="text">
     <string>Selection Tool</string>
+   </property>
+  </action>
+  <action name="actionStroke_Color">
+   <property name="text">
+    <string>Stroke Color</string>
+   </property>
+  </action>
+  <action name="actionFill_Color">
+   <property name="text">
+    <string>Fill Color</string>
    </property>
   </action>
  </widget>

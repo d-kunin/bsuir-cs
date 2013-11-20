@@ -42,8 +42,7 @@ public:
   {
     QPen pen;
     pen.setWidth(paint->GetStrokeWidth());
-    Color c = paint->GetStrokeColor();
-    pen.setColor(QColor(c.r,c.g,c.b, c.a));
+    pen.setColor(FromXColor(paint->GetStrokeColor()));
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
@@ -51,6 +50,16 @@ public:
 
     _nativePainter->setPen(pen);
     _nativePainter->setBrush(brush);
+  }
+
+  static QColor FromXColor(Color const & color)
+  {
+    return QColor(color.r,color.g,color.b, color.a);
+  }
+
+  static Color FromQColor(QColor const & color)
+  {
+    return Color(color.red(), color.green(), color.blue(), color.alpha());
   }
 
   float TargetWidth() { return 0; }

@@ -51,7 +51,7 @@ void PaintWidget::paintEvent(QPaintEvent * /*event*/)
     _xPainter.setPainter(&_painter);
     _scene.Draw(&_xPainter);
 
-    if (_tool->GetDrawable() != NULL)
+    if (_tool->NeedDrawing())
       _tool->GetDrawable()->Draw(&_xPainter);
   }
   _painter.end();

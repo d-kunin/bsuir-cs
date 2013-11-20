@@ -3,6 +3,8 @@
 
 #include "QxPainter.hpp"
 
+#include <QColorDialog>
+
 xPaintWindow::xPaintWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::xPaintWindow)
@@ -92,4 +94,17 @@ void xPaintWindow::on_actionPolyline_triggered()
 void xPaintWindow::on_actionSelection_Tool_triggered()
 {
   _paintWidget->SetTool(new SelectionTool);
+}
+
+void xPaintWindow::on_actionStroke_Color_triggered()
+{
+  QColorDialog colorDialog;
+  QColor color = colorDialog.getColor
+                 (QxPainter::FromXColor(_paintWidget->GetPaint().GetStrokeColor()), this, tr("Select Stroke Color"));
+
+  if (color.isValid())
+  {
+    _paintWidget->GetPaint().SetStrokeColor(QxPainter::FromQColor(color));
+    _paintWidget->OnPaintUpdate();
+  }
 }
