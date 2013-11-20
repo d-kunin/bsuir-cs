@@ -76,7 +76,7 @@ void xPaintWindow::on_actionPolyline_triggered()
 
 void xPaintWindow::on_actionSelection_Tool_triggered()
 {
-  _paintWidget->SetTool(new SelectionTool);
+  _paintWidget->SetTool(new SelectionTool(this));
 }
 
 void xPaintWindow::on_actionStroke_Color_triggered()
@@ -107,4 +107,14 @@ void xPaintWindow::on_actionFill_Color_triggered()
     _paintWidget->GetPaint().SetFillColor(Convert::FromQColor(color));
     _paintWidget->OnPaintUpdate();
   }
+}
+
+void xPaintWindow::OnDrawableSelected(Drawable * /*drawable*/)
+{
+  cout << "Selected" << endl;
+}
+
+void xPaintWindow::OnNothingSelected()
+{
+  cout << "Nothing selected" << endl;
 }

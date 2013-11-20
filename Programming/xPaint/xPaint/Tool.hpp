@@ -194,13 +194,32 @@ private:
 class SelectionTool: public Tool
 {
 public:
-  SelectionTool()
+  class SelectionListener
+  {
+  public:
+    virtual void OnDrawableSelected(Drawable * drawable) = 0;
+    virtual void OnNothingSelected() = 0;
+  };
+
+  SelectionTool(SelectionListener * listener = NULL)
   {
     _selectedDrawable = NULL;
     _selectionBorder = NULL;
     _selectionPaint.SetStrokeColor(painter::Color(0, 0 , 255, 64));
     _selectionPaint.SetFillColor(painter::Color(0, 0, 255, 32));
     _selectionPaint.SetStrokeWidth(3);
+
+    _listener = listener;
+  }
+
+  ~SelectionTool()
+  {
+    delete _selectionBorder;
+  }
+
+  void SetListener(SelectionListener * listener)
+  {
+    _listener = listener;
   }
 
   void OnRecieveStartPoint(int x, int y)
@@ -214,15 +233,20 @@ public:
       _selectedDrawable = hit;
       _selectionBorder = new painter::RectDrawable(hit->BoundingRect());
       _selectionBorder->SetPaint(_selectionPaint);
-
       _needDrawing = true;
+
+      if (_listener)
+        _listener->OnDrawableSelected(hit);
     }
     else
     {
       delete _selectionBorder;
       _selectionBorder = NULL;
-
+      _selectedDrawable = NULL;
       _needDrawing = false;
+
+      if (_listener)
+        _listener->OnNothingSelected();
     }
   }
 
@@ -250,6 +274,8 @@ private:
   painter::Drawable     * _selectedDrawable;
   painter::RectDrawable * _selectionBorder;
   painter::Paint _selectionPaint;
+
+  SelectionListener * _listener;
 
   int _startX;
   int _startY;

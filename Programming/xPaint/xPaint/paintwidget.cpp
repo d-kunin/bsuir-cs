@@ -11,7 +11,6 @@ PaintWidget::PaintWidget(QWidget *parent) :
 {
   _tool = new RectTool();
   _tool->SetScene(&_scene);
-  _painter.setRenderHint(QPainter::Antialiasing);
 }
 
 void PaintWidget::SetTool(Tool * tool)
@@ -49,6 +48,7 @@ void PaintWidget::paintEvent(QPaintEvent * /*event*/)
 {
   _painter.begin(this);
   {
+    _painter.setRenderHint(QPainter::Antialiasing);
     _xPainter.setPainter(&_painter);
     _scene.Draw(&_xPainter);
 

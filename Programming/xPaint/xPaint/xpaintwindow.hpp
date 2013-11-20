@@ -4,18 +4,22 @@
 #include <QMainWindow>
 
 #include "paintwidget.hpp"
+#include "Tool.hpp"
 
 namespace Ui {
 class xPaintWindow;
 }
 
-class xPaintWindow : public QMainWindow
+class xPaintWindow : public QMainWindow, public SelectionTool::SelectionListener
 {
   Q_OBJECT
 
 public:
   explicit xPaintWindow(QWidget *parent = 0);
   ~xPaintWindow();
+
+  void OnDrawableSelected(Drawable *drawable) override;
+  void OnNothingSelected() override;
 
 private slots:
   void on_actionRect_triggered();
