@@ -3,6 +3,7 @@
 #include "gem_lib/Painter/Painter.hpp"
 #include "gem_lib/Geometry/Geometry.hpp"
 #include "gem_lib/Geometry/Utils.hpp"
+#include "Qt/Converts.hpp"
 
 #include <QPainter>
 
@@ -12,8 +13,7 @@ class QxPainter : public painter::Painter
 {
 public:
   QxPainter()
-  {
-  }
+  {}
 
   void setPainter(QPainter * painter) { _nativePainter = painter; }
 
@@ -42,32 +42,21 @@ public:
   {
     QPen pen;
     pen.setWidth(paint->GetStrokeWidth());
-    pen.setColor(FromXColor(paint->GetStrokeColor()));
+    pen.setColor(Convert::FromXColor(paint->GetStrokeColor()));
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    brush.setColor(QColor(0, 0, 255, 64));
+    brush.setColor(Convert::FromXColor(paint->GetFillColor()));
 
     _nativePainter->setPen(pen);
     _nativePainter->setBrush(brush);
-  }
-
-  static QColor FromXColor(Color const & color)
-  {
-    return QColor(color.r,color.g,color.b, color.a);
-  }
-
-  static Color FromQColor(QColor const & color)
-  {
-    return Color(color.red(), color.green(), color.blue(), color.alpha());
   }
 
   float TargetWidth() { return 0; }
   float TargetHeight() { return 0; }
 
   ~QxPainter()
-  {
-  }
+  {}
 
 private:
   QPainter * _nativePainter;

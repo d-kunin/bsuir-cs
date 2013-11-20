@@ -28,12 +28,6 @@ private slots:
 
   void on_actionLine_triggered();
 
-  void on_actionRed_triggered();
-
-  void on_actionGreen_triggered();
-
-  void on_actionBlue_triggered();
-
   void on_actionIncWidth_triggered();
 
   void on_actionDecWidth_triggered();
@@ -43,6 +37,8 @@ private slots:
   void on_actionSelection_Tool_triggered();
 
   void on_actionStroke_Color_triggered();
+
+  void on_actionFill_Color_triggered();
 
 private:
   Ui::xPaintWindow *ui;

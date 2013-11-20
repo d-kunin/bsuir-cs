@@ -23,7 +23,11 @@ public:
 
 public:
   Paint()
-    : _strokeWidth(5), _strokeStyle(SOLID), _fillStyle(NORMAL)
+    : _strokeWidth(5),
+      _strokeColor(Color(0, 0, 0, 255)),
+      _strokeStyle(SOLID),
+      _fillColor(Color(255, 255, 255, 255)),
+      _fillStyle(NORMAL)
   {}
 
   void SetStrokeWidth(float width)         { _strokeWidth = width; }

@@ -2,6 +2,7 @@
 #include "ui_xpaintwindow.h"
 
 #include "QxPainter.hpp"
+#include "QT/Converts.hpp"
 
 #include <QColorDialog>
 
@@ -11,6 +12,7 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   _paintWidget = new PaintWidget();
+
   ui->_layout->addWidget(_paintWidget);
 }
 
@@ -55,25 +57,6 @@ void xPaintWindow::on_actionClear_All_triggered()
   _paintWidget->update();
 }
 
-void xPaintWindow::on_actionRed_triggered()
-{
-  _paintWidget->GetPaint().SetStrokeColor(Color(255, 0, 0));
-  _paintWidget->OnPaintUpdate();
-}
-
-void xPaintWindow::on_actionGreen_triggered()
-{
-  _paintWidget->GetPaint().SetStrokeColor(Color(0, 255, 0));
-  _paintWidget->OnPaintUpdate();
-}
-
-void xPaintWindow::on_actionBlue_triggered()
-{
-  _paintWidget->GetPaint().SetStrokeColor(Color(0, 0, 255));
-  _paintWidget->OnPaintUpdate();
-}
-
-
 void xPaintWindow::on_actionIncWidth_triggered()
 {
   _paintWidget->GetPaint().GetStrokeWidth()+=5;
@@ -100,11 +83,28 @@ void xPaintWindow::on_actionStroke_Color_triggered()
 {
   QColorDialog colorDialog;
   QColor color = colorDialog.getColor
-                 (QxPainter::FromXColor(_paintWidget->GetPaint().GetStrokeColor()), this, tr("Select Stroke Color"));
+                 (Convert::FromXColor(_paintWidget->GetPaint().GetStrokeColor()),
+                  this, tr("Select Stroke Color"),
+                  QColorDialog::ShowAlphaChannel);
 
   if (color.isValid())
   {
-    _paintWidget->GetPaint().SetStrokeColor(QxPainter::FromQColor(color));
+    _paintWidget->GetPaint().SetStrokeColor(Convert::FromQColor(color));
+    _paintWidget->OnPaintUpdate();
+  }
+}
+
+void xPaintWindow::on_actionFill_Color_triggered()
+{
+  QColorDialog colorDialog;
+  QColor color = colorDialog.getColor
+                 (Convert::FromXColor(_paintWidget->GetPaint().GetFillColor()),
+                  this, tr("Select Fill Color"),
+                  QColorDialog::ShowAlphaChannel);
+
+  if (color.isValid())
+  {
+    _paintWidget->GetPaint().SetFillColor(Convert::FromQColor(color));
     _paintWidget->OnPaintUpdate();
   }
 }

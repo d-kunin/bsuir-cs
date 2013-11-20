@@ -16,6 +16,7 @@ CONFIG += c++11
 SOURCES += main.cpp\
         xpaintwindow.cpp \
         paintwidget.cpp \
+    Qt/Converts.cpp
 
 HEADERS  += xpaintwindow.hpp \
          paintwidget.hpp \
@@ -27,6 +28,7 @@ HEADERS  += xpaintwindow.hpp \
          gem_lib/Geometry/Transform.hpp \
          QxPainter.hpp \
          Tool.hpp \
-    gem_lib/Geometry/Algorithm.hpp
+    gem_lib/Geometry/Algorithm.hpp \
+    Qt/Converts.hpp
 
 FORMS    += xpaintwindow.ui
