@@ -108,7 +108,6 @@ public:
         * t
         * Transform::Translate(p._x, p._y);
   }
-
   //}@
 
   //{@ Geometry-specific transforms
@@ -139,16 +138,20 @@ public:
   // LINE
   Line2D<T> operator *(Line2D<T> const & line) const
   {
-    return Line2D<T>((*this)*line._start, (*this)*line._end);
+    Transform t = WithFixedPoint(*this, line._start);
+    return Line2D<T>(t*line._start, t*line._end);
   }
 
   // POLYLINE
   Polyline<T> operator *(Polyline<T> const & poly) const
   {
+    Transform t = WithFixedPoint(*this, poly._points.front());
+
+
     std::vector<Point2D<T>> points(poly._points.size());
 
     for (size_t i = 0; i < points.size(); ++i)
-      points[i] = (*this)*poly._points[i];
+      points[i] = t*poly._points[i];
 
     return Polyline<T>(points);
   }
