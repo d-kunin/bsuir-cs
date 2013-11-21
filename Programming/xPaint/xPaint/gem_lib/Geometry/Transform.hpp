@@ -18,6 +18,46 @@ public:
   Transform()
     : _matrix(MatrixT::Identity()) {}
 
+  T & dX()
+  {
+    return _matrix(2,0);
+  }
+
+  T & dY()
+  {
+    return _matrix(2,1);
+  }
+
+  T & scaleX()
+  {
+    return _matrix(0,0);
+  }
+
+  T & scaleY()
+  {
+    return _matrix(1,1);
+  }
+
+  T dX() const
+  {
+    return _matrix(2,0);
+  }
+
+  T dY() const
+  {
+    return _matrix(2,1);
+  }
+
+  T scaleX() const
+  {
+    return _matrix(0,0);
+  }
+
+  T scaleY() const
+  {
+    return _matrix(1,1);
+  }
+
   //{@ Basic transforms
   static Transform Scale(T sX, T sY)
   {
@@ -91,7 +131,9 @@ public:
   Ellipse<T> operator *(Ellipse<T> const & ellipse) const
   {
     Transform t = WithFixedPoint(*this, ellipse._center);
-    return Ellipse<T>(t*ellipse._center, t*ellipse._radius);
+    return Ellipse<T>(t*ellipse._center,
+                      ellipse.radiusX()*t.scaleX(),
+                      ellipse.radiusY()*t.scaleY());
   }
 
   // LINE
