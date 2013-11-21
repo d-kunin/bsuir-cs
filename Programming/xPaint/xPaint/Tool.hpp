@@ -110,16 +110,16 @@ public:
   void OnRecieveStartPoint(int x, int y)
   {
     _drawable._geometry._center = painter::PointF(x,y);
-    _drawable._geometry._rX = 0;
-    _drawable._geometry._rY = 0;
+    _drawable._geometry.radiusX() = 0;
+    _drawable._geometry.radiusY() = 0;
 
     _needDrawing = true;
   }
 
   void OnRecieveIntermPoint(int x, int y)
   {
-    _drawable._geometry._rX = _drawable._geometry._center._x - x;
-    _drawable._geometry._rY = _drawable._geometry._center._y - y;
+    _drawable._geometry.radiusX() = _drawable._geometry._center._x - x;
+    _drawable._geometry.radiusY() = _drawable._geometry._center._y - y;
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
@@ -264,9 +264,7 @@ public:
   }
 
   void OnRecieveEndPoint(int /*x*/, int /*y*/)
-  {
-    /// @todo
-  }
+  {}
 
   painter::Drawable * GetDrawable() { return _selectionBorder; }
 

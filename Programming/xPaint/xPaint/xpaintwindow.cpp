@@ -109,12 +109,52 @@ void xPaintWindow::on_actionFill_Color_triggered()
   }
 }
 
-void xPaintWindow::OnDrawableSelected(Drawable * /*drawable*/)
+void xPaintWindow::OnDrawableSelected(Drawable * drawable)
 {
   cout << "Selected" << endl;
+  _selectedDrawable = drawable;
 }
 
 void xPaintWindow::OnNothingSelected()
 {
   cout << "Nothing selected" << endl;
+  _selectedDrawable = NULL;
+}
+
+void xPaintWindow::on_actionScale_Up_triggered()
+{
+  if (_selectedDrawable)
+  {
+    float factor = 3.0/2.0;
+    _selectedDrawable->Transform(TransformF::Scale(factor, factor));
+    _paintWidget->update();
+  }
+}
+
+void xPaintWindow::on_actionScale_Down_triggered()
+{
+  if (_selectedDrawable)
+  {
+    float factor = 2.0/3.0;
+    _selectedDrawable->Transform(TransformF::Scale(factor, factor));
+    _paintWidget->update();
+  }
+}
+
+void xPaintWindow::on_actionRotate_CW_triggered()
+{
+  if(_selectedDrawable)
+  {
+    _selectedDrawable->Transform(TransformF::RotateCW(M_PI/8));
+    _paintWidget->update();
+  }
+}
+
+void xPaintWindow::on_actionRotate_CCW_triggered()
+{
+  if(_selectedDrawable)
+  {
+    _selectedDrawable->Transform(TransformF::RotateCW(-M_PI/8));
+    _paintWidget->update();
+  }
 }

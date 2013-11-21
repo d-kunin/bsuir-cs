@@ -60,9 +60,19 @@
     <addaction name="actionStroke_Color"/>
     <addaction name="actionFill_Color"/>
    </widget>
+   <widget class="QMenu" name="menuTransform">
+    <property name="title">
+     <string>Transform</string>
+    </property>
+    <addaction name="actionScale_Up"/>
+    <addaction name="actionScale_Down"/>
+    <addaction name="actionRotate_CW"/>
+    <addaction name="actionRotate_CCW"/>
+   </widget>
    <addaction name="menuSelect_Tool"/>
    <addaction name="menuStroke"/>
    <addaction name="menuColors"/>
+   <addaction name="menuTransform"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -126,6 +136,26 @@
   <action name="actionFill_Color">
    <property name="text">
     <string>Fill Color</string>
+   </property>
+  </action>
+  <action name="actionScale_Up">
+   <property name="text">
+    <string>Scale Up</string>
+   </property>
+  </action>
+  <action name="actionScale_Down">
+   <property name="text">
+    <string>Scale Down</string>
+   </property>
+  </action>
+  <action name="actionRotate_CW">
+   <property name="text">
+    <string>Rotate CW</string>
+   </property>
+  </action>
+  <action name="actionRotate_CCW">
+   <property name="text">
+    <string>Rotate CCW</string>
    </property>
   </action>
  </widget>

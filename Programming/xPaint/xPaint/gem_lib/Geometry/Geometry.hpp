@@ -106,14 +106,37 @@ class Ellipse
 {
 public:
   Point2D<T> _center;
-  T _rX;
-  T _rY;
+  Point2D<T> _radius;
 
-  Ellipse(Point2D<T> center, T rh, T rv)
-    : _center(center), _rX(rh), _rY(rv) {}
+  Ellipse(Point2D<T> center, T rX, T rY)
+    : _center(center), _radius(rX, rY) {}
+
+  Ellipse(Point2D<T> center, Point2D<T> radius)
+    : _center(center), _radius(radius)
+  {}
 
   Ellipse()
-    : _rX(0), _rY(0) {}
+  {}
+
+  T & radiusX()
+  {
+    return _radius._x;
+  }
+
+  T & radiusY()
+  {
+    return _radius._y;
+  }
+
+  T radiusX() const
+  {
+    return _radius._x;
+  }
+
+  T radiusY() const
+  {
+    return _radius._y;
+  }
 };
 
 template <typename T>

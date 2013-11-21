@@ -48,6 +48,11 @@ public:
     return NULL;
   }
 
+  void Remove(Drawable * drawable)
+  {
+    _drawables.erase(std::remove(_drawables.begin(), _drawables.end(), drawable), _drawables.end());
+  }
+
   ~Scene()
   {
     for (Drawable * drawable : _drawables)

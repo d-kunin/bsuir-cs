@@ -35,7 +35,7 @@ public:
   virtual void DrawEllipse(EllipseF const & ellipse)
   {
     _nativePainter->drawEllipse(QPoint(ellipse._center._x, ellipse._center._y),
-                                static_cast<int>(ellipse._rX), static_cast<int>(ellipse._rY));
+                                static_cast<int>(ellipse.radiusX()), static_cast<int>(ellipse.radiusY()));
   }
 
   virtual void UsePaint(Paint * paint)

@@ -44,7 +44,17 @@ private slots:
 
   void on_actionFill_Color_triggered();
 
+  void on_actionScale_Up_triggered();
+
+  void on_actionScale_Down_triggered();
+
+  void on_actionRotate_CW_triggered();
+
+  void on_actionRotate_CCW_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
+
+  Drawable * _selectedDrawable;
 };

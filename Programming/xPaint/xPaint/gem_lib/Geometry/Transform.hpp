@@ -3,7 +3,7 @@
 #include "Matrix.hpp"
 #include "Geometry.hpp"
 
-#include <cmath>
+#include <math.h>
 
 namespace geometry
 {
@@ -61,6 +61,14 @@ public:
     t._matrix = _matrix*that._matrix;
     return t;
   }
+
+  static Transform WithFixedPoint(Transform const & t, Point2D<T> const & p)
+  {
+    return Transform::Translate(-p._x, -p._y)
+        * t
+        * Transform::Translate(p._x, p._y);
+  }
+
   //}@
 
   //{@ Geometry-specific transforms
@@ -75,15 +83,15 @@ public:
   // RECT
   Rect<T> operator *(Rect<T> const & rect) const
   {
-    return Rect<T>((*this)*rect._topLeft, (*this)*rect._bottomRight);
+    Transform t = WithFixedPoint(*this, rect._topLeft);
+    return Rect<T>(t*rect._topLeft, t*rect._bottomRight);
   }
 
   // ELLIPSE
   Ellipse<T> operator *(Ellipse<T> const & ellipse) const
   {
-    /// @todo Add axixes transform
-    return Ellipse<T>((*this)*ellipse._center,
-                      ellipse._rX, ellipse._rY);
+    Transform t = WithFixedPoint(*this, ellipse._center);
+    return Ellipse<T>(t*ellipse._center, t*ellipse._radius);
   }
 
   // LINE

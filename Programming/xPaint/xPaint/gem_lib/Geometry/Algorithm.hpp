@@ -37,8 +37,8 @@ Rect<T> BoundingRect(Rect<T> const & rect)
 template <typename T>
 Rect<T> BoundingRect(Ellipse<T> const & e)
 {
-  Point2D<T> tl(e._center._x - e._rX, e._center._y - e._rY);
-  Point2D<T> br(e._center._x + e._rX, e._center._y + e._rY);
+  Point2D<T> tl(e._center._x - e.radiusX(), e._center._y - e.radiusY());
+  Point2D<T> br(e._center._x + e.radiusX(), e._center._y + e.radiusY());
   return Rect<T>(tl, br);
 }
 
