@@ -41,6 +41,10 @@ public:
   Rect(Point2D<T> topleft, Point2D<T> bottomright)
     : _topLeft(topleft), _bottomRight(bottomright) {}
 
+  Rect(T x0, T y0, T x1, T y1)
+    : _topLeft(x0,y0), _bottomRight(x1, y1)
+  {}
+
   Rect() {}
 
   T Width() const

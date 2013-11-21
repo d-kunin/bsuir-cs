@@ -52,6 +52,8 @@ private slots:
 
   void on_actionRotate_CCW_triggered();
 
+  void on_actionLena_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gem_lib/Painter/qimagedrawable.hpp"
 #include "gem_lib/Painter/Painter.hpp"
 #include "gem_lib/Geometry/Geometry.hpp"
 #include "gem_lib/Geometry/Utils.hpp"
@@ -7,13 +8,19 @@
 
 #include <QPainter>
 
-using namespace painter;
+namespace painter
+{
 
-class QxPainter : public painter::Painter
+class QxPainter : public Painter
 {
 public:
   QxPainter()
   {}
+
+  void DrawImageDrawable(ImageDrawable const & image)
+  {
+    _nativePainter->drawImage(Convert::FromRectF(image.BoundingRect()), image.Image());
+  }
 
   void setPainter(QPainter * painter) { _nativePainter = painter; }
 
@@ -61,3 +68,5 @@ public:
 private:
   QPainter * _nativePainter;
 };
+
+}

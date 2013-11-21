@@ -147,9 +147,7 @@ public:
   {
     Transform t = WithFixedPoint(*this, poly._points.front());
 
-
     std::vector<Point2D<T>> points(poly._points.size());
-
     for (size_t i = 0; i < points.size(); ++i)
       points[i] = t*poly._points[i];
 

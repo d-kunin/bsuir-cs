@@ -65,7 +65,7 @@ class DrawTool: public Drawable, public Tool
     _drawable.Draw(painter);
   }
 
-  painter::RectF BoundingRect() override
+  painter::RectF BoundingRect() const override
   {
     return _drawable.BoundingRect();
   }

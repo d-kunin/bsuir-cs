@@ -35,10 +35,10 @@ protected:
   void mouseReleaseEvent(QMouseEvent *);
 
 private:
-  QxPainter _xPainter;
+  painter::QxPainter _xPainter;
   QPainter _painter;
   painter::Scene _scene;
 
+  painter::Paint _paint;
   Tool * _tool;
-  Paint _paint;
 };

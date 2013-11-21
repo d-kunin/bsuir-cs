@@ -19,7 +19,7 @@ public:
     _geometry = transform*_geometry;
   }
 
-  RectF BoundingRect() override
+  RectF BoundingRect() const override
   {
     return algo::BoundingRect(_geometry);
   }

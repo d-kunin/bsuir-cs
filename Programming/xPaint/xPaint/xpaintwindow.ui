@@ -69,10 +69,17 @@
     <addaction name="actionRotate_CW"/>
     <addaction name="actionRotate_CCW"/>
    </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionLena"/>
+   </widget>
    <addaction name="menuSelect_Tool"/>
    <addaction name="menuStroke"/>
    <addaction name="menuColors"/>
    <addaction name="menuTransform"/>
+   <addaction name="menuImage"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -156,6 +163,11 @@
   <action name="actionRotate_CCW">
    <property name="text">
     <string>Rotate CCW</string>
+   </property>
+  </action>
+  <action name="actionLena">
+   <property name="text">
+    <string>Lena</string>
    </property>
   </action>
  </widget>

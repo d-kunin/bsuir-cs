@@ -24,7 +24,7 @@ public:
       drawable->Draw(painter);
   }
 
-  RectF BoundingRect()
+  RectF BoundingRect() const override
   {
     RectF bRect = _drawables.front()->BoundingRect();
 

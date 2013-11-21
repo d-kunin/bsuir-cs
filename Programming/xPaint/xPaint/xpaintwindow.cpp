@@ -2,6 +2,7 @@
 #include "ui_xpaintwindow.h"
 
 #include "QxPainter.hpp"
+#include "gem_lib/Painter/qimagedrawable.hpp"
 #include "QT/Converts.hpp"
 
 #include <QColorDialog>
@@ -157,4 +158,10 @@ void xPaintWindow::on_actionRotate_CCW_triggered()
     _selectedDrawable->Transform(TransformF::RotateCW(-M_PI/8));
     _paintWidget->update();
   }
+}
+
+void xPaintWindow::on_actionLena_triggered()
+{
+  _paintWidget->GetScene().Drawables().push_back(new painter::ImageDrawable);
+  _paintWidget->update();
 }
