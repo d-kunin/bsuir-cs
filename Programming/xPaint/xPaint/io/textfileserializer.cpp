@@ -1,5 +1,8 @@
 #include "textfileserializer.hpp"
 
+#include <sstream>
+#include <iostream>
+
 using std::endl;
 using std::ios;
 
@@ -13,8 +16,100 @@ static const string  RECT = "RECT";
 
 TextFileSerializer::TextFileSerializer(string const & filename)
   : _fileName(filename)
+{}
+
+painter::Scene * TextFileSerializer::ReadScene()
 {
-  _file.open(_fileName, ios::out | ios::trunc);
+  if (!_file.is_open())
+    _file.open(_fileName);
+
+  painter::Scene * scene = new painter::Scene;
+  string line;
+  while (std::getline(_file, line))
+  {
+    painter::Drawable * drawable = NULL;
+    string type;
+    std::istringstream iss(line);
+    iss >> type;
+
+    if (RECT == type)
+    {
+      float x0, y0, x1, y1;
+      iss >> x0 >> y0 >> x1 >> y1;
+      painter::RectF r(x0, y0, x1, y1);
+      drawable = new painter::RectDrawable(r);
+
+      iss >> type;
+      if (PAINT == type)
+        drawable->SetPaint(ParsePaint(iss));
+    }
+    else if (LINE == type)
+    {
+      float x0, y0, x1, y1;
+      iss >> x0 >> y0 >> x1 >> y1;
+      painter::LineF l(x0, y0, x1, y1);
+      drawable = new painter::LineDrawable(l);
+
+      iss >> type;
+      if (PAINT == type)
+        drawable->SetPaint(ParsePaint(iss));
+    }
+    else if (ELLI == type)
+    {
+      float x0, y0, rx, ry;
+      iss >> x0 >> y0 >> rx >> ry;
+      painter::EllipseF e(x0, y0, rx, ry);
+      drawable = new painter::EllipseDrawable(e);
+
+      iss >> type;
+      if (PAINT == type)
+        drawable->SetPaint(ParsePaint(iss));
+    }
+    else if (POLY == type)
+    {
+      float x, y;
+      size_t count = 0;
+      iss >> count;
+      painter::PolylineF poly;
+      for (size_t index = 0; index < count; ++index)
+      {
+        iss >> x >> y;
+        poly.Add(x, y);
+      }
+      drawable = new painter::PolylineDrawable(poly);
+
+      _file >> type;
+      if (PAINT == type)
+        drawable->SetPaint(ParsePaint(iss));
+    }
+
+    if (drawable)
+      scene->Add(drawable);
+  }
+
+  _file.close();
+
+  return scene;
+}
+
+void TextFileSerializer::Write(painter::Scene const * scene)
+{
+  if (!_file.is_open())
+    _file.open(_fileName, ios::trunc | ios::out);
+
+  _file << SCENE << SP
+        << scene->Drawables().size() << endl;
+
+  for (painter::Drawable const * drawable : scene->Drawables())
+  {
+    Serializable const * serializable =
+        dynamic_cast<Serializable const *>(drawable);
+
+    if (serializable)
+      serializable->WriteTo(this);
+  }
+
+  _file.close();
 }
 
 void TextFileSerializer::Write(painter::RectDrawable const * r)
@@ -64,21 +159,6 @@ void TextFileSerializer::Write(painter::PolylineDrawable const * p)
   _file << endl;
 }
 
-void TextFileSerializer::Write(painter::Scene const * scene)
-{
-  _file << SCENE << SP
-        << scene->Drawables().size() << endl;
-
-  for (painter::Drawable const * drawable : scene->Drawables())
-  {
-    Serializable const * serializable =
-        dynamic_cast<Serializable const *>(drawable);
-
-    if (serializable)
-      serializable->WriteTo(this);
-  }
-}
-
 void TextFileSerializer::Write(const painter::Paint * paint)
 {
   _file << PAINT << SP;
@@ -91,4 +171,16 @@ void TextFileSerializer::Write(const painter::Paint * paint)
 void TextFileSerializer::Write(const painter::Color * color)
 {
   _file << SP << color->AsString();
+}
+
+painter::Paint TextFileSerializer::ParsePaint(istream & in)
+{
+  painter::Paint p;
+  string tmp;
+  in >> tmp;
+  p.SetFillColor(painter::Color::FromString(tmp));
+  in >> p.GetStrokeWidth();
+  in >> tmp;
+  p.SetStrokeColor(painter::Color::FromString(tmp));
+  return p;
 }

@@ -25,7 +25,7 @@ struct Color: public Serializable
     this->b = b;
   }
 
-  Color(int color);
+  Color(unsigned long color);
 
   void WriteTo(Serializer *) const override;
 

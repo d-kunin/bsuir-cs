@@ -26,10 +26,16 @@ public:
   Point2D<T> _start;
   Point2D<T> _end;
 
-  Line2D() {}
+  Line2D()
+  {}
 
   Line2D(Point2D<T> const & start, Point2D<T> const & end)
-    : _start(start), _end(end) {}
+    : _start(start), _end(end)
+  {}
+
+  Line2D(T x0, T y0, T x1, T y1)
+    : _start(x0, y0), _end(x1, y1)
+  {}
 };
 
 template <typename T>
@@ -117,6 +123,10 @@ public:
 
   Ellipse(Point2D<T> center, Point2D<T> radius)
     : _center(center), _radius(radius)
+  {}
+
+  Ellipse(T x0, T y0, T rx, T ry)
+    : _center(x0, y0), _radius(rx, ry)
   {}
 
   Ellipse()

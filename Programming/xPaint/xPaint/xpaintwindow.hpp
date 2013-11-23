@@ -57,10 +57,14 @@ private slots:
 
   void on_actionSave_triggered();
 
+  void on_actionLoad_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
 
-  Serializer * _serializer;
+  Serializer   * _serializer;
+  Deserializer * _deserializer;
+
   Drawable   * _selectedDrawable;
 };

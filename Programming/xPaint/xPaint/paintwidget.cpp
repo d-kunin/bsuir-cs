@@ -9,8 +9,24 @@
 PaintWidget::PaintWidget(QWidget *parent) :
   QWidget(parent)
 {
+  _scene = new painter::Scene;
   _tool = new RectTool();
-  _tool->SetScene(&_scene);
+  _tool->SetScene(_scene);
+}
+
+PaintWidget::~PaintWidget()
+{
+  delete _scene;
+  delete _tool;
+}
+
+void PaintWidget::SetScene(Scene * scene)
+{
+  _tool->SetScene(NULL);
+  delete _scene;
+  _scene = scene;
+  _tool->SetScene(scene);
+  update();
 }
 
 void PaintWidget::SetTool(Tool * tool)
@@ -18,13 +34,15 @@ void PaintWidget::SetTool(Tool * tool)
   delete _tool;
 
   _tool = tool;
-  _tool->SetScene(&_scene);
+  _tool->SetScene(_scene);
 
   if (_tool->GetDrawable())
     _tool->GetDrawable()->SetPaint(_paint);
 
   update();
 }
+
+
 
 void PaintWidget::mouseMoveEvent(QMouseEvent * event)
 {
@@ -50,7 +68,7 @@ void PaintWidget::paintEvent(QPaintEvent * /*event*/)
   {
     _painter.setRenderHint(QPainter::Antialiasing);
     _xPainter.setPainter(&_painter);
-    _scene.Draw(&_xPainter);
+    _scene->Draw(&_xPainter);
 
     if (_tool->NeedDrawing())
       _tool->GetDrawable()->Draw(&_xPainter);

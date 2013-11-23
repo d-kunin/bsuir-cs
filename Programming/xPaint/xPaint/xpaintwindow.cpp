@@ -14,7 +14,9 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
   ui->setupUi(this);
   _paintWidget = new PaintWidget();
   ui->_layout->addWidget(_paintWidget);
-  _serializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
+
+  _serializer   = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
+  _deserializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
 }
 
 xPaintWindow::~xPaintWindow()
@@ -22,6 +24,7 @@ xPaintWindow::~xPaintWindow()
   delete ui;
   delete _paintWidget;
   delete _serializer;
+  delete _deserializer;
 }
 
 void xPaintWindow::on_actionRect_triggered()
@@ -41,10 +44,10 @@ void xPaintWindow::on_actionLine_triggered()
 
 void xPaintWindow::on_actionRemove_Last_triggered()
 {
-  if (!_paintWidget->GetScene().Drawables().empty())
+  if (!_paintWidget->GetScene()->Drawables().empty())
   {
-    delete _paintWidget->GetScene().Drawables().back();
-    _paintWidget->GetScene().Drawables().pop_back();
+    delete _paintWidget->GetScene()->Drawables().back();
+    _paintWidget->GetScene()->Drawables().pop_back();
 
     _paintWidget->update();
   }
@@ -52,9 +55,9 @@ void xPaintWindow::on_actionRemove_Last_triggered()
 
 void xPaintWindow::on_actionClear_All_triggered()
 {
-  for (Drawable * d : _paintWidget->GetScene().Drawables())
+  for (Drawable * d : _paintWidget->GetScene()->Drawables())
     delete d;
-  _paintWidget->GetScene().Drawables().clear();
+  _paintWidget->GetScene()->Drawables().clear();
 
   _paintWidget->update();
 }
@@ -163,11 +166,16 @@ void xPaintWindow::on_actionRotate_CCW_triggered()
 
 void xPaintWindow::on_actionLena_triggered()
 {
-  _paintWidget->GetScene().Drawables().push_back(new painter::ImageDrawable);
+  _paintWidget->GetScene()->Add(new painter::ImageDrawable);
   _paintWidget->update();
 }
 
 void xPaintWindow::on_actionSave_triggered()
 {
-  _serializer->Write(&_paintWidget->GetScene());
+  _serializer->Write(_paintWidget->GetScene());
+}
+
+void xPaintWindow::on_actionLoad_triggered()
+{
+  _paintWidget->SetScene(_deserializer->ReadScene());
 }

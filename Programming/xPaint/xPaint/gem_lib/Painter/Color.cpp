@@ -7,7 +7,7 @@
 namespace painter
 {
 
-Color::Color(int color)
+Color::Color(unsigned long color)
 {
   a = (0xFF000000 & color) >> 24;
   r = (0x00FF0000 & color) >> 16;
@@ -36,7 +36,7 @@ string Color::AsString() const
 
 Color Color::FromString(string const & str)
 {
-  int value = std::stoi(str, 0, 16);
+  unsigned long value = std::stoul(str, 0, 16);
   return Color(value);
 }
 

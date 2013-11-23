@@ -14,8 +14,11 @@ class PaintWidget : public QWidget
 
 public:
   explicit PaintWidget(QWidget *parent = 0);
+  ~PaintWidget();
+
   void SetTool(Tool * tool);
-  painter::Scene & GetScene() { return _scene; }
+  painter::Scene * GetScene() { return _scene; }
+  void             SetScene(Scene * scene);
   painter::Paint & GetPaint() { return _paint; }
 
   void OnPaintUpdate();
@@ -37,8 +40,8 @@ protected:
 private:
   painter::QxPainter _xPainter;
   QPainter _painter;
-  painter::Scene _scene;
-
   painter::Paint _paint;
-  Tool * _tool;
+
+  painter::Scene * _scene;
+  Tool           * _tool;
 };

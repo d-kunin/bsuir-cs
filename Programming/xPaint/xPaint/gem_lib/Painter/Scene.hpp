@@ -57,6 +57,11 @@ public:
     return NULL;
   }
 
+  void Add(Drawable * drawable)
+  {
+    _drawables.push_back(drawable);
+  }
+
   void Remove(Drawable * drawable)
   {
     _drawables.erase(std::remove(_drawables.begin(), _drawables.end(), drawable), _drawables.end());

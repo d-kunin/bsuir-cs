@@ -1,12 +1,20 @@
 #include "Serializer.hpp"
+#include "Deserializer.hpp"
 
 #include <fstream>
+#include <string>
 
-class TextFileSerializer : public Serializer
+using std::string;
+using std::fstream;
+using std::istream;
+
+class TextFileSerializer : public Serializer,
+                           public Deserializer
 {
 public:
 
   TextFileSerializer(string const & filename);
+  ~TextFileSerializer() {}
 
   void Write(painter::RectDrawable const *) override;
   void Write(painter::EllipseDrawable const *) override;
@@ -16,9 +24,11 @@ public:
   void Write(painter::Paint const *) override;
   void Write(painter::Color const *) override;
 
-private:
-  string _fileName;
-  std::ofstream _file;
+  painter::Scene * ReadScene() override;
 
-  const string VERSION = "1";
+private:
+  string  _fileName;
+  fstream _file;
+
+  painter::Paint ParsePaint(istream & in);
 };
