@@ -78,7 +78,7 @@ painter::Scene * TextFileSerializer::ReadScene()
       }
       drawable = new painter::PolylineDrawable(poly);
 
-      _file >> type;
+      iss >> type;
       if (PAINT == type)
         drawable->SetPaint(ParsePaint(iss));
     }
