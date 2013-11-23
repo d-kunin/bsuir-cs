@@ -17,7 +17,12 @@ SOURCES += main.cpp\
         xpaintwindow.cpp \
         paintwidget.cpp \
         gem_lib/Painter/qimagedrawable.cpp \
-        Qt/Converts.cpp
+        Qt/Converts.cpp \
+    io/textfileserializer.cpp \
+    gem_lib/Painter/DrawableGeometry.cpp \
+    gem_lib/Painter/Scene.cpp \
+    gem_lib/Painter/Painter.cpp \
+    gem_lib/Painter/Color.cpp
 
 HEADERS  += xpaintwindow.hpp \
          paintwidget.hpp \
@@ -31,6 +36,10 @@ HEADERS  += xpaintwindow.hpp \
          Tool.hpp \
          gem_lib/Geometry/Algorithm.hpp \
          gem_lib/Painter/qimagedrawable.hpp \
-         Qt/Converts.hpp
+         Qt/Converts.hpp \
+    io/Serializable.hpp \
+    io/textfileserializer.hpp \
+    io/Serializer.hpp \
+    io/Deserializer.hpp
 
 FORMS    += xpaintwindow.ui

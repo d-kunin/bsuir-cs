@@ -2,11 +2,15 @@
 
 #include "Color.hpp"
 
+#include "../../io/Serializable.hpp"
+
 namespace painter
 {
-class Paint
+class Paint: public Serializable
 {
 public:
+
+  void WriteTo(Serializer *) const;
 
   enum FillStyle
   {
@@ -35,11 +39,14 @@ public:
   void SetStrokeStyle(StrokeStyle style)   { _strokeStyle = style; }
 
   float & GetStrokeWidth() { return _strokeWidth; }
+  float   GetStrokeWidth() const { return _strokeWidth; }
   Color & GetStrokeColor() { return _strokeColor; }
+  Color const & GetStrokeColor() const { return _strokeColor; }
   StrokeStyle GetStrokeStyle() const { return _strokeStyle; }
 
 
-  Color     GetFillColor() const { return _fillColor; }
+  Color & GetFillColor() { return _fillColor; }
+  Color const & GetFillColor() const { return _fillColor; }
   FillStyle GetFillStyle() const { return _fillStyle; }
 
   void SetFillColor(Color const & color) { _fillColor = color; }

@@ -1,10 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include "Utils.hpp"
-using std::cout;
-using std::endl;
-
 #include "Geometry.hpp"
 
 using geometry::Point2D;

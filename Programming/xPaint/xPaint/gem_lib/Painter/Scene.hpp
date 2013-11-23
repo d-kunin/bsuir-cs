@@ -2,18 +2,27 @@
 
 #include "Drawable.hpp"
 #include "../Commons.hpp"
+#include "../../io/Serializable.hpp"
 
 namespace painter {
 
-class Scene: public Drawable
+class Scene: public Drawable,
+             public Serializable
 {
 
 private:
-  vector<Drawable*> _drawables; // no depth for now, use vector order
+  vector<Drawable*> _drawables;
 
 public:
 
+  void WriteTo(Serializer *) const override;
+
   vector<Drawable*> & Drawables()
+  {
+    return _drawables;
+  }
+
+  vector<Drawable *> const & Drawables() const
   {
     return _drawables;
   }

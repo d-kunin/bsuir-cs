@@ -13,8 +13,9 @@ class ImageDrawable : public Drawable
 public:
   ImageDrawable();
 
-  void  Draw(Painter * painter) ;
-  RectF BoundingRect() const ;
+  void  Draw(Painter * painter) override;
+  RectF BoundingRect() const override;
+  void Transform(TransformF const & transform) override;
 
   QImage const & Image() const { return _image; }
 

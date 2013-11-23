@@ -1,8 +1,12 @@
 #pragma once
 
+#include "../../io/Serializable.hpp"
+
+#include "../Commons.hpp"
+
 namespace painter
 {
-struct Color
+struct Color: public Serializable
 {
   unsigned char a;
   unsigned char r;
@@ -21,5 +25,11 @@ struct Color
     this->b = b;
   }
 
+  Color(int color);
+
+  void WriteTo(Serializer *) const override;
+
+  string AsString() const;
+  static Color FromString(string const &);
 };
 }

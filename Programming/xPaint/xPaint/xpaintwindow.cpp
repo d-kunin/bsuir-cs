@@ -13,14 +13,15 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   _paintWidget = new PaintWidget();
-
   ui->_layout->addWidget(_paintWidget);
+  _serializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
 }
 
 xPaintWindow::~xPaintWindow()
 {
   delete ui;
   delete _paintWidget;
+  delete _serializer;
 }
 
 void xPaintWindow::on_actionRect_triggered()
@@ -164,4 +165,9 @@ void xPaintWindow::on_actionLena_triggered()
 {
   _paintWidget->GetScene().Drawables().push_back(new painter::ImageDrawable);
   _paintWidget->update();
+}
+
+void xPaintWindow::on_actionSave_triggered()
+{
+  _serializer->Write(&_paintWidget->GetScene());
 }

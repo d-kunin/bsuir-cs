@@ -5,6 +5,10 @@
 #include "Drawable.hpp"
 #include "Painter.hpp"
 
+#include "../../io/Serializable.hpp"
+
+class Serializer;
+
 namespace painter
 {
 
@@ -44,7 +48,8 @@ public:
   }
 };
 
-class LineDrawable: public GeometryDrawable<LineF>
+class LineDrawable: public GeometryDrawable<LineF>,
+                    public Serializable
 {
 public:
 
@@ -66,9 +71,12 @@ public:
   {
     return algo::Intersects(p._x, p._y, _geometry);
   }
+
+  void WriteTo(Serializer * ) const override;
 };
 
-class RectDrawable: public GeometryDrawable<RectF>
+class RectDrawable: public GeometryDrawable<RectF>,
+                    public Serializable
 {
 public:
 
@@ -90,9 +98,12 @@ public:
   {
     return algo::Intersects(p._x, p._y, _geometry);
   }
+
+  void WriteTo(Serializer * ) const override;
 };
 
-class EllipseDrawable: public GeometryDrawable<EllipseF>
+class EllipseDrawable: public GeometryDrawable<EllipseF>,
+                       public Serializable
 {
 public:
 
@@ -114,9 +125,12 @@ public:
   {
     return algo::Intersects(p._x, p._y, _geometry);
   }
+
+  void WriteTo(Serializer * ) const override;
 };
 
-class PolylineDrawable: public GeometryDrawable<PolylineF>
+class PolylineDrawable: public GeometryDrawable<PolylineF>,
+                        public Serializable
 {
 public:
 
@@ -147,6 +161,8 @@ public:
   {
     return algo::Intersects(p._x, p._y, _geometry);
   }
+
+  void WriteTo(Serializer * ) const override;
 };
 
 }

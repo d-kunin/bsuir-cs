@@ -5,6 +5,7 @@
 
 #include "paintwidget.hpp"
 #include "Tool.hpp"
+#include "io/textfileserializer.hpp"
 
 namespace Ui {
 class xPaintWindow;
@@ -54,9 +55,12 @@ private slots:
 
   void on_actionLena_triggered();
 
+  void on_actionSave_triggered();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
 
-  Drawable * _selectedDrawable;
+  Serializer * _serializer;
+  Drawable   * _selectedDrawable;
 };
