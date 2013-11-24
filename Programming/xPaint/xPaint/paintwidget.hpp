@@ -21,7 +21,10 @@ public:
   void             SetScene(Scene * scene);
   painter::Paint & GetPaint() { return _paint; }
 
-  void OnPaintUpdate();
+
+  void SetFillColor(painter::Color const & color);
+  void SetStrokeColor(painter::Color const & color);
+  void SetStrokeWidth(float width);
 
 signals:
 
@@ -38,6 +41,9 @@ protected:
   void mouseReleaseEvent(QMouseEvent *);
 
 private:
+  void OnPaintUpdate();
+
+
   painter::QxPainter _xPainter;
   QPainter _painter;
   painter::Paint _paint;

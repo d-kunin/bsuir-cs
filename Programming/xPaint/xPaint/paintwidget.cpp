@@ -12,6 +12,11 @@ PaintWidget::PaintWidget(QWidget *parent) :
   _scene = new painter::Scene;
   _tool = new RectTool();
   _tool->SetScene(_scene);
+
+  QPalette palette = this->palette();
+  palette.setColor(QPalette::Background, Qt::white);
+  setAutoFillBackground(true);
+  setPalette(palette);
 }
 
 PaintWidget::~PaintWidget()
@@ -43,6 +48,23 @@ void PaintWidget::SetTool(Tool * tool)
 }
 
 
+void PaintWidget::SetStrokeWidth(float width)
+{
+  _paint.SetStrokeWidth(width);
+  OnPaintUpdate();
+}
+
+void PaintWidget::SetStrokeColor(painter::Color const & color)
+{
+  _paint.SetStrokeColor(color);
+  OnPaintUpdate();
+}
+
+void PaintWidget::SetFillColor(painter::Color const & color)
+{
+  _paint.SetFillColor(color);
+  OnPaintUpdate();
+}
 
 void PaintWidget::mouseMoveEvent(QMouseEvent * event)
 {

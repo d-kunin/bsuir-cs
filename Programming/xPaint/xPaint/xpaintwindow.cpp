@@ -13,7 +13,7 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   _paintWidget = new PaintWidget();
-  ui->_layout->addWidget(_paintWidget);
+  ui->_layout->addWidget(_paintWidget, 1);
 
   _serializer   = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
   _deserializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
@@ -25,6 +25,24 @@ xPaintWindow::~xPaintWindow()
   delete _paintWidget;
   delete _serializer;
   delete _deserializer;
+}
+
+void xPaintWindow::SetUpEditting(bool isEdditing)
+{
+  QWidget* edits[] = {
+    ui->_btnRemove,
+    ui->_btnRotateCW,
+    ui->_btnRotateCCW,
+    ui->_btnScale,
+    ui->_btnTranslate,
+    ui->_sbScaleX,
+    ui->_sbScaleY,
+    ui->_sbTransX,
+    ui->_sbTransY,
+  };
+
+  for (QWidget * w : edits)
+    w->setEnabled(isEdditing);
 }
 
 void xPaintWindow::on_actionRect_triggered()
@@ -62,18 +80,6 @@ void xPaintWindow::on_actionClear_All_triggered()
   _paintWidget->update();
 }
 
-void xPaintWindow::on_actionIncWidth_triggered()
-{
-  _paintWidget->GetPaint().GetStrokeWidth()+=5;
-  _paintWidget->OnPaintUpdate();
-}
-
-void xPaintWindow::on_actionDecWidth_triggered()
-{
-  _paintWidget->GetPaint().GetStrokeWidth()-=5;
-  _paintWidget->OnPaintUpdate();
-}
-
 void xPaintWindow::on_actionPolyline_triggered()
 {
   _paintWidget->SetTool(new PolylineTool);
@@ -93,10 +99,7 @@ void xPaintWindow::on_actionStroke_Color_triggered()
                   QColorDialog::ShowAlphaChannel);
 
   if (color.isValid())
-  {
-    _paintWidget->GetPaint().SetStrokeColor(Convert::FromQColor(color));
-    _paintWidget->OnPaintUpdate();
-  }
+    _paintWidget->SetStrokeColor(Convert::FromQColor(color));
 }
 
 void xPaintWindow::on_actionFill_Color_triggered()
@@ -108,22 +111,19 @@ void xPaintWindow::on_actionFill_Color_triggered()
                   QColorDialog::ShowAlphaChannel);
 
   if (color.isValid())
-  {
-    _paintWidget->GetPaint().SetFillColor(Convert::FromQColor(color));
-    _paintWidget->OnPaintUpdate();
-  }
+    _paintWidget->SetFillColor(Convert::FromQColor(color));
 }
 
 void xPaintWindow::OnDrawableSelected(Drawable * drawable)
 {
-  cout << "Selected" << endl;
   _selectedDrawable = drawable;
+  SetUpEditting(true);
 }
 
 void xPaintWindow::OnNothingSelected()
 {
-  cout << "Nothing selected" << endl;
   _selectedDrawable = NULL;
+  SetUpEditting(false);
 }
 
 void xPaintWindow::on_actionScale_Up_triggered()
@@ -178,4 +178,9 @@ void xPaintWindow::on_actionSave_triggered()
 void xPaintWindow::on_actionLoad_triggered()
 {
   _paintWidget->SetScene(_deserializer->ReadScene());
+}
+
+void xPaintWindow::on__sldStrokeWidth_valueChanged(int value)
+{
+  _paintWidget->SetStrokeWidth(value);
 }

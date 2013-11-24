@@ -33,10 +33,6 @@ private slots:
 
   void on_actionLine_triggered();
 
-  void on_actionIncWidth_triggered();
-
-  void on_actionDecWidth_triggered();
-
   void on_actionPolyline_triggered();
 
   void on_actionSelection_Tool_triggered();
@@ -59,12 +55,15 @@ private slots:
 
   void on_actionLoad_triggered();
 
+  void on__sldStrokeWidth_valueChanged(int value);
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
 
   Serializer   * _serializer;
   Deserializer * _deserializer;
-
   Drawable   * _selectedDrawable;
+
+  void SetUpEditting(bool isEdditing);
 };
