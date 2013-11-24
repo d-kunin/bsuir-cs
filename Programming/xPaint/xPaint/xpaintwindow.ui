@@ -324,7 +324,7 @@
   </action>
   <action name="actionLena">
    <property name="text">
-    <string>Lena</string>
+    <string>Add Image</string>
    </property>
   </action>
   <action name="actionSave">

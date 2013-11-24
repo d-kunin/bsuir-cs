@@ -6,6 +6,7 @@
 #include "QT/Converts.hpp"
 
 #include <QColorDialog>
+#include <QFileDialog>
 
 xPaintWindow::xPaintWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -30,6 +31,11 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
   connect(ui->_btnTranslate, SIGNAL(clicked()), SLOT(on_translate()));
   connect(ui->_btnRotateCCW, SIGNAL(clicked()), SLOT(on_rotate_ccw()));
   connect(ui->_btnRotateCW, SIGNAL(clicked()), SLOT(on_rotate_cw()));
+  connect(ui->_btnRemove, SIGNAL(clicked()), SLOT(on_remove_item()));
+  // file
+  connect(ui->actionSave, SIGNAL(triggered()), SLOT(on_save_action()));
+  connect(ui->actionLoad, SIGNAL(triggered()), SLOT(on_load_action()));
+  connect(ui->actionLena, SIGNAL(triggered()), SLOT(on_add_image()));
 
 
   _serializer   = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
@@ -86,6 +92,17 @@ void xPaintWindow::on_actionRemove_Last_triggered()
     _paintWidget->GetScene()->Drawables().pop_back();
 
     _paintWidget->update();
+  }
+}
+
+void xPaintWindow::on_remove_item()
+{
+  if (_selectedDrawable)
+  {
+    _paintWidget->GetScene()->Remove(_selectedDrawable);
+    _selectedDrawable = NULL;
+    _paintWidget->update();
+    SetUpEditting(false);
   }
 }
 
@@ -182,18 +199,45 @@ void xPaintWindow::on_rotate_ccw()
 
 void xPaintWindow::on_add_image()
 {
-  _paintWidget->GetScene()->Add(new painter::ImageDrawable);
-  _paintWidget->update();
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Add Image"), QString(),
+                                                  tr("Images (*.png *.jpg *.jpeg)"));
+
+  if (!fileName.isEmpty())
+  {
+    _paintWidget->GetScene()->Add(new painter::ImageDrawable(fileName));
+    _paintWidget->update();
+  }
 }
 
 void xPaintWindow::on_save_action()
 {
-  _serializer->Write(_paintWidget->GetScene());
+
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save To File"), QString(),
+                                                  tr("(*.txt *.jcvd)"));
+
+  if (!fileName.isEmpty())
+  {
+    TextFileSerializer tfs(fileName.toStdString());
+    tfs.Write(_paintWidget->GetScene());
+  }
 }
 
 void xPaintWindow::on_load_action()
 {
-  _paintWidget->SetScene(_deserializer->ReadScene());
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QString(),
+                                                  tr("(*.jcvd *.txt)"));
+
+  if (!fileName.isEmpty())
+  {
+    TextFileSerializer tfs(fileName.toStdString());
+    _paintWidget->SetScene(tfs.ReadScene());
+
+    if (_selectedDrawable)
+    {
+      _selectedDrawable = NULL;
+      SetUpEditting(false);
+    }
+  }
 }
 
 void xPaintWindow::on_stroke_width_changed(int value)

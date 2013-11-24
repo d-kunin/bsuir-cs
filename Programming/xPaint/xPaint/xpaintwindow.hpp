@@ -28,6 +28,8 @@ private slots:
 
   void on_actionClear_All_triggered();
 
+  void on_remove_item();
+
   void on_stroke_color_clicked();
 
   void on_fill_color_clicked();

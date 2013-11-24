@@ -6,7 +6,12 @@ namespace painter {
 
 
 ImageDrawable::ImageDrawable()
-  : _image("/Users/markX/temp/len_full.jpg")
+{
+  _bounds = RectF(0, 0, _image.width(), _image.height());
+}
+
+ImageDrawable::ImageDrawable(QString const & path)
+  : _image(path)
 {
   _bounds = RectF(0, 0, _image.width(), _image.height());
 }
