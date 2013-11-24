@@ -37,10 +37,6 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
   connect(ui->actionLoad, SIGNAL(triggered()), SLOT(on_load_action()));
   connect(ui->actionLena, SIGNAL(triggered()), SLOT(on_add_image()));
 
-
-  _serializer   = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
-  _deserializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
-
   OnColorUpdate();
   SetUpEditting(false);
 }
@@ -49,8 +45,6 @@ xPaintWindow::~xPaintWindow()
 {
   delete ui;
   delete _paintWidget;
-  delete _serializer;
-  delete _deserializer;
 }
 
 void xPaintWindow::SetUpEditting(bool isEdditing)
@@ -244,7 +238,6 @@ void xPaintWindow::on_stroke_width_changed(int value)
 {
   _paintWidget->SetStrokeWidth(value);
 }
-
 
 void xPaintWindow::on_rect_tool(bool checked)
 {

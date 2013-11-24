@@ -64,8 +64,6 @@ private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
 
-  Serializer   * _serializer;
-  Deserializer * _deserializer;
   Drawable   * _selectedDrawable;
 
   void SetUpEditting(bool isEdditing);
