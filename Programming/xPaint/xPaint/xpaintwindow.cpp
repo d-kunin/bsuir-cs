@@ -198,7 +198,7 @@ void xPaintWindow::on_add_image()
 
   if (!fileName.isEmpty())
   {
-    _paintWidget->GetScene()->Add(new painter::ImageDrawable(fileName));
+    _paintWidget->GetScene()->Add(new painter::ImageDrawable(fileName.toStdString()));
     _paintWidget->update();
   }
 }

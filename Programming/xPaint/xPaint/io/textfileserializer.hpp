@@ -23,6 +23,7 @@ public:
   void Write(painter::Scene const *) override;
   void Write(painter::Paint const *) override;
   void Write(painter::Color const *) override;
+  void Write(painter::ImageDrawable const *) override;
 
   painter::Scene * ReadScene() override;
 

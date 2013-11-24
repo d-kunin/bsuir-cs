@@ -1,21 +1,24 @@
 #include "qimagedrawable.hpp"
 
 #include "../../QxPainter.hpp"
+#include "../../io/Serializer.hpp"
 
 namespace painter {
-
 
 ImageDrawable::ImageDrawable()
 {
   _bounds = RectF(0, 0, _image.width(), _image.height());
 }
 
-ImageDrawable::ImageDrawable(QString const & path)
-  : _image(path)
+ImageDrawable::ImageDrawable(string const & path)
+  : _image(path.c_str()), _fileName(path)
 {
   _bounds = RectF(0, 0, _image.width(), _image.height());
 }
 
+ImageDrawable::ImageDrawable(string const & path, RectF const & rect)
+  : _image(path.c_str()), _fileName(path), _bounds(rect)
+{}
 
 void ImageDrawable::Draw(Painter * painter)
 {
@@ -26,7 +29,6 @@ void ImageDrawable::Draw(Painter * painter)
   }
 }
 
-
 RectF ImageDrawable::BoundingRect() const
 {
   return _bounds;
@@ -35,6 +37,11 @@ RectF ImageDrawable::BoundingRect() const
 void ImageDrawable::Transform(TransformF const & transform)
 {
   _bounds = transform*_bounds;
+}
+
+void ImageDrawable::WriteTo(Serializer * serializer) const
+{
+  serializer->Write(this);
 }
 
 }

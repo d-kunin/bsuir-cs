@@ -6,13 +6,14 @@
 using std::endl;
 using std::ios;
 
-static const string  SP = " ";
+static const string  SP    = " ";
 static const string  SCENE = "SCN";
 static const string  PAINT = "PNT";
-static const string  LINE = "LINE";
-static const string  ELLI = "ELLI";
-static const string  POLY = "POLY";
-static const string  RECT = "RECT";
+static const string  LINE  = "LINE";
+static const string  ELLI  = "ELLI";
+static const string  POLY  = "POLY";
+static const string  RECT  = "RECT";
+static const string  IMG   = "IMG";
 
 TextFileSerializer::TextFileSerializer(string const & filename)
   : _fileName(filename)
@@ -81,6 +82,13 @@ painter::Scene * TextFileSerializer::ReadScene()
       iss >> type;
       if (PAINT == type)
         drawable->SetPaint(ParsePaint(iss));
+    }
+    else if (IMG == type)
+    {
+      float x0, y0, x1, y1;
+      string file;
+      iss >> x0 >> y0 >> x1 >> y1 >> file;
+      drawable = new painter::ImageDrawable(file, painter::RectF(x0, y0, x1, y1));
     }
 
     if (drawable)
@@ -171,6 +179,16 @@ void TextFileSerializer::Write(const painter::Paint * paint)
 void TextFileSerializer::Write(const painter::Color * color)
 {
   _file << SP << color->AsString();
+}
+
+void TextFileSerializer::Write(const painter::ImageDrawable * image)
+{
+  _file << IMG << SP
+        << image->BoundingRect()._topLeft._x << SP
+        << image->BoundingRect()._topLeft._y << SP
+        << image->BoundingRect()._bottomRight._x << SP
+        << image->BoundingRect()._bottomRight._y << SP
+        << image->FileName() << endl;
 }
 
 painter::Paint TextFileSerializer::ParsePaint(istream & in)
