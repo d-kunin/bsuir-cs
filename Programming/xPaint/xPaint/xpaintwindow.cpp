@@ -15,8 +15,28 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
   _paintWidget = new PaintWidget();
   ui->_layout->addWidget(_paintWidget, 1);
 
+  // tools
+  connect(ui->_rbRect, SIGNAL(toggled(bool)), SLOT(on_rect_tool(bool)));
+  connect(ui->_rbLine, SIGNAL(toggled(bool)), SLOT(on_line_tool(bool)));
+  connect(ui->_rbEllipse, SIGNAL(toggled(bool)), SLOT(on_ellipse_tool(bool)));
+  connect(ui->_rbPoly, SIGNAL(toggled(bool)), SLOT(on_polyline_tool(bool)));
+  connect(ui->_rbSelection, SIGNAL(toggled(bool)), SLOT(on_selection_tool(bool)));
+  // paint
+  connect(ui->_sldStrokeWidth, SIGNAL(valueChanged(int)), SLOT(on_stroke_width_changed(int)));
+  connect(ui->_btnStrokeColor, SIGNAL(clicked()), SLOT(on_stroke_color_clicked()));
+  connect(ui->_btnFillColor, SIGNAL(clicked()), SLOT(on_fill_color_clicked()));
+  // transform
+  connect(ui->_btnScale, SIGNAL(clicked()), SLOT(on_scale()));
+  connect(ui->_btnTranslate, SIGNAL(clicked()), SLOT(on_translate()));
+  connect(ui->_btnRotateCCW, SIGNAL(clicked()), SLOT(on_rotate_ccw()));
+  connect(ui->_btnRotateCW, SIGNAL(clicked()), SLOT(on_rotate_cw()));
+
+
   _serializer   = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
   _deserializer = new TextFileSerializer("/Users/markX/temp/drawfile.txt");
+
+  OnColorUpdate();
+  SetUpEditting(false);
 }
 
 xPaintWindow::~xPaintWindow()
@@ -45,19 +65,17 @@ void xPaintWindow::SetUpEditting(bool isEdditing)
     w->setEnabled(isEdditing);
 }
 
-void xPaintWindow::on_actionRect_triggered()
+void xPaintWindow::OnColorUpdate()
 {
-  _paintWidget->SetTool(new RectTool);
-}
+  QPalette paletteFill = ui->_colorFill->palette();
+  paletteFill.setColor(QPalette::Background, Convert::FromXColor(_paintWidget->GetPaint().GetFillColor()));
+  ui->_colorFill->setAutoFillBackground(true);
+  ui->_colorFill->setPalette(paletteFill);
 
-void xPaintWindow::on_actionEllipse_triggered()
-{
-  _paintWidget->SetTool(new EllipseTool);
-}
-
-void xPaintWindow::on_actionLine_triggered()
-{
-  _paintWidget->SetTool(new LineTool);
+  QPalette paletteStroke = ui->_colorStroke->palette();
+  paletteStroke.setColor(QPalette::Background, Convert::FromXColor(_paintWidget->GetPaint().GetStrokeColor()));
+  ui->_colorStroke->setAutoFillBackground(true);
+  ui->_colorStroke->setPalette(paletteStroke);
 }
 
 void xPaintWindow::on_actionRemove_Last_triggered()
@@ -80,17 +98,7 @@ void xPaintWindow::on_actionClear_All_triggered()
   _paintWidget->update();
 }
 
-void xPaintWindow::on_actionPolyline_triggered()
-{
-  _paintWidget->SetTool(new PolylineTool);
-}
-
-void xPaintWindow::on_actionSelection_Tool_triggered()
-{
-  _paintWidget->SetTool(new SelectionTool(this));
-}
-
-void xPaintWindow::on_actionStroke_Color_triggered()
+void xPaintWindow::on_stroke_color_clicked()
 {
   QColorDialog colorDialog;
   QColor color = colorDialog.getColor
@@ -99,10 +107,13 @@ void xPaintWindow::on_actionStroke_Color_triggered()
                   QColorDialog::ShowAlphaChannel);
 
   if (color.isValid())
+  {
     _paintWidget->SetStrokeColor(Convert::FromQColor(color));
+    OnColorUpdate();
+  }
 }
 
-void xPaintWindow::on_actionFill_Color_triggered()
+void xPaintWindow::on_fill_color_clicked()
 {
   QColorDialog colorDialog;
   QColor color = colorDialog.getColor
@@ -111,7 +122,10 @@ void xPaintWindow::on_actionFill_Color_triggered()
                   QColorDialog::ShowAlphaChannel);
 
   if (color.isValid())
+  {
     _paintWidget->SetFillColor(Convert::FromQColor(color));
+    OnColorUpdate();
+  }
 }
 
 void xPaintWindow::OnDrawableSelected(Drawable * drawable)
@@ -126,61 +140,96 @@ void xPaintWindow::OnNothingSelected()
   SetUpEditting(false);
 }
 
-void xPaintWindow::on_actionScale_Up_triggered()
+void xPaintWindow::on_scale()
 {
   if (_selectedDrawable)
   {
-    float factor = 3.0/2.0;
-    _selectedDrawable->Transform(TransformF::Scale(factor, factor));
+    float factorX = ui->_sbScaleX->value();
+    float factorY = ui->_sbScaleY->value();
+    _selectedDrawable->Transform(TransformF::Scale(factorX, factorY));
     _paintWidget->update();
   }
 }
 
-void xPaintWindow::on_actionScale_Down_triggered()
+void xPaintWindow::on_translate()
 {
   if (_selectedDrawable)
   {
-    float factor = 2.0/3.0;
-    _selectedDrawable->Transform(TransformF::Scale(factor, factor));
+    int transX = ui->_sbTransX->value();
+    int transY = ui->_sbTransY->value();
+    _selectedDrawable->Transform(TransformF::Translate(transX, transY));
     _paintWidget->update();
   }
 }
 
-void xPaintWindow::on_actionRotate_CW_triggered()
+void xPaintWindow::on_rotate_cw()
 {
   if(_selectedDrawable)
   {
-    _selectedDrawable->Transform(TransformF::RotateCW(M_PI/8));
+    _selectedDrawable->Transform(TransformF::RotateCW(M_PI/2));
     _paintWidget->update();
   }
 }
 
-void xPaintWindow::on_actionRotate_CCW_triggered()
+void xPaintWindow::on_rotate_ccw()
 {
   if(_selectedDrawable)
   {
-    _selectedDrawable->Transform(TransformF::RotateCW(-M_PI/8));
+    _selectedDrawable->Transform(TransformF::RotateCW(-M_PI/2));
     _paintWidget->update();
   }
 }
 
-void xPaintWindow::on_actionLena_triggered()
+void xPaintWindow::on_add_image()
 {
   _paintWidget->GetScene()->Add(new painter::ImageDrawable);
   _paintWidget->update();
 }
 
-void xPaintWindow::on_actionSave_triggered()
+void xPaintWindow::on_save_action()
 {
   _serializer->Write(_paintWidget->GetScene());
 }
 
-void xPaintWindow::on_actionLoad_triggered()
+void xPaintWindow::on_load_action()
 {
   _paintWidget->SetScene(_deserializer->ReadScene());
 }
 
-void xPaintWindow::on__sldStrokeWidth_valueChanged(int value)
+void xPaintWindow::on_stroke_width_changed(int value)
 {
   _paintWidget->SetStrokeWidth(value);
+}
+
+
+void xPaintWindow::on_rect_tool(bool checked)
+{
+  if (checked && !dynamic_cast<RectTool*>(_paintWidget->GetTool()))
+      _paintWidget->SetTool(new RectTool);
+}
+
+void xPaintWindow::on_line_tool(bool checked)
+{
+  if (checked && !dynamic_cast<LineTool*>(_paintWidget->GetTool()))
+      _paintWidget->SetTool(new LineTool);
+}
+
+void xPaintWindow::on_ellipse_tool(bool checked)
+{
+  if (checked && !dynamic_cast<EllipseTool*>(_paintWidget->GetTool()))
+      _paintWidget->SetTool(new EllipseTool);
+}
+
+void xPaintWindow::on_polyline_tool(bool checked)
+{
+  if (checked && !dynamic_cast<PolylineTool*>(_paintWidget->GetTool()))
+      _paintWidget->SetTool(new PolylineTool);
+}
+
+void xPaintWindow::on_selection_tool(bool checked)
+{
+  if (!checked)
+    SetUpEditting(false);
+  else if (!dynamic_cast<SelectionTool*>(_paintWidget->GetTool()))
+    _paintWidget->SetTool(new SelectionTool(this));
 }

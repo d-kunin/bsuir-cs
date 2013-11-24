@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1000</width>
     <height>600</height>
    </rect>
   </property>
@@ -28,32 +28,83 @@
      <layout class="QHBoxLayout" name="_layout">
       <item>
        <widget class="QGroupBox" name="groupBox">
+        <property name="maximumSize">
+         <size>
+          <width>320</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="title">
          <string>Tools</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
+         <property name="leftMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>6</number>
+         </property>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="_rbLine">
+           <property name="text">
+            <string>&amp;Line</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="_rbRect">
+           <property name="text">
+            <string>&amp;Rectangle</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="_rbEllipse">
+           <property name="text">
+            <string>&amp;Ellipse</string>
+           </property>
+          </widget>
+         </item>
          <item row="5" column="0">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <layout class="QGridLayout" name="_editPanel">
-             <item row="1" column="0">
-              <widget class="QPushButton" name="_btnTranslate">
+             <item row="2" column="2">
+              <widget class="QPushButton" name="_btnRotateCCW">
                <property name="text">
-                <string>Translate</string>
+                <string>Rotate CCW</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
-              <widget class="QDoubleSpinBox" name="_sbScaleY"/>
-             </item>
-             <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="_sbScaleX"/>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="_sbTransX">
+               <property name="minimum">
+                <number>-1000</number>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+              </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QSpinBox" name="_sbTransY"/>
+              <widget class="QSpinBox" name="_sbTransY">
+               <property name="minimum">
+                <number>-1000</number>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+              </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="_sbTransX"/>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="_btnRotateCW">
+               <property name="text">
+                <string>Rotate CW</string>
+               </property>
+              </widget>
              </item>
              <item row="0" column="0">
               <widget class="QPushButton" name="_btnScale">
@@ -69,17 +120,36 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="_btnRotateCW">
-               <property name="text">
-                <string>Rotate CW</string>
+             <item row="0" column="2">
+              <widget class="QDoubleSpinBox" name="_sbScaleY">
+               <property name="minimum">
+                <double>-99.989999999999995</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
                </property>
               </widget>
              </item>
-             <item row="2" column="2">
-              <widget class="QPushButton" name="_btnRotateCCW">
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="_sbScaleX">
+               <property name="minimum">
+                <double>-99.989999999999995</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="_btnTranslate">
                <property name="text">
-                <string>Rotate CCW</string>
+                <string>Translate</string>
                </property>
               </widget>
              </item>
@@ -121,59 +191,77 @@
              </item>
             </layout>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>Stroke Color</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="text">
-              <string>Fill Color</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="radioButton">
+         <item row="4" column="0">
+          <widget class="QRadioButton" name="_rbSelection">
            <property name="text">
-            <string>Rectangle</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="radioButton_6">
-           <property name="text">
-            <string>Ellipse</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="radioButton_5">
-           <property name="text">
-            <string>Line</string>
+            <string>&amp;Selection Tool</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QRadioButton" name="radioButton_4">
+          <widget class="QRadioButton" name="_rbPoly">
            <property name="text">
-            <string>Polyline</string>
+            <string>&amp;Polyline</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QRadioButton" name="radioButton_7">
-           <property name="text">
-            <string>Selection Tool</string>
+         <item row="6" column="0">
+          <layout class="QHBoxLayout" name="_colors">
+           <property name="spacing">
+            <number>5</number>
            </property>
-          </widget>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMaximumSize</enum>
+           </property>
+           <item>
+            <widget class="QWidget" name="_colorFill" native="true">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <widget class="QPushButton" name="_btnFillColor">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>40</y>
+                <width>95</width>
+                <height>32</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Fill Color</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="_colorStroke" native="true">
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <widget class="QPushButton" name="_btnStrokeColor">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>40</y>
+                <width>120</width>
+                <height>32</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Stroke Color</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -187,45 +275,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1000</width>
      <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSelect_Tool">
     <property name="title">
-     <string>Shape</string>
+     <string>Edit</string>
     </property>
-    <addaction name="actionLine"/>
-    <addaction name="actionRect"/>
-    <addaction name="actionEllipse"/>
-    <addaction name="actionPolyline"/>
-    <addaction name="separator"/>
     <addaction name="actionRemove_Last"/>
     <addaction name="actionClear_All"/>
-    <addaction name="actionSelection_Tool"/>
-   </widget>
-   <widget class="QMenu" name="menuStroke">
-    <property name="title">
-     <string>Stroke</string>
-    </property>
-    <addaction name="actionIncWidth"/>
-    <addaction name="actionDecWidth"/>
-   </widget>
-   <widget class="QMenu" name="menuColors">
-    <property name="title">
-     <string>Colors</string>
-    </property>
-    <addaction name="actionStroke_Color"/>
-    <addaction name="actionFill_Color"/>
-   </widget>
-   <widget class="QMenu" name="menuTransform">
-    <property name="title">
-     <string>Transform</string>
-    </property>
-    <addaction name="actionScale_Up"/>
-    <addaction name="actionScale_Down"/>
-    <addaction name="actionRotate_CW"/>
-    <addaction name="actionRotate_CCW"/>
    </widget>
    <widget class="QMenu" name="menuImage">
     <property name="title">
@@ -242,9 +301,6 @@
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSelect_Tool"/>
-   <addaction name="menuStroke"/>
-   <addaction name="menuColors"/>
-   <addaction name="menuTransform"/>
    <addaction name="menuImage"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -256,16 +312,6 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionRect">
-   <property name="text">
-    <string>Rect</string>
-   </property>
-  </action>
-  <action name="actionEllipse">
-   <property name="text">
-    <string>Ellipse</string>
-   </property>
-  </action>
   <action name="actionRemove_Last">
    <property name="text">
     <string>Remove Last</string>
@@ -274,61 +320,6 @@
   <action name="actionClear_All">
    <property name="text">
     <string>Clear All</string>
-   </property>
-  </action>
-  <action name="actionLine">
-   <property name="text">
-    <string>Line</string>
-   </property>
-  </action>
-  <action name="actionIncWidth">
-   <property name="text">
-    <string>+ Width</string>
-   </property>
-  </action>
-  <action name="actionDecWidth">
-   <property name="text">
-    <string>- Width</string>
-   </property>
-  </action>
-  <action name="actionPolyline">
-   <property name="text">
-    <string>Polyline</string>
-   </property>
-  </action>
-  <action name="actionSelection_Tool">
-   <property name="text">
-    <string>Selection Tool</string>
-   </property>
-  </action>
-  <action name="actionStroke_Color">
-   <property name="text">
-    <string>Stroke Color</string>
-   </property>
-  </action>
-  <action name="actionFill_Color">
-   <property name="text">
-    <string>Fill Color</string>
-   </property>
-  </action>
-  <action name="actionScale_Up">
-   <property name="text">
-    <string>Scale Up</string>
-   </property>
-  </action>
-  <action name="actionScale_Down">
-   <property name="text">
-    <string>Scale Down</string>
-   </property>
-  </action>
-  <action name="actionRotate_CW">
-   <property name="text">
-    <string>Rotate CW</string>
-   </property>
-  </action>
-  <action name="actionRotate_CCW">
-   <property name="text">
-    <string>Rotate CCW</string>
    </property>
   </action>
   <action name="actionLena">

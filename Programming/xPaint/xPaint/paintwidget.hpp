@@ -17,6 +17,8 @@ public:
   ~PaintWidget();
 
   void SetTool(Tool * tool);
+  Tool * GetTool() { return _tool; }
+
   painter::Scene * GetScene() { return _scene; }
   void             SetScene(Scene * scene);
   painter::Paint & GetPaint() { return _paint; }

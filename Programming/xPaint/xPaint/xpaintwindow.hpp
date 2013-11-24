@@ -11,7 +11,8 @@ namespace Ui {
 class xPaintWindow;
 }
 
-class xPaintWindow : public QMainWindow, public SelectionTool::SelectionListener
+class xPaintWindow : public QMainWindow,
+                     public SelectionTool::SelectionListener
 {
   Q_OBJECT
 
@@ -23,39 +24,39 @@ public:
   void OnNothingSelected() override;
 
 private slots:
-  void on_actionRect_triggered();
-
-  void on_actionEllipse_triggered();
-
   void on_actionRemove_Last_triggered();
 
   void on_actionClear_All_triggered();
 
-  void on_actionLine_triggered();
+  void on_stroke_color_clicked();
 
-  void on_actionPolyline_triggered();
+  void on_fill_color_clicked();
 
-  void on_actionSelection_Tool_triggered();
+  void on_scale();
 
-  void on_actionStroke_Color_triggered();
+  void on_translate();
 
-  void on_actionFill_Color_triggered();
+  void on_rotate_cw();
 
-  void on_actionScale_Up_triggered();
+  void on_rotate_ccw();
 
-  void on_actionScale_Down_triggered();
+  void on_add_image();
 
-  void on_actionRotate_CW_triggered();
+  void on_save_action();
 
-  void on_actionRotate_CCW_triggered();
+  void on_load_action();
 
-  void on_actionLena_triggered();
+  void on_stroke_width_changed(int value);
 
-  void on_actionSave_triggered();
+  void on_rect_tool(bool checked);
 
-  void on_actionLoad_triggered();
+  void on_line_tool(bool checked);
 
-  void on__sldStrokeWidth_valueChanged(int value);
+  void on_ellipse_tool(bool checked);
+
+  void on_polyline_tool(bool checked);
+
+  void on_selection_tool(bool checked);
 
 private:
   Ui::xPaintWindow *ui;
@@ -66,4 +67,5 @@ private:
   Drawable   * _selectedDrawable;
 
   void SetUpEditting(bool isEdditing);
+  void OnColorUpdate();
 };
