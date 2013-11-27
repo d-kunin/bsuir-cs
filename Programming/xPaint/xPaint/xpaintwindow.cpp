@@ -8,6 +8,9 @@
 #include <QColorDialog>
 #include <QFileDialog>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 xPaintWindow::xPaintWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::xPaintWindow)

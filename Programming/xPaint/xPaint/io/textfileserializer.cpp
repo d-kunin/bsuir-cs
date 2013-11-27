@@ -22,7 +22,7 @@ TextFileSerializer::TextFileSerializer(string const & filename)
 painter::Scene * TextFileSerializer::ReadScene()
 {
   if (!_file.is_open())
-    _file.open(_fileName);
+    _file.open(_fileName, ios::in | ios::binary);
 
   painter::Scene * scene = new painter::Scene;
   string line;
@@ -103,7 +103,7 @@ painter::Scene * TextFileSerializer::ReadScene()
 void TextFileSerializer::Write(painter::Scene const * scene)
 {
   if (!_file.is_open())
-    _file.open(_fileName, ios::trunc | ios::out);
+    _file.open(_fileName, ios::trunc | ios::out | ios::binary);
 
   _file << SCENE << SP
         << scene->Drawables().size() << endl;
