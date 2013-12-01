@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab3</title>
+    <style>
+        body {
+            margin: 5% 15%;
+        }
+    </style>
+</head>
+<body>
+<h1>Aптека</h1>
+
+<h2>Лекарства</h2>
+<table>
+    <form>
+
+    </form>
+    <tr>
+        <th>Наименование</th>
+        <th>Производитель</th>
+        <th>Форма выпуска</th>
+        <th>Цена</th>
+    </tr>
+    <tr>
+        <td><a href="../lab2/tonsilgon.html">ТОНЗИЛГОН Н</a></td>
+        <td>драже N50</td>
+        <td>Бионорика / Германия</td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td><a href="../lab2/actovegin.html">АКТОВЕГИН</a></td>
+        <td>крем 5% 20г N1</td>
+        <td>Такеда / Япония</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td><a href="../lab2/theraflex.html">ТЕРАФЛЕКС</a></td>
+        <td>капс N30</td>
+        <td>Байер Консьюмер / Германия</td>
+        <td>42</td>
+    </tr>
+</table>
+<br>
+
+<h3>Оставьте свой комментарий</h3>
+
+<form>
+    <span>Ваша почта:</span>
+    <br>
+    <input type="text" name="commentFrom">
+    <br>
+    <span>Лекарство:</span>
+    <br>
+    <select name="commentedGrug">
+        <option value="tonsilgon">ТОНЗИЛГОН Н</option>
+        <option value="actovegin">АКТОВЕГИН</option>
+        <option value="theraflex">ТЕРАФЛЕКС</option>
+    </select>
+    <br>
+    <span>Комментарий:</span>
+    <br>
+    <textarea name="comment">Очень помогла мазь от чесотки</textarea>
+    <br>
+    <input type="button" value="Отправить отзыв"
+           onclick="alert('Мы как будто приняли коммент!\n' + document.getElementsByName('comment')[0].value)">
+</form>
+<br>
+
+<h2>Поставки</h2>
+<table>
+    <tr>
+        <th>Дата</th>
+        <th>Наименования</th>
+    </tr>
+    <tr>
+        <td>
+            <time>22-11-13</time>
+        </td>
+        <td>
+            <ol>
+                <li>
+                    ТЕРАФЛЕКС
+                </li>
+                <li>
+                    АКТОВЕГИН
+                </li>
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <time>01-12-13</time>
+        </td>
+        <td>
+            <ol>
+                <li>
+                    ТОНЗИЛГОН Н
+                </li>
+                <li>
+                    АКТОВЕГИН
+                </li>
+                <li>
+                    ТЕРАФЛЕКС
+                </li>
+            </ol>
+        </td>
+    </tr>
+</table>
+<h2>Покупки</h2>
+<table>
+    <tr>
+        <th>
+            Время
+        </th>
+        <th>
+            Наименование
+        </th>
+        <th>
+            Количество
+        </th>
+        <th>
+            Сумма
+        </th>
+    </tr>
+    <tr>
+        <td rowspan="2">
+            <time>11:42</time>
+        </td>
+        <td>
+            АКТОВЕГИН
+        </td>
+        <td>
+            2
+        </td>
+        <td rowspan="2">
+            82
+        </td>
+    </tr>
+    <tr>
+        <td>
+            ТЕРАФЛЕКС
+        </td>
+        <td>
+            1
+        </td>
+    </tr>
+</table>
+
+<h3>Сделать заказ</h3>
+
+<form>
+
+    <span>Лекарство:</span>
+    <br>
+    <select name="orderedDrug">
+        <option value="tonsilgon">ТОНЗИЛГОН Н</option>
+        <option value="actovegin">АКТОВЕГИН</option>
+        <option value="theraflex">ТЕРАФЛЕКС</option>
+    </select>
+
+    <br>
+    <span>Количество:</span>
+    <br>
+    <input type="text" name="itemsCount" value="1">
+    <br>
+    <input type="button" value="Заказать"
+           onclick="alert('Можно подумать вы заказали:\n'
+           + document.getElementsByName('orderedDrug')[0].value
+           + ' в количестве '
+           + document.getElementsByName('itemsCount')[0].value)">
+</form>
+</body>
+</html>
