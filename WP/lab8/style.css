@@ -1,0 +1,109 @@
+body {
+    margin: 0% 10%;
+    background-color: #000000;
+}
+
+.content {
+    background-color: dimgray;
+    padding: 5% 5%;
+}
+
+.nav {
+    font-family: "Inconsolata", "Times New Roman";
+    background-color: #000000;
+    color: white;
+}
+
+.nav_title {
+    display: inline;
+    float: left;
+    font-family: "Inconsolata", "Times New Roman";
+    background-color: #000000;
+    color: white;
+    font-size: 150%;
+}
+
+.nav_li
+{
+    display: inline;
+    list-style-type: none;
+    text-align: left;
+    padding-right: 5px;
+    margin-right: 5%;
+    font-size: 150%;
+}
+
+.nav_big
+{
+    display: inline;
+    list-style-type: none;
+    text-align: left;
+    padding-right: 5px;
+    margin-right: 5%;
+    font-size: 200%;
+}
+
+span {
+    font-family: "Inconsolata", "Times New Roman";
+    color: white;
+}
+
+h1 {
+    font-family: "Inconsolata", "Times New Roman";
+    text-align: center;
+    color: deepskyblue;
+}
+
+h2 {
+    font-family: "Inconsolata", "Times New Roman";
+    font-weight: bold;
+    color: #000000;
+    margin-left: -2%;
+    margin-top: 1cm;
+    text-align: left;
+    color: deepskyblue;
+}
+
+h3 {
+    font-family: "Inconsolata", "Times New Roman";
+    text-align: left;
+    color: white;
+}
+
+.t_header {
+    background-color: yellow;
+    color: #000000;
+    font-family: "Times New Roman", serif;
+    font-weight: lighter;
+    font-style: normal;
+    text-align: center;
+    padding: 5pt;
+    font-size: 110%;
+}
+
+.t_table {
+    background-color: gray;
+    color: white;
+    border: 2px solid #000000;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    padding: 5pt;
+    border: 2pt solid #000000;
+}
+
+tr {
+    border: 2pt solid #000000;
+}
+
+a {
+    color: orange;
+    text-decoration: none;
+}
+
+.inline {
+    display: inline;
+    float: left;
+}
