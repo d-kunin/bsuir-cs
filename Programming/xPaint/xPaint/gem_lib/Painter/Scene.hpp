@@ -27,51 +27,21 @@ public:
     return _drawables;
   }
 
-  void Draw(Painter * painter) override
-  {
-    for (Drawable * drawable : _drawables)
-      drawable->Draw(painter);
-  }
+  void Draw(Painter * painter) override;
 
-  RectF BoundingRect() const override
-  {
-    RectF bRect = _drawables.front()->BoundingRect();
+  RectF BoundingRect() const override;
 
-    for (Drawable * draw : _drawables)
-      bRect.Inflate(draw->BoundingRect());
+  Drawable * FindDrawableForPoint(PointF const & p);
 
-    return bRect;
-  }
+  void Add(Drawable * drawable);
 
-  Drawable * FindDrawableForPoint(PointF const & p)
-  {
-    if (_drawables.size() > 0)
-    {
-      for (int i = _drawables.size() - 1; i >= 0; --i)
-      {
-        Drawable * drawable = _drawables[i];
-        if (drawable->Contains(p))
-          return drawable;
-      }
-    }
-    return NULL;
-  }
+  void Remove(Drawable * drawable);
 
-  void Add(Drawable * drawable)
-  {
-    _drawables.push_back(drawable);
-  }
+  void MoveToFront(Drawable * drawable);
 
-  void Remove(Drawable * drawable)
-  {
-    _drawables.erase(std::remove(_drawables.begin(), _drawables.end(), drawable), _drawables.end());
-  }
+  void MoveToBack(Drawable * drawable);
 
-  ~Scene()
-  {
-    for (Drawable * drawable : _drawables)
-      delete drawable;
-  }
+  ~Scene();
 };
 
 }

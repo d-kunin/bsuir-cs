@@ -41,11 +41,12 @@ Rect<T> BoundingRect(Ellipse<T> const & e)
 template <typename T>
 Rect<T> BoundingRect(Polyline<T> const & poly)
 {
-  /// @todo remove this 2 points from loop
+
   Rect<T> r(poly._points[0], poly._points[1]);
 
-  for (Point2D<T> const & point : poly._points)
-    r.Inflate(point);
+  for (size_t i = 2; i < poly._points.size(); ++i)
+    r.Inflate(poly._points[i]);
+
   return r;
 }
 

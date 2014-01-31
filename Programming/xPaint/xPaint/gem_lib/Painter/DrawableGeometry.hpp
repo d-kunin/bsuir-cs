@@ -25,7 +25,10 @@ public:
 
   RectF BoundingRect() const override
   {
-    return algo::BoundingRect(_geometry);
+    const float width = _paint.GetStrokeWidth();
+    RectF rawRect = algo::BoundingRect(_geometry);
+    rawRect.Inflate(width, width); // includes stroke width now
+    return rawRect;
   }
 };
 

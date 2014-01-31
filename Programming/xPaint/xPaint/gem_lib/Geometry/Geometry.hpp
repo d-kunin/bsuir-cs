@@ -17,6 +17,16 @@ public:
 
   Point2D(T x, T y)
     : _x(x), _y(y) {}
+
+  bool operator==(Point2D<T> const & other) const
+  {
+    return (_x == other._x) && (_y == other._y);
+  }
+
+  bool operator !=(Point2D<T> const & other) const
+  {
+    return !(*this == other);
+  }
 };
 
 template <typename T>
@@ -109,6 +119,12 @@ public:
     Inflate(rect._bottomRight);
     Inflate(rect._topLeft);
   }
+
+  void Inflate(T dx, T dy)
+  {
+    Inflate(Point2D<T>(_bottomRight._x + dx, _bottomRight._y + dy));
+    Inflate(Point2D<T>(_topLeft._x - dx, _topLeft._y - dy));
+  }
 };
 
 template <typename T>
@@ -167,7 +183,12 @@ public:
     _points = points;
   }
 
-  void Add(T x, T y) { _points.push_back(Point2D<T>(x,y)); }
+  void Add(T x, T y)
+  {
+    Point2D<T> _newP(x, y);
+    if (_points.empty() || (_newP != _points.back()))
+      _points.push_back(Point2D<T>(x,y));
+  }
 };
 
 }

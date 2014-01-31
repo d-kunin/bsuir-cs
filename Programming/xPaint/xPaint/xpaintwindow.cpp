@@ -20,25 +20,28 @@ xPaintWindow::xPaintWindow(QWidget *parent) :
   ui->_layout->addWidget(_paintWidget, 1);
 
   // tools
-  connect(ui->_rbRect, SIGNAL(toggled(bool)), SLOT(on_rect_tool(bool)));
-  connect(ui->_rbLine, SIGNAL(toggled(bool)), SLOT(on_line_tool(bool)));
-  connect(ui->_rbEllipse, SIGNAL(toggled(bool)), SLOT(on_ellipse_tool(bool)));
-  connect(ui->_rbPoly, SIGNAL(toggled(bool)), SLOT(on_polyline_tool(bool)));
+  connect(ui->_rbRect,      SIGNAL(toggled(bool)), SLOT(on_rect_tool(bool)));
+  connect(ui->_rbLine,      SIGNAL(toggled(bool)), SLOT(on_line_tool(bool)));
+  connect(ui->_rbEllipse,   SIGNAL(toggled(bool)), SLOT(on_ellipse_tool(bool)));
+  connect(ui->_rbPoly,      SIGNAL(toggled(bool)), SLOT(on_polyline_tool(bool)));
   connect(ui->_rbSelection, SIGNAL(toggled(bool)), SLOT(on_selection_tool(bool)));
   // paint
   connect(ui->_sldStrokeWidth, SIGNAL(valueChanged(int)), SLOT(on_stroke_width_changed(int)));
-  connect(ui->_btnStrokeColor, SIGNAL(clicked()), SLOT(on_stroke_color_clicked()));
-  connect(ui->_btnFillColor, SIGNAL(clicked()), SLOT(on_fill_color_clicked()));
+  connect(ui->_btnStrokeColor, SIGNAL(clicked()),         SLOT(on_stroke_color_clicked()));
+  connect(ui->_btnFillColor,   SIGNAL(clicked()),         SLOT(on_fill_color_clicked()));
   // transform
-  connect(ui->_btnScale, SIGNAL(clicked()), SLOT(on_scale()));
+  connect(ui->_btnScale,     SIGNAL(clicked()), SLOT(on_scale()));
   connect(ui->_btnTranslate, SIGNAL(clicked()), SLOT(on_translate()));
   connect(ui->_btnRotateCCW, SIGNAL(clicked()), SLOT(on_rotate_ccw()));
-  connect(ui->_btnRotateCW, SIGNAL(clicked()), SLOT(on_rotate_cw()));
-  connect(ui->_btnRemove, SIGNAL(clicked()), SLOT(on_remove_item()));
+  connect(ui->_btnRotateCW,  SIGNAL(clicked()), SLOT(on_rotate_cw()));
+  connect(ui->_btnRemove,    SIGNAL(clicked()), SLOT(on_remove_item()));
   // file
   connect(ui->actionSave, SIGNAL(triggered()), SLOT(on_save_action()));
   connect(ui->actionLoad, SIGNAL(triggered()), SLOT(on_load_action()));
   connect(ui->actionLena, SIGNAL(triggered()), SLOT(on_add_image()));
+  // z-order
+  connect(ui->_btnToBack,  SIGNAL(clicked()),   SLOT(on_to_back()));
+  connect(ui->_btnToFront, SIGNAL(clicked()),   SLOT(on_to_front()));
 
   OnColorUpdate();
   SetUpEditting(false);
@@ -52,7 +55,7 @@ xPaintWindow::~xPaintWindow()
 
 void xPaintWindow::SetUpEditting(bool isEdditing)
 {
-  QWidget* edits[] = {
+  QWidget * edits[] = {
     ui->_btnRemove,
     ui->_btnRotateCW,
     ui->_btnRotateCCW,
@@ -62,10 +65,21 @@ void xPaintWindow::SetUpEditting(bool isEdditing)
     ui->_sbScaleY,
     ui->_sbTransX,
     ui->_sbTransY,
+    ui->_btnToBack,
+    ui->_btnToFront,
+  };
+
+  QWidget * edits2[] = {
+    ui->_sldStrokeWidth,
+    ui->_colorFill,
+    ui->_colorStroke,
   };
 
   for (QWidget * w : edits)
     w->setEnabled(isEdditing);
+
+  for (QWidget * w : edits2)
+    w->setEnabled(!isEdditing);
 }
 
 void xPaintWindow::OnColorUpdate()
@@ -268,8 +282,25 @@ void xPaintWindow::on_polyline_tool(bool checked)
 
 void xPaintWindow::on_selection_tool(bool checked)
 {
-  if (!checked)
-    SetUpEditting(false);
-  else if (!dynamic_cast<SelectionTool*>(_paintWidget->GetTool()))
-    _paintWidget->SetTool(new SelectionTool(this));
+  SetUpEditting(checked);
+   if (!dynamic_cast<SelectionTool*>(_paintWidget->GetTool()))
+     _paintWidget->SetTool(new SelectionTool(this));
+}
+
+void xPaintWindow::on_to_back()
+{
+  if (_selectedDrawable)
+  {
+    _paintWidget->GetScene()->MoveToBack(_selectedDrawable);
+    _paintWidget->update();
+  }
+}
+
+void xPaintWindow::on_to_front()
+{
+  if (_selectedDrawable)
+  {
+    _paintWidget->GetScene()->MoveToFront(_selectedDrawable);
+    _paintWidget->update();
+  }
 }

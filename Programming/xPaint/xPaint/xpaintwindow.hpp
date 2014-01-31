@@ -60,6 +60,10 @@ private slots:
 
   void on_selection_tool(bool checked);
 
+  void on_to_back();
+
+  void on_to_front();
+
 private:
   Ui::xPaintWindow *ui;
   PaintWidget * _paintWidget;
