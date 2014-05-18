@@ -53,7 +53,8 @@ main:
 
 	fprint	eq_format, [a], [b], [c]
 
-	;; load to FPU stack
+	
+	;; disriminant
 	fld	qword[c]
 	fmul	qword[a]
 	fmul	qword[four]	; 4ac
@@ -62,6 +63,11 @@ main:
 	fsub	st0, st1	; b^2 - 4ac
 	fst	qword[d]
 	fprint	d_eq, [d]
+	;; check d >= 0
+	cmp 	qword[d], 0
+	jl	negative_d
+
+	
 	
 	
 	;; solve and print result
@@ -79,6 +85,10 @@ error_num_args:
 	dprint	badArgumentsCount
 	jmp	done
 
+negative_d:
+	dprint	msgNegativeD
+	jmp	done
+	
 done:
 	dprint	str_done
 	pop	r12
@@ -88,7 +98,9 @@ done:
 section .data		
 	
 badArgumentsCount:
-        db      "Requires exactly three arguments", 10, 0
+        db      "Requires exactly three arguments", 0xA, 0
+msgNegativeD:
+	db	"Disriminant is less than 0. No solutions in R.", 0xA, 0
 str_done:
 	db	"done",	0xA, 0
 
