@@ -1,6 +1,11 @@
-	;; solver linear equation in for
-	;; ax - b = 0
-;;; nasm -felf64 quad.asm && gcc -o quad quad.o
+;;; solve quadratic equation
+;; ax^2+bx+c = 0
+;; 
+;; COMPILE:
+;; nasm -felf64 quad.asm && gcc -o quad quad.o
+;; RUN:
+;; quad 1 5 4
+;;; 
 
 ;;; <MACRO>
 ;; simple string printing
@@ -15,7 +20,7 @@
 	mov	rax, 1
 	call	printf
 %endmacro
-;; double pring: 3 args
+;; double print: 3 args
 %macro fprint 4
 	movq	xmm0, %2
 	movq	xmm1, %3
@@ -24,24 +29,24 @@
 	mov	rax, 3
 	call	printf
 %endmacro
-;; read double from stringprin
+;; read double from string
 %macro dread 2
 	mov	rdi, %1
 	call	atof
 	movq	%2, xmm0
 %endmacro
-;;; <MAIN>
-	
+
+;;; <MAIN>	
 	global main
 	extern atof
 	extern puts
 	extern printf
 	
-	section .text
+section .text
 main:
 	push	r12
 
-	;; check arguments
+	;; check arguments count
 	cmp	rdi, 4
 	jne	error_num_args
 
@@ -54,7 +59,7 @@ main:
 	fprint	eq_format, [a], [b], [c]
 
 	
-	;; disriminant
+	;; discriminant
 	fld	qword[c]
 	fmul	qword[a]
 	fmul	qword[four]	; 4ac
@@ -63,19 +68,31 @@ main:
 	fsub	st0, st1	; b^2 - 4ac
 	fst	qword[d]
 	fprint	d_eq, [d]
+	
 	;; check d >= 0
 	cmp 	qword[d], 0
 	jl	negative_d
 
-	
-	
-	
-	;; solve and print result
-	fdiv	st0, st1
+	;; calc x1
+	fld	qword[d]
+	fsqrt
+	fld	qword[b]
+	fchs
+	fsub	st0, st1	; -b - sqrt(d)
+	fdiv	qword[two]
+	fdiv	qword[a]
 	fst	qword[x1]
-	fmul	st0, st1
+	;; cals x2
+	fld	qword[d]
+	fsqrt
+	fld	qword[b]
+	fchs
+	fadd	st0, st1	; -b + sqrt(d)
+	fdiv	qword[two]
+	fdiv	qword[a]
 	fst	qword[x2]
-	
+
+	;; print result
 	fprint	x1_eq, [x1]
 	fprint	x2_eq, [x2]
 
@@ -102,7 +119,7 @@ badArgumentsCount:
 msgNegativeD:
 	db	"Disriminant is less than 0. No solutions in R.", 0xA, 0
 str_done:
-	db	"done",	0xA, 0
+	db	"Done!", 0xA, 0
 
 eq_format:	db	"%f*x^2+%f*x+%f = 0", 0xA, 0
 x1_eq:		db	"x1=%f", 0xA, 0
@@ -116,3 +133,4 @@ b:	dq	0.0
 c:	dq	0.0
 d:	dq	0.0
 four:	dq	4.0
+two:	dq	2.0
