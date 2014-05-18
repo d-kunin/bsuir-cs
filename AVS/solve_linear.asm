@@ -1,5 +1,6 @@
 	;; solver linear equation in for
 	;; ax - b = 0
+;;; nasm -felf64 solve_linear.asm && gcc -o solver_linear solve_linear.o
 
 ;;; <MACRO>
 ;; simple string printing
@@ -50,8 +51,20 @@ main:
 
 
 	;; read 'b'
-	dread [r12+16], xmm2
-	fprint	b_eq, xmm0
+	dread 	[r12+16], xmm2
+	fprint	b_eq, xmm2
+
+	;; load to FPU stack
+	fld	qword[a]
+	fld	qword[b]
+	;; solve and print result
+	fdiv	st0, st1
+	fst	qword[x]
+	
+	movq	xmm0, [x]
+	fprint	x_eq, xmm0
+	movq	xmm0, [a]
+	fprint	a_eq, xmm0
 
 	jmp	done
 
@@ -66,18 +79,18 @@ done:
 	pop	r13
 	pop	r12
 	ret
-		
+
+	section .data
+	
 badArgumentsCount:
         db      "Requires exactly two arguments", 10, 0
-
-test1:
-	db	"read first", 0xA, 0
-test2:
-	db	"read second", 0xA, 0
 str_done:
 	db	"done",	0xA, 0
 
-a_eq:
-	db	"a=%f", 0xA, 0
-b_eq:
-	db	"b=%f", 0xA, 0
+a_eq:	db	"a=%f", 0xA, 0
+b_eq:	db	"b=%f", 0xA, 0
+x_eq	db	"x=%f", 0xA, 0
+	
+x:	dq	0
+a:	dq	2
+b:	dq	1
