@@ -1,6 +1,6 @@
 	;; solver linear equation in for
 	;; ax - b = 0
-;;; nasm -felf64 solve_linear.asm && gcc -o solver_linear solve_linear.o
+;;; nasm -felf64 quad.asm && gcc -o quad quad.o
 
 ;;; <MACRO>
 ;; simple string printing
@@ -8,11 +8,20 @@
 	mov	rdi,  %1 ; %1 means first argument
 	call 	puts
 %endmacro
-;; doulbe printing
+;; doulbe print : 1 arg
 %macro fprint 2
 	movq	xmm0, %2
 	mov	rdi, %1
 	mov	rax, 1
+	call	printf
+%endmacro
+;; double pring: 3 args
+%macro fprint 4
+	movq	xmm0, %2
+	movq	xmm1, %3
+	movq	xmm2, %4
+	mov	rdi, %1
+	mov	rax, 3
 	call	printf
 %endmacro
 ;; read double from stringprin
@@ -33,30 +42,36 @@ main:
 	push	r12
 
 	;; check arguments
-	cmp	rdi, 3
+	cmp	rdi, 4
 	jne	error_num_args
 
 	mov 	r12, rsi
 	;; read arguments
-	;; read 'a'
-	dread	[r12+8], [a]
-	;; todo if 0?
-	fprint	a_eq, [a]
-
-	;; read 'b'
+	dread	[r12+8],  [a]
 	dread 	[r12+16], [b]
-	fprint	b_eq, [b]
+	dread	[r12+24], [c]
+
+	fprint	eq_format, [a], [b], [c]
 
 	;; load to FPU stack
-	fld	qword[a]
+	fld	qword[c]
+	fmul	qword[a]
+	fmul	qword[four]	; 4ac
 	fld	qword[b]
+	fmul	st0, st0	; b^2
+	fsub	st0, st1	; b^2 - 4ac
+	fst	qword[d]
+	fprint	d_eq, [d]
+	
 	
 	;; solve and print result
 	fdiv	st0, st1
-	fst	qword[x]
+	fst	qword[x1]
+	fmul	st0, st1
+	fst	qword[x2]
 	
-	movq	xmm0, [x]
-	fprint	x_eq, xmm0
+	fprint	x1_eq, [x1]
+	fprint	x2_eq, [x2]
 
 	jmp	done
 
@@ -73,14 +88,19 @@ done:
 section .data		
 	
 badArgumentsCount:
-        db      "Requires exactly two arguments", 10, 0
+        db      "Requires exactly three arguments", 10, 0
 str_done:
 	db	"done",	0xA, 0
 
-a_eq:	db	"a=%f", 0xA, 0
-b_eq:	db	"b=%f", 0xA, 0
-x_eq	db	"x=%f", 0xA, 0
+eq_format:	db	"%f*x^2+%f*x+%f = 0", 0xA, 0
+x1_eq:		db	"x1=%f", 0xA, 0
+x2_eq:		db	"x2=%f", 0xA, 0
+d_eq:		db	"D=%f",  0xA, 0
 	
-x:	dq	0
-a:	dq	0
-b:	dq	0
+x1:	dq	0.0
+x2:	dq	0.0
+a:	dq	0.0
+b:	dq	0.0
+c:	dq	0.0
+d:	dq	0.0
+four:	dq	4.0
