@@ -45,13 +45,14 @@ main:
 	mov 	r12, rsi
 	;; read arguments
 	;; read 'a'
-	dread	[r12+8], xmm1 
+	dread	[r12+8], xmm1
+	movq	[a], xmm1
 	;; todo if 0?
 	fprint	a_eq, xmm1
 
-
 	;; read 'b'
 	dread 	[r12+16], xmm2
+	movq	[b], xmm2
 	fprint	b_eq, xmm2
 
 	;; load to FPU stack
@@ -63,11 +64,8 @@ main:
 	
 	movq	xmm0, [x]
 	fprint	x_eq, xmm0
-	movq	xmm0, [a]
-	fprint	a_eq, xmm0
 
 	jmp	done
-
 
 error_num_args:
 	dprint	badArgumentsCount
@@ -80,7 +78,8 @@ done:
 	pop	r12
 	ret
 
-	section .data
+;;; <DATA>
+section .data		
 	
 badArgumentsCount:
         db      "Requires exactly two arguments", 10, 0
@@ -92,5 +91,5 @@ b_eq:	db	"b=%f", 0xA, 0
 x_eq	db	"x=%f", 0xA, 0
 	
 x:	dq	0
-a:	dq	2
-b:	dq	1
+a:	dq	0
+b:	dq	0
