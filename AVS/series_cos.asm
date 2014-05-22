@@ -37,6 +37,9 @@ main:
 	call	printf
 	add	esp, 12
 
+	;; set up x
+	fld	qword [a]
+	fstp	qword [x]
 loop_x:
 	fld	qword [b]
 	fld	qword [x]
@@ -47,13 +50,17 @@ loop_x:
 	;; reset vars
 	fld1
 	fstp	qword [xi] 	; xi = 1
-	fld1
-	fstp	qword [sum]	; sum = 1
-
+	fldz
+	fstp	qword [sum]	; sum = 0
 	mov	eax, 1
-	mov	dword [n], eax
+	mov	dword [n], eax 	; n = 1
+	;; ! reset vars
 
-	
+	push	dword [x + 4]
+	push	dword [x]
+	push	format_f
+	call	printf
+	add	esp, 12		; print current x
 	
 loop_n:	
 	;; increment n while does not precise
@@ -70,9 +77,7 @@ loop_n:
 	ja	print_row	; if (prs > abs) { print_result }
 	
 	;; inc n
-	mov	eax, n
-	inc	eax
-	mov	dword [n], eax
+	add	dword [n], 1
 	;; inc xi
 	fld	dword [n]
 	fld1
@@ -98,6 +103,12 @@ loop_n:
 	fmul			; -1*xi*x*x st0
 	fdiv			; -1*xi*x*x/(2n*(2n-1))
 	fstp	qword [xi]
+
+	mov	ecx, n
+	push	dword [ecx]
+	push	format_d
+	call	printf
+	add	esp, 8
 	
 	jmp	loop_n
 
