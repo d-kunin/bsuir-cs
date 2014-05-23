@@ -41,6 +41,7 @@
 
 ;;; <EXTERN>
 extern 	printf
+extern 	atof
 ;;; 
 
 ;;; <MAIN>
@@ -51,13 +52,35 @@ main:
 check_args:
 	mov	eax, dword[esp + 4]
 	cmp	eax, 5
-	je	do_work
+	je	read_args
 error_args:
 	push	msg_error
 	call	printf
 	add	esp, 4
 	jmp	done
-	;; arguments ok
+	;; arguments
+
+read_args:	
+	mov	esi, dword [esp + 8]
+	push	dword [esi + 4]
+	call	atof
+	add	esp, 4
+	fstp	qword [a]	; a
+
+	push	dword [esi + 8]
+	call	atof
+	add	esp, 4
+	fstp	qword [b]	; b
+
+	push	dword [esi + 12]
+	call	atof
+	add	esp, 4
+	fstp	qword [h]	; h
+	
+	push	dword [esi + 16]
+	call	atof
+	add	esp, 4
+	fstp	qword [prs]	; epsilon
 
 do_work:	
 	;; set up x
