@@ -47,6 +47,19 @@ extern 	printf
 section .text
 global main
 main:
+	;; check arguments
+check_args:
+	mov	eax, dword[esp + 4]
+	cmp	eax, 5
+	je	do_work
+error_args:
+	push	msg_error
+	call	printf
+	add	esp, 4
+	jmp	done
+	;; arguments ok
+
+do_work:	
 	;; set up x
 	fld	qword [a]
 	fstp	qword [x]
@@ -168,3 +181,5 @@ sum:		dq	0.0
 
 tmp_d:		dd	0
 tmp_f:		dq	0.0
+
+msg_error:	db	"Needs exactly 4 arguments: a b h eps", 0xA, 0
