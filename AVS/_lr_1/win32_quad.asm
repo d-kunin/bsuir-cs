@@ -1,76 +1,92 @@
+[bits 32]
 ;;; solve quadratic equation
 ;; ax^2+bx+c = 0
 ;; 
-;; COMPILE:
-;; nasm -felf64 quad.asm && gcc -o quad quad.o
-;; RUN:
-;; quad 1 5 4
+;; compile: build.dat
 ;;; 
-	global _main
-	extern _atof
-	extern _puts
-	extern _printf
+
+;;; <EXTERN>
+	global task1
+	extern atof
+	extern puts
+	extern printf
+	extern scanf
+;;; </EXTERN>
 	
 
 ;;; <MACRO>
 ;; simple string printing
 %macro 	dprint 1 ; macro with one argument
-	mov	rdi,  %1 ; %1 means first argument
-	call 	_puts
+	push 	%1
+	call 	puts
+	add		esp, 4
 %endmacro
 ;; doulbe print : 1 arg
 %macro fprint 2
-	movq	xmm0, %2
-	mov	rdi, %1
-	mov	rax, 1
-	call	_printf
+	push	dword[%2 + 4]
+	push	dword[%2]
+	push	%1
+	call	printf
+	add		esp, 12
 %endmacro
 ;; double print: 3 args
 %macro fprint 4
-	movq	xmm0, %2
-	movq	xmm1, %3
-	movq	xmm2, %4
-	mov	rdi, %1
-	mov	rax, 3
-	call	_printf
+	push	dword[%4 + 4]
+	push	dword[%4]
+	push	dword[%3 + 4]
+	push	dword[%3]
+	push	dword[%2 + 4]
+	push	dword[%2]
+	push	%1
+	call	printf
+	add		esp, 28
 %endmacro
+
 ;; read double from string
-%macro dread 2
-	mov	rdi, %1
-	call	_atof
-	movq	%2, xmm0
+%macro parse_double 2
+	push	dword[%1]
+	call	atof
+	add		esp, 4
+	fstp	qword[%2]
 %endmacro
 
 ;;; <MAIN>
-_main:
-	push	r12
-
+section .text
+task1:
 	;; check arguments count
-	cmp	rdi, 4
+check_args:
+	mov	eax, dword[esp + 4]
+	cmp	eax, 4
 	jne	error_num_args
 
-	mov 	r12, rsi
-	;; read arguments
-	dread	[r12+8],  [a]
-	dread 	[r12+16], [b]
-	dread	[r12+24], [c]
-
-	fprint	eq_format, [a], [b], [c]
+	;; read arguments from argc/args
+	mov		esi, dword [esp + 8]
+	parse_double	esi+4,  a
+	parse_double 	esi+8, b
+	parse_double	esi+12, c
+	fprint			eq_format, a, b, c
 
 	
 	;; discriminant
-	fld	qword[c]
+	fld		qword[c]
 	fmul	qword[a]
-	fmul	qword[four]	; 4ac
+	fld1
+	fld1
+	fadd
+	fld1
+	fld1
+	fadd
+	fmul
+	fmul
 	fld	qword[b]
 	fmul	st0, st0	; b^2
 	fsub	st0, st1	; b^2 - 4ac
-	fst	qword[d]
-	fprint	d_eq, [d]
-	
+	fst		qword[d]
+	fprint	d_eq, d
 	;; check d >= 0
-	cmp 	qword[d], 0
-	jl	negative_d
+	fldz
+	fcomip	st0, st1
+	ja		negative_d
 
 	;; calc x1
 	fld	qword[d]
@@ -78,7 +94,10 @@ _main:
 	fld	qword[b]
 	fchs
 	fsub	st0, st1	; -b - sqrt(d)
-	fdiv	qword[two]
+	fld1
+	fld1
+	fadd
+	fdiv
 	fdiv	qword[a]
 	fst	qword[x1]
 	;; cals x2
@@ -87,13 +106,15 @@ _main:
 	fld	qword[b]
 	fchs
 	fadd	st0, st1	; -b + sqrt(d)
-	fdiv	qword[two]
+	fld1
+	fld1
+	fdiv
 	fdiv	qword[a]
-	fst	qword[x2]
+	fst		qword[x2]
 
 	;; print result
-	fprint	x1_eq, [x1]
-	fprint	x2_eq, [x2]
+	fprint	x1_eq, x1
+	fprint	x2_eq, x2
 
 	jmp	done
 
@@ -107,12 +128,11 @@ negative_d:
 	
 done:
 	dprint	str_done
-	pop	r12
 	ret
+;;; </MAIN>
 
 ;;; <DATA>
 section .data		
-	
 badArgumentsCount:
         db      "Requires exactly three arguments", 0xA, 0
 msgNegativeD:
@@ -131,5 +151,4 @@ a:	dq	0.0
 b:	dq	0.0
 c:	dq	0.0
 d:	dq	0.0
-four:	dq	4.0
-two:	dq	2.0
+;;; </DATA>
