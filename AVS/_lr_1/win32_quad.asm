@@ -65,7 +65,6 @@ check_args:
 	parse_double 	esi+8, b
 	parse_double	esi+12, c
 	fprint			eq_format, a, b, c
-
 	
 	;; discriminant
 	fld		qword[c]
@@ -99,7 +98,7 @@ check_args:
 	fadd
 	fdiv
 	fdiv	qword[a]
-	fst	qword[x1]
+	fstp	qword[x1]
 	;; cals x2
 	fld	qword[d]
 	fsqrt
@@ -108,9 +107,10 @@ check_args:
 	fadd	st0, st1	; -b + sqrt(d)
 	fld1
 	fld1
+	fadd
+	fmul	qword[a]
 	fdiv
-	fdiv	qword[a]
-	fst		qword[x2]
+	fstp		qword[x2]
 
 	;; print result
 	fprint	x1_eq, x1
@@ -134,7 +134,7 @@ done:
 ;;; <DATA>
 section .data		
 badArgumentsCount:
-        db      "Requires exactly three arguments", 0xA, 0
+    db      "Requires exactly three arguments", 0xA, 0
 msgNegativeD:
 	db	"Disriminant is less than 0. No solutions in R.", 0xA, 0
 str_done:
