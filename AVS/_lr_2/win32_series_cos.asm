@@ -1,11 +1,14 @@
 [bits 32]
-;; compile nasm -felf series_cos.asm && gcc -m32 -o runme series_cos.o
+;; compile:
+;; 1) linux: nasm -felf series_cos.asm && gcc -m32 -o runme series_cos.o
+;; 2) windows: build.bat
+
 ;;; <EXTERN>
 global task2
-
 extern 	printf
+extern 	scanf
 extern 	atof
-;;; 
+;;; </EXTERN>
 
 ;;; <MACRO>
 %macro clear_fpu 0
@@ -21,30 +24,20 @@ extern 	atof
 	add	esp, 12
 %endmacro
 
-%macro log_d_var	2
-	
-	section .data
-	.str:	db %1, 0
-	
-	section .text
-	push	dword [%2 + 4]
-	push 	dword [%2]
-	push 	.str
-	call	printf
-	add	esp, 12
-	
+%macro print 	1
+	push %1
+	call printf
+	add esp, 4
 %endmacro
 
-%macro new_line 0
-	section .data
-	eol:	db "", 0xA, 0
-
-	section .text
-	push	eol
-	call	printf
-	add	esp, 4
+%macro parse_double 1
+	push	%1
+	push	format_double
+	call	scanf
+	add		esp, 8
+	cmp		eax, 1
+	jne		parse_error
 %endmacro
-
 
 ;;; <MAIN>
 section .text
@@ -54,13 +47,10 @@ check_args:
 	mov	eax, dword[esp + 4]
 	cmp	eax, 5
 	je	read_args
-error_args:
-	push	msg_error
-	call	printf
-	add	esp, 4
-	jmp	done
-	;; arguments
-
+	jmp ask_args
+	
+;; argument from main(argc, argv)
+;; <argc/args>
 read_args:	
 	mov	esi, dword [esp + 8]
 	push	dword [esi + 4]
@@ -82,6 +72,21 @@ read_args:
 	call	atof
 	add	esp, 4
 	fstp	qword [prs]	; epsilon
+;; </argc/args>
+
+;; <scanf>
+ask_args:
+	print msg_input
+	print msg_a
+	parse_double a
+	print msg_b
+	parse_double b
+	print msg_h
+	parse_double h
+	print msg_eps
+	parse_double prs
+	jmp		do_work
+;;</scanf>
 
 do_work:	
 	;; set up x
@@ -99,10 +104,8 @@ loop_x:
 	fstp	qword [xi] 	; xi = 1
 	fld1
 	fstp	qword [sum]	; sum = 1
-	mov	dword [n], 0 	; n = 1
+	mov		dword [n], 0 	; n = 1
 	;; ! reset vars
-
-	;; log_d_var "x=%f", x
 loop_n:	
 	;; increment n while is not precise
 	fld	qword [x]
@@ -150,12 +153,7 @@ loop_n:
 	fld		qword [xi]
 	fld		qword [sum]
 	fadd
-	fstp	qword [sum]
-
-	;; log_d_var	"sum=%f ", sum
-	;; log_d_var	"xi=%f", xi
-	;; new_line
-	
+	fstp	qword [sum]	
 	jmp	loop_n
 
 print_row:	
@@ -182,28 +180,36 @@ print_row:
 
 done:
 	ret
+	
+parse_error:
+	print msg_dpe
+	ret
 
 ;;; <DATA>
 section .data
-
 format_d:	db		"%d", 0xA, 0
 format_f:	db		"%f", 0xA, 0
 format_fpu:	db		"st0=%f", 0xA, 0
 format_row:	db		"[x=%f, n=%d]", 0xA, 0
-	
-;; For problem
+;; for input reads
+msg_input:  db		"Enter a,b,h and epsilon", 0xA, 0
+msg_dpe: 	db		"Are you sure that was floating point value?", 0xA, 0
+msg_a: 		db		"a=", 0
+msg_b:		db		"b=", 0
+msg_h:		db		"h=", 0
+msg_eps:	db		"eps=", 0
+format_double: db 	"%lf", 0
+
+;; vars for problem
 x:		dq	0.0
-a:		dq	-3.15
-b:		dq	3.15
-h:		dq	0.1
+a:		dq	0.0
+b:		dq	0.0
+h:		dq	0.0
 n:		dd	0
-prs:		dq	0.00000001
+prs:	dq	0.00000001
 ;;; 
 
-xi:		dq	0.0
+xi:			dq	0.0
 sum:		dq	0.0
-
-tmp_d:		dd	0
 tmp_f:		dq	0.0
-
-msg_error:	db	"Needs exactly 4 arguments: a b h eps", 0xA, 0
+;; </DATA>
