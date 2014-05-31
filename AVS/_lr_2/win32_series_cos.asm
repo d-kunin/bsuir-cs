@@ -72,6 +72,8 @@ read_args:
 	call	atof
 	add	esp, 4
 	fstp	qword [prs]	; epsilon
+	
+	jmp		do_work
 ;; </argc/args>
 
 ;; <scanf>
