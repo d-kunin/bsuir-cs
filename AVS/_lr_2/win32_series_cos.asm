@@ -123,6 +123,11 @@ loop_n:
 	;; inc n
 	add	dword [n], 1
 	
+	;; check too much itaration
+	mov eax, dword[n]
+	cmp eax, dword[max_iter]
+	jg   conv_error
+	
 	;; <calc xi>
 	;; top
 	fld1
@@ -163,12 +168,20 @@ print_row:
 	add	dword [n], 1
 
 	;; print result here	
+	fld		qword [x]
+	fcos
+	fstp 	qword [tmp_f]
+	
+	push	dword[tmp_f + 4]
+	push    dword[tmp_f]
+	push	dword[sum + 4]
+	push 	dword[sum]
 	push 	dword[n]
 	push 	dword[x + 4]
 	push 	dword[x]
 	push	format_row
 	call	printf
-	add	esp, 16
+	add	esp, 32
 	
 ;;; end loop_n
 
@@ -187,12 +200,16 @@ parse_error:
 	print msg_dpe
 	ret
 
+conv_error:
+	print msg_notconverge;
+	ret
+	
 ;;; <DATA>
 section .data
 format_d:	db		"%d", 0xA, 0
 format_f:	db		"%f", 0xA, 0
 format_fpu:	db		"st0=%f", 0xA, 0
-format_row:	db		"[x=%f, n=%d]", 0xA, 0
+format_row:	db		"[x=%f, n=%d, sum=%lf, cos(x)=%lf]", 0xA, 0
 ;; for input reads
 msg_input:  db		"Enter a,b,h and epsilon", 0xA, 0
 msg_dpe: 	db		"Are you sure that was floating point value?", 0xA, 0
@@ -201,6 +218,7 @@ msg_b:		db		"b=", 0
 msg_h:		db		"h=", 0
 msg_eps:	db		"eps=", 0
 format_double: db 	"%lf", 0
+msg_notconverge: db "Not converging series.", 0xA, 0
 
 ;; vars for problem
 x:		dq	0.0
@@ -209,6 +227,7 @@ b:		dq	0.0
 h:		dq	0.0
 n:		dd	0
 prs:	dq	0.00000001
+max_iter: dd 100
 ;;; 
 
 xi:			dq	0.0
