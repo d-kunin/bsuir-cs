@@ -1,0 +1,4 @@
+history
+!! - last command from history
+!1 - first command in history
+!-3 - third command from the the end in the history
