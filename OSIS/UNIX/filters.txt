@@ -1,0 +1,6 @@
+grep
+sort
+wc
+head 
+tail
+tee
